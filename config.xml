@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<ttop xmlns:ref="x-schema:refSchema.xml" xmlns:data="x-schema:idSchema.xml">
+	<parsers>
+	<!--
+		<filter>
+			<stringEq>
+				<SourceMAC/>
+				<string>00:11:22:33:44:55</string>
+			</stringEq>
+			</or>
+		</filter>
+		-->
+		<parser of="DIX">
+			<parser of="IPv4">
+				<parser of="IPv4Packet">
+					<filter>
+						<and>
+							<IsIPv4/>
+							<IPv4>
+								<IsComplete/>
+							</IPv4>
+						</and>
+					</filter>
+					<parser of="UDP">
+					</parser>
+					<parser of="TCP">
+						<parser of="TCPSession">
+						</parser>
+					</parser>
+				</parser>
+			</parser>
+		</parser>
+	</parsers>
+</ttop>
