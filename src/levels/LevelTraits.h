@@ -3,7 +3,7 @@
 #define SRC_LEVELS_LEVELTRAITS_H_
 
 #include "../ParserDescription.h"
-#include "../Filter.h"
+#include "../Logic.h"
 #include <memory>
 #include <exception>
 
@@ -20,6 +20,8 @@ public:
 
 	std::unique_ptr<t_filter> FilterLogic = std::unique_ptr<t_filter>(new t_filter(true));
 
+	LevelTraits();
+	LevelTraits(t_filter *filter);
 	virtual ~LevelTraits() {};
 
 	virtual struct parserDescription::Description GetDescription() = 0;

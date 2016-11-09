@@ -12,8 +12,8 @@ parserDescription::info EtherNet::GetDescription()
 }
 
 EtherNet::EtherNet()
+	: LevelTraits(new FilterEtherNet())
 {
-	FilterLogic = std::unique_ptr<FilterEtherNet>(new FilterEtherNet());
 }
 
 } /* namespace level */

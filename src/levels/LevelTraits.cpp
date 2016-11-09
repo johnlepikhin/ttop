@@ -39,6 +39,17 @@ void LevelTraits<PARSER>::ParseXMLSettings(tinyxml2::XMLElement *node)
 	}
 }
 
+template<typename PARSER>
+LevelTraits<PARSER>::LevelTraits()
+{
+}
+
+template<typename PARSER>
+LevelTraits<PARSER>::LevelTraits(t_filter *filter)
+	: FilterLogic(filter)
+{
+}
+
 template class LevelTraits<ParserEtherNet>;
 template class LevelTraits<ParserEtherNetDIX>;
 template class LevelTraits<ParserEtherNetSNAP>;

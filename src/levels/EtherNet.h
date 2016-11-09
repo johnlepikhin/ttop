@@ -5,7 +5,7 @@
 #include "LevelTraits.h"
 #include <levels/ParserEtherNet.h>
 #include <memory>
-#include "../Filter.h"
+#include "../Logic.h"
 
 namespace ttop {
 
@@ -21,12 +21,12 @@ public:
 	{
 		std::string name(elt.Value());
 		if (name == "SourceMAC") {
-			ttop::logic::Filter<ChunkEtherNet>::t_string_value r = [](std::shared_ptr<ChunkEtherNet> c) {
+			typename ttop::logic::Logic<ChunkEtherNet, OUT>::t_string_value r = [](std::shared_ptr<ChunkEtherNet> c) {
 				return (MAC::asString(c->SourceMAC));
 			};
 			return (r);
 		} else if (name == "DestinationMAC") {
-			ttop::logic::Filter<ChunkEtherNet>::t_string_value r = [](std::shared_ptr<ChunkEtherNet> c) {
+			typename ttop::logic::Logic<ChunkEtherNet, OUT>::t_string_value r = [](std::shared_ptr<ChunkEtherNet> c) {
 				return (MAC::asString(c->DestinationMAC));
 			};
 			return (r);
