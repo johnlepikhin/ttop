@@ -26,15 +26,17 @@ public:
 	typedef std::function<std::string(std::shared_ptr<IN>)> t_string_value;
 	typedef std::function<long long(std::shared_ptr<IN>)> t_longlong_value;
 	typedef std::function<bool(std::shared_ptr<IN>)> t_bool_value;
-	typedef std::function<bool(t_string_value, t_string_value, std::shared_ptr<IN>)> t_string_operator;
-	typedef std::function<bool(t_longlong_value, t_longlong_value, std::shared_ptr<IN>)> t_longlong_operator;
+	typedef std::function<bool(t_string_value, t_string_value, std::shared_ptr<IN>)> t_string_operator2;
+	typedef std::function<bool(t_longlong_value, t_longlong_value, std::shared_ptr<IN>)> t_longlong_operator2;
 
-	typedef std::function<bool(t_bool_value, t_bool_value, std::shared_ptr<IN>)> t_bool_operator;
+	typedef std::function<bool(t_bool_value, std::shared_ptr<IN>)> t_bool_operator1;
+	typedef std::function<bool(t_bool_value, t_bool_value, std::shared_ptr<IN>)> t_bool_operator2;
 
-	t_bool_operator BoolAnd = [](t_bool_value a, t_bool_value b, std::shared_ptr<IN> v) { return(a(v) && b(v)); };
-	t_bool_operator BoolOr = [](t_bool_value a, t_bool_value b, std::shared_ptr<IN> v) { return(a(v) || b(v)); };
-	t_string_operator StringEquals = [](t_string_value a, t_string_value b, std::shared_ptr<IN> v) { return(a(v) == b(v)); };
-	t_longlong_operator LongLongEquals = [](t_longlong_value a, t_longlong_value b, std::shared_ptr<IN> v) { return(a(v) == b(v)); };
+	t_bool_operator2 BoolAnd = [](t_bool_value a, t_bool_value b, std::shared_ptr<IN> v) { return(a(v) && b(v)); };
+	t_bool_operator2 BoolOr = [](t_bool_value a, t_bool_value b, std::shared_ptr<IN> v) { return(a(v) || b(v)); };
+	t_bool_operator1 BoolNot = [](t_bool_value a, std::shared_ptr<IN> v) { return(!a(v)); };
+	t_string_operator2 StringEquals = [](t_string_value a, t_string_value b, std::shared_ptr<IN> v) { return(a(v) == b(v)); };
+	t_longlong_operator2 LongLongEquals = [](t_longlong_value a, t_longlong_value b, std::shared_ptr<IN> v) { return(a(v) == b(v)); };
 
 	t_bool_value True = [](std::shared_ptr<IN>) { return (true); };
 	t_bool_value False = [](std::shared_ptr<IN>) { return (false); };
@@ -118,6 +120,29 @@ public:
 						return (r);
 					}
 					throw ParseError("Logic parser found no second node for node '" + name + "'");
+				}
+				throw ParseError("Logic parser found no children for node '" + name + "'");
+
+			} else if (name == "and") {
+				tinyxml2::XMLElement *first = elt->FirstChild()->ToElement();
+				if (first) {
+					tinyxml2::XMLElement *second = first->NextSibling()->ToElement();
+					if (second) {
+						t_bool_value s_first = ParseBool(first);
+						t_bool_value s_second = ParseBool(second);
+						t_bool_value r = std::bind(BoolAnd, s_first, s_second, std::placeholders::_1);
+						return (r);
+					}
+					throw ParseError("Logic parser found no second node for node '" + name + "'");
+				}
+				throw ParseError("Logic parser found no children for node '" + name + "'");
+
+			} else if (name == "not") {
+				tinyxml2::XMLElement *first = elt->FirstChild()->ToElement();
+				if (first) {
+					t_bool_value s_first = ParseBool(first);
+					t_bool_value r = std::bind(BoolNot, s_first, std::placeholders::_1);
+					return (r);
 				}
 				throw ParseError("Logic parser found no children for node '" + name + "'");
 
