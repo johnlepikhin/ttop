@@ -46,6 +46,11 @@ public:
 		return (Algorithm(input));
 	}
 
+	Logic (OUT defaultValue)
+	{
+		Algorithm = [defaultValue](std::shared_ptr<IN>) { return (defaultValue); };
+	}
+
 	virtual ~Logic() {}
 
 	t_bool_value ToBoolValue(t_bool_value &v) { return (v); };

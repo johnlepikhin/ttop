@@ -11,10 +11,35 @@ namespace ttop {
 
 namespace level {
 
-class FilterEtherNet: public ttop::logic::Filter<ChunkEtherNet>
+template <typename OUT>
+class IfDataEtherNet: public logic::Logic<ChunkEtherNet, OUT>
 {
 public:
-	virtual typename ttop::logic::Logic<ChunkEtherNet, bool>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt);
+	IfDataEtherNet(OUT defaultValue) : logic::Logic<ChunkEtherNet, OUT>(defaultValue) {}
+
+	virtual typename logic::Logic<ChunkEtherNet, OUT>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
+	{
+		std::string name(elt.Value());
+		if (name == "SourceMAC") {
+			ttop::logic::Filter<ChunkEtherNet>::t_string_value r = [](std::shared_ptr<ChunkEtherNet> c) {
+				return (MAC::asString(c->SourceMAC));
+			};
+			return (r);
+		} else if (name == "DestinationMAC") {
+			ttop::logic::Filter<ChunkEtherNet>::t_string_value r = [](std::shared_ptr<ChunkEtherNet> c) {
+				return (MAC::asString(c->DestinationMAC));
+			};
+			return (r);
+		}
+		return (ttop::logic::Logic<ChunkEtherNet, OUT>::ParseStringCustom(elt));
+	}
+
+	virtual ~IfDataEtherNet() {};
+};
+
+class FilterEtherNet : public IfDataEtherNet<bool> {
+public:
+	FilterEtherNet() : IfDataEtherNet<bool>(true) {}
 };
 
 class EtherNet: public LevelTraits<ParserEtherNet> {

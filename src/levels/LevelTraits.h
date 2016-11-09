@@ -13,10 +13,12 @@ namespace level {
 template <typename PARSER>
 class LevelTraits : public PARSER {
 public:
-	typedef ttop::logic::Filter<typename PARSER::THIS_T> t_filter;
-	typedef std::shared_ptr<typename PARSER::THIS_T> t_value;
+	typedef typename PARSER::THIS_T THIS_T;
 
-	std::unique_ptr<t_filter> FilterLogic = std::unique_ptr<t_filter>(new t_filter());
+	typedef ttop::logic::Logic<THIS_T, bool> t_filter;
+	typedef std::shared_ptr<THIS_T> t_value;
+
+	std::unique_ptr<t_filter> FilterLogic = std::unique_ptr<t_filter>(new t_filter(true));
 
 	virtual ~LevelTraits() {};
 

@@ -25,7 +25,8 @@ bool LevelTraits<PARSER>::BeforeRecursionHook(t_value chunk)
 template<typename PARSER>
 void LevelTraits<PARSER>::ParseXMLSettingsFilter(tinyxml2::XMLElement *node)
 {
-	FilterLogic->Parse(node);
+	tinyxml2::XMLElement *logic = node->FirstChildElement();
+	FilterLogic->Algorithm = FilterLogic->ParseBool(logic);
 }
 
 template<typename PARSER>
