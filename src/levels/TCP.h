@@ -12,6 +12,7 @@ namespace level {
 class TCP : public LevelTraits<ParserTCP> {
 public:
 	parserDescription::info GetDescription();
+	TCP();
 };
 
 } /* namespace level */

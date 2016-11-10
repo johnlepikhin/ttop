@@ -13,6 +13,7 @@ class TCPSession
 		: public LevelTraits<ParserSessionTCP> {
 public:
 	parserDescription::info GetDescription();
+	TCPSession();
 };
 
 } /* namespace level */

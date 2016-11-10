@@ -13,6 +13,7 @@ class UDP
 		: public LevelTraits<ParserUDP> {
 public:
 	parserDescription::info GetDescription();
+	UDP();
 };
 
 } /* namespace level */

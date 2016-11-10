@@ -1,6 +1,7 @@
 
 #include "EtherNet.h"
 #include "types/MAC.h"
+#include "DataEtherNet.h"
 
 namespace ttop {
 
@@ -12,7 +13,7 @@ parserDescription::info EtherNet::GetDescription()
 }
 
 EtherNet::EtherNet()
-	: LevelTraits(new FilterEtherNet())
+	: LevelTraits(new ttop::level_data::FilterEtherNet())
 {
 }
 
