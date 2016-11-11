@@ -13,7 +13,7 @@ parserDescription::info EtherNet::GetDescription()
 }
 
 EtherNet::EtherNet()
-	: LevelTraits(new ttop::level_data::FilterEtherNet())
+	: Level(std::make_shared<ttop::level_data::FilterEtherNet>())
 {
 }
 

@@ -4,13 +4,15 @@
 
 #include <levels/ParserEtherNetSNAP.h>
 
-#include "LevelTraits.h"
+#include "Level.h"
 
 namespace ttop {
 namespace level {
 
-class EtherNetSNAP : public LevelTraits<ParserEtherNetSNAP> {
+class EtherNetSNAP : public Level<ParserEtherNetSNAP> {
+public:
 	parserDescription::info GetDescription();
+	EtherNetSNAP();
 };
 
 } /* namespace level */

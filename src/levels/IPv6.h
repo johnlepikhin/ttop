@@ -4,14 +4,15 @@
 
 #include <levels/ParserIPv6.h>
 
-#include "LevelTraits.h"
+#include "Level.h"
 
 namespace ttop {
 namespace level {
 
-class IPv6 : public LevelTraits<ParserIPv6> {
+class IPv6 : public Level<ParserIPv6> {
 public:
 	parserDescription::info GetDescription();
+	IPv6();
 };
 
 } /* namespace level */

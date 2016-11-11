@@ -4,12 +4,12 @@
 
 #include <levels/ParserPacketIPv4.h>
 
-#include "LevelTraits.h"
+#include "Level.h"
 
 namespace ttop {
 namespace level {
 
-class IPv4Packet : public LevelTraits<ParserPacketIPv4> {
+class IPv4Packet : public Level<ParserPacketIPv4> {
 public:
 	IPv4Packet();
 	parserDescription::info GetDescription();

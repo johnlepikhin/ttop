@@ -3,12 +3,13 @@
 #define SRC_LEVELS_ETHERNETDIX_H_
 
 #include <levels/ParserEtherNetDIX.h>
-#include "LevelTraits.h"
+
+#include "Level.h"
 
 namespace ttop {
 namespace level {
 
-class EtherNetDIX : public LevelTraits<ParserEtherNetDIX> {
+class EtherNetDIX : public Level<ParserEtherNetDIX> {
 public:
 	parserDescription::info GetDescription();
 

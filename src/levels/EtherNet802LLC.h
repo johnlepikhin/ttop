@@ -4,15 +4,16 @@
 
 #include <levels/ParserEtherNet802LLC.h>
 
-#include "LevelTraits.h"
+#include "Level.h"
 
 namespace ttop {
 namespace level {
 
 class EtherNet802LLC
-		: public LevelTraits<ParserEtherNet802LLC> {
+		: public Level<ParserEtherNet802LLC> {
 public:
 	parserDescription::info GetDescription();
+	EtherNet802LLC();
 };
 
 } /* namespace level */

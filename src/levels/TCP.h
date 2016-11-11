@@ -4,12 +4,12 @@
 
 #include <levels/ParserTCP.h>
 
-#include "LevelTraits.h"
+#include "Level.h"
 
 namespace ttop {
 namespace level {
 
-class TCP : public LevelTraits<ParserTCP> {
+class TCP : public Level<ParserTCP> {
 public:
 	parserDescription::info GetDescription();
 	TCP();

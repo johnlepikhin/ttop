@@ -4,14 +4,15 @@
 
 #include <levels/ParserEtherNetRAW.h>
 
-#include "LevelTraits.h"
+#include "Level.h"
 
 namespace ttop {
 namespace level {
 
-class EtherNetRAW : public LevelTraits<ParserEtherNetRAW> {
+class EtherNetRAW : public Level<ParserEtherNetRAW> {
 public:
 	parserDescription::info GetDescription();
+	EtherNetRAW();
 };
 
 } /* namespace level */

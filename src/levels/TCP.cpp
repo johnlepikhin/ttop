@@ -11,7 +11,7 @@ parserDescription::info TCP::GetDescription()
 }
 
 TCP::TCP()
-	: LevelTraits(new ttop::level_data::FilterTCP())
+	: Level(std::make_shared<ttop::level_data::FilterTCP>())
 {
 }
 

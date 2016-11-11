@@ -11,7 +11,7 @@ parserDescription::info UDP::GetDescription()
 }
 
 UDP::UDP()
-	: LevelTraits(new ttop::level_data::FilterUDP())
+	: Level(std::make_shared<ttop::level_data::FilterUDP>())
 {
 }
 

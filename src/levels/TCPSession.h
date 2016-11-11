@@ -4,13 +4,13 @@
 
 #include <levels/ParserSessionTCP.h>
 
-#include "LevelTraits.h"
+#include "Level.h"
 
 namespace ttop {
 namespace level {
 
 class TCPSession
-		: public LevelTraits<ParserSessionTCP> {
+		: public Level<ParserSessionTCP> {
 public:
 	parserDescription::info GetDescription();
 	TCPSession();

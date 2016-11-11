@@ -11,7 +11,7 @@ parserDescription::info TCPSession::GetDescription()
 }
 
 TCPSession::TCPSession()
-	: LevelTraits(new ttop::level_data::FilterTCPSession())
+	: Level(std::make_shared<ttop::level_data::FilterTCPSession>())
 {
 }
 

@@ -21,7 +21,7 @@ class Logic {
 public:
 	typedef std::function<OUT(std::shared_ptr<IN>)> t_logic;
 
-	t_logic Algorithm;
+	OUT DefaultValue;
 
 	typedef std::function<std::string(std::shared_ptr<IN>)> t_string_value;
 	typedef std::function<long long(std::shared_ptr<IN>)> t_longlong_value;
@@ -44,13 +44,18 @@ public:
 	t_string_value String(const std::string &v) { return([v](std::shared_ptr<IN>) { return (v); }); };
 	t_longlong_value LongLong(long long int &v) { return([v](std::shared_ptr<IN>) { return (v); }); };
 
-	virtual OUT Evaluate(std::shared_ptr<IN> input) {
-		return (Algorithm(input));
+	Logic<IN, OUT> Clone() {
+		return (Logic<IN, OUT>(DefaultValue));
 	}
+
 
 	Logic (OUT defaultValue)
 	{
-		Algorithm = [defaultValue](std::shared_ptr<IN>) { return (defaultValue); };
+		DefaultValue = defaultValue;
+	}
+
+	t_logic GetDefault() {
+		return ([this](std::shared_ptr<IN>) { return (this->DefaultValue); });
 	}
 
 	virtual ~Logic() {}

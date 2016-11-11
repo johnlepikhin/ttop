@@ -4,13 +4,13 @@
 
 #include <levels/ParserUDP.h>
 
-#include "LevelTraits.h"
+#include "Level.h"
 
 namespace ttop {
 namespace level {
 
 class UDP
-		: public LevelTraits<ParserUDP> {
+		: public Level<ParserUDP> {
 public:
 	parserDescription::info GetDescription();
 	UDP();
