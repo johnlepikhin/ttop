@@ -18,6 +18,8 @@ public:
 
 	typedef std::function<bool(std::shared_ptr<THIS_T>)> t_bool;
 	typedef std::shared_ptr<logic::Logic<THIS_T, bool> > t_bool_parser;
+	typedef std::shared_ptr<logic::Logic<THIS_T, unsigned long long> > t_long_parser;
+	typedef std::shared_ptr<logic::Logic<THIS_T, std::string> > t_string_parser;
 
 	typedef logic::Logic<THIS_T, bool> t_string;
 	typedef logic::Logic<THIS_T, bool> t_longlong;
@@ -26,11 +28,17 @@ public:
 	typedef std::shared_ptr<THIS_T> t_value;
 
 	t_bool_parser BoolLogicParser = t_bool_parser(true);
+	t_long_parser LongLogicParser = t_long_parser(0);
+	t_string_parser StringLogicParser = t_string_parser("");
+
 	t_bool FilterAlgorithm = BoolLogicParser->True;
 
 	std::vector<std::shared_ptr<t_view > > Views;
 
-	Level(t_bool_parser boolParser);
+	Level(t_bool_parser boolParser
+			, t_long_parser longParser
+			, t_string_parser stringParser
+			);
 	virtual ~Level() {};
 
 	virtual struct parserDescription::Description GetDescription() = 0;

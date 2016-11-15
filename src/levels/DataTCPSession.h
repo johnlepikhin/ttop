@@ -215,9 +215,17 @@ public:
 	virtual ~DataTCPSession() {};
 };
 
-class FilterTCPSession : public DataTCPSession<bool> {
+class BoolTCPSession : public DataTCPSession<bool> {
 public:
-	FilterTCPSession() : DataTCPSession<bool>(true) {}
+	BoolTCPSession() : DataTCPSession<bool>(true) {}
+};
+class LongTCPSession : public DataTCPSession<unsigned long long> {
+public:
+	LongTCPSession() : DataTCPSession<unsigned long long>(0) {}
+};
+class StringTCPSession : public DataTCPSession<std::string> {
+public:
+	StringTCPSession() : DataTCPSession<std::string>("") {}
 };
 
 }

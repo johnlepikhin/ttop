@@ -74,9 +74,17 @@ public:
 	virtual ~DataEtherNetDIX() {};
 };
 
-class FilterEtherNetDIX : public DataEtherNetDIX<bool> {
+class BoolEtherNetDIX : public DataEtherNetDIX<bool> {
 public:
-	FilterEtherNetDIX() : DataEtherNetDIX<bool>(true) {}
+	BoolEtherNetDIX() : DataEtherNetDIX<bool>(true) {}
+};
+class LongEtherNetDIX : public DataEtherNetDIX<unsigned long long> {
+public:
+	LongEtherNetDIX() : DataEtherNetDIX<unsigned long long>(0) {}
+};
+class StringEtherNetDIX : public DataEtherNetDIX<std::string> {
+public:
+	StringEtherNetDIX() : DataEtherNetDIX<std::string>("") {}
 };
 
 }

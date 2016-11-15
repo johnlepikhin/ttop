@@ -11,7 +11,10 @@ parserDescription::info UDP::GetDescription()
 }
 
 UDP::UDP()
-	: Level(std::make_shared<ttop::level_data::FilterUDP>())
+	: Level(std::make_shared<ttop::level_data::BoolUDP>()
+			, std::make_shared<ttop::level_data::LongUDP>()
+			, std::make_shared<ttop::level_data::StringUDP>()
+			)
 {
 }
 

@@ -45,7 +45,8 @@ void Level<PARSER>::ParseXMLSettingsView(tinyxml2::XMLElement *node)
 	if (_type) {
 		std::string type(_type);
 		// TODO
-		std::shared_ptr<view::View<THIS_T> > View = std::make_shared<view::Dump<THIS_T> >(BoolLogicParser);
+		std::shared_ptr<view::View<THIS_T> > View
+			= std::make_shared<view::Dump<THIS_T> >(BoolLogicParser, LongLogicParser, StringLogicParser);
 		View->Parse(node, type);
 		Views.push_back(View);
 	} else {
@@ -70,8 +71,13 @@ void Level<PARSER>::ParseXMLSettings(tinyxml2::XMLElement *node)
 }
 
 template<typename PARSER>
-Level<PARSER>::Level(t_bool_parser boolParser)
+Level<PARSER>::Level(t_bool_parser boolParser
+		, t_long_parser longParser
+		, t_string_parser stringParser
+)
 	: BoolLogicParser(boolParser)
+	, LongLogicParser(longParser)
+	, StringLogicParser(stringParser)
 {
 }
 

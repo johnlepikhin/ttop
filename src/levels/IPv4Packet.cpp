@@ -11,7 +11,10 @@ parserDescription::info IPv4Packet::GetDescription()
 }
 
 IPv4Packet::IPv4Packet()
-	: Level<ParserPacketIPv4>(std::make_shared<level_data::FilterPacketIPVariant>())
+	: Level<ParserPacketIPv4>(std::make_shared<level_data::BoolPacketIPVariant>()
+			, std::make_shared<level_data::LongPacketIPVariant>()
+			, std::make_shared<level_data::StringPacketIPVariant>()
+			)
 {
 }
 

@@ -144,9 +144,17 @@ public:
 	virtual ~DataTCP() {};
 };
 
-class FilterTCP : public DataTCP<bool> {
+class BoolTCP : public DataTCP<bool> {
 public:
-	FilterTCP() : DataTCP<bool>(true) {}
+	BoolTCP() : DataTCP<bool>(true) {}
+};
+class LongTCP : public DataTCP<unsigned long long> {
+public:
+	LongTCP() : DataTCP<unsigned long long>(0) {}
+};
+class StringTCP : public DataTCP<std::string> {
+public:
+	StringTCP() : DataTCP<std::string>("") {}
 };
 
 }

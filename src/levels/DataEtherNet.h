@@ -35,9 +35,17 @@ public:
 	virtual ~DataEtherNet() {};
 };
 
-class FilterEtherNet : public DataEtherNet<bool> {
+class BoolEtherNet : public DataEtherNet<bool> {
 public:
-	FilterEtherNet() : DataEtherNet<bool>(true) {}
+	BoolEtherNet() : DataEtherNet<bool>(true) {}
+};
+class LongEtherNet : public DataEtherNet<unsigned long long> {
+public:
+	LongEtherNet() : DataEtherNet<unsigned long long>(0) {}
+};
+class StringEtherNet : public DataEtherNet<std::string> {
+public:
+	StringEtherNet() : DataEtherNet<std::string>("") {}
 };
 
 }

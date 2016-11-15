@@ -13,7 +13,10 @@ parserDescription::info EtherNet::GetDescription()
 }
 
 EtherNet::EtherNet()
-	: Level(std::make_shared<ttop::level_data::FilterEtherNet>())
+	: Level(std::make_shared<ttop::level_data::BoolEtherNet>()
+			, std::make_shared<ttop::level_data::LongEtherNet>()
+			, std::make_shared<ttop::level_data::StringEtherNet>()
+			)
 {
 }
 

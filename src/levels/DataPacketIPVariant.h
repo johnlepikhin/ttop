@@ -87,9 +87,17 @@ public:
 	virtual ~DataPacketIPVariant() {};
 };
 
-class FilterPacketIPVariant : public DataPacketIPVariant<bool> {
+class BoolPacketIPVariant : public DataPacketIPVariant<bool> {
 public:
-	FilterPacketIPVariant() : DataPacketIPVariant<bool>(true) {}
+	BoolPacketIPVariant() : DataPacketIPVariant<bool>(true) {}
+};
+class LongPacketIPVariant : public DataPacketIPVariant<unsigned long long> {
+public:
+	LongPacketIPVariant() : DataPacketIPVariant<unsigned long long>(0) {}
+};
+class StringPacketIPVariant : public DataPacketIPVariant<std::string> {
+public:
+	StringPacketIPVariant() : DataPacketIPVariant<std::string>("") {}
 };
 
 }

@@ -11,7 +11,10 @@ parserDescription::info EtherNetDIX::GetDescription()
 }
 
 EtherNetDIX::EtherNetDIX()
-	: Level(std::make_shared<ttop::level_data::FilterEtherNetDIX>())
+	: Level(std::make_shared<ttop::level_data::BoolEtherNetDIX>()
+			, std::make_shared<ttop::level_data::LongEtherNetDIX>()
+			, std::make_shared<ttop::level_data::StringEtherNetDIX>()
+			)
 {
 }
 

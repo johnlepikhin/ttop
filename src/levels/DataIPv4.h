@@ -128,9 +128,17 @@ public:
 	virtual ~DataIPv4() {};
 };
 
-class FilterIPv4 : public DataIPv4<bool> {
+class BoolIPv4 : public DataIPv4<bool> {
 public:
-	FilterIPv4() : DataIPv4<bool>(true) {}
+	BoolIPv4() : DataIPv4<bool>(true) {}
+};
+class LongIPv4 : public DataIPv4<unsigned long long> {
+public:
+	LongIPv4() : DataIPv4<unsigned long long>(0) {}
+};
+class StringIPv4 : public DataIPv4<std::string> {
+public:
+	StringIPv4() : DataIPv4<std::string>("") {}
 };
 
 }

@@ -10,21 +10,48 @@
 			</or>
 		</filter>
 		-->
+		<view type="dump">
+			<select name="source"><string><SourceMAC/></string></select>
+			<select name="dest"><string><DestinationMAC/></string></select>
+			<select name="counter"><counter/></select>
+		</view>
 		<parser of="DIX">
 			<parser of="IPv4">
 				<parser of="IPv4Packet">
+<!--
 					<filter>
 						<and>
 							<IsIPv4/>
 							<IPv4>
-								<IsComplete/>
+								<and>
+									<IsComplete/>
+									<Parent>
+										<Parent>
+											<Parent>
+												<stringEq>
+													<SourceMAC/>
+													<string>00:13:c4:bc:56:80</string>
+												</stringEq>
+											</Parent>
+										</Parent>
+									</Parent>
+								</and>
 							</IPv4>
 						</and>
 					</filter>
+-->
 					<parser of="UDP">
 					</parser>
 					<parser of="TCP">
 						<parser of="TCPSession">
+							<filter>
+								<Client>
+									<longEq>
+										<RawIfaceBytes/>
+										<long>10</long>
+									</longEq>
+								</Client>
+							</filter>
 						</parser>
 					</parser>
 				</parser>

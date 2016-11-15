@@ -94,9 +94,17 @@ public:
 	virtual ~DataUDP() {};
 };
 
-class FilterUDP : public DataUDP<bool> {
+class BoolUDP : public DataUDP<bool> {
 public:
-	FilterUDP() : DataUDP<bool>(true) {}
+	BoolUDP() : DataUDP<bool>(true) {}
+};
+class LongUDP : public DataUDP<unsigned long long> {
+public:
+	LongUDP() : DataUDP<unsigned long long>(0) {}
+};
+class StringUDP : public DataUDP<std::string> {
+public:
+	StringUDP() : DataUDP<std::string>("") {}
 };
 
 }

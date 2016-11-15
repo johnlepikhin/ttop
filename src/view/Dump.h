@@ -15,13 +15,28 @@ public:
 		return ((std::string)"dump");
 	}
 
-	Dump(std::shared_ptr<logic::Logic<IN, bool> > boolParser)
-		: View<IN>(boolParser)
+	Dump(std::shared_ptr<logic::Logic<IN, bool> > boolParser
+			, std::shared_ptr<logic::Logic<IN, unsigned long long> > longParser
+			, std::shared_ptr<logic::Logic<IN, std::string> > stringParser
+			)
+		: View<IN>(boolParser, longParser, stringParser)
 	{
 
 	}
 
 	virtual ~Dump() {};
+
+	virtual void Output()
+	{
+		bool isFirst = true;
+		for (auto s : this->Selection) {
+			if (!isFirst)
+				std::cout << " ";
+			std::cout << s->OutputString();
+			isFirst = false;
+		}
+		std::cout << std::endl;
+	}
 };
 
 } /* namespace view */
