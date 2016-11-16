@@ -21,8 +21,10 @@ bool Level<PARSER>::BeforeRecursionHook(t_value chunk)
 		PARSER::BeforeRecursionHook(chunk);
 		bool r = Filter(chunk);
 
-		for (auto view : Views) {
-			view->Input(chunk);
+		if (r) {
+			for (auto view : Views) {
+				view->Input(chunk);
+			}
 		}
 
 		return (r);
@@ -44,11 +46,14 @@ void Level<PARSER>::ParseXMLSettingsView(tinyxml2::XMLElement *node)
 	const char *_type = node->Attribute("type");
 	if (_type) {
 		std::string type(_type);
-		// TODO
-		std::shared_ptr<view::View<THIS_T> > View
+		if (type == "dump") {
+			std::shared_ptr<view::View<THIS_T> > View
 			= std::make_shared<view::Dump<THIS_T> >(BoolLogicParser, LongLogicParser, StringLogicParser);
-		View->Parse(node, type);
-		Views.push_back(View);
+			View->Parse(node, type);
+			Views.push_back(View);
+		} else {
+			throw logic::ParseError("unknown type= in <view/>: " + type);
+		}
 	} else {
 		throw logic::ParseError("type= is required for <view/>");
 	}
@@ -79,6 +84,14 @@ Level<PARSER>::Level(t_bool_parser boolParser
 	, LongLogicParser(longParser)
 	, StringLogicParser(stringParser)
 {
+}
+
+template<typename PARSER>
+Level<PARSER>::~Level()
+{
+	for (std::shared_ptr<t_view> view : Views) {
+		view->Output();
+	}
 }
 
 template class Level<ParserEtherNet>;

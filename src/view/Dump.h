@@ -29,10 +29,10 @@ public:
 	virtual void Output()
 	{
 		bool isFirst = true;
-		for (auto s : this->Selection) {
+		for (auto s : this->Selection_list) {
 			if (!isFirst)
 				std::cout << " ";
-			std::cout << s->OutputString();
+			std::cout << s->Value;
 			isFirst = false;
 		}
 		std::cout << std::endl;

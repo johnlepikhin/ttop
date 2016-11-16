@@ -39,7 +39,7 @@ public:
 			, t_long_parser longParser
 			, t_string_parser stringParser
 			);
-	virtual ~Level() {};
+	virtual ~Level();
 
 	virtual struct parserDescription::Description GetDescription() = 0;
 	virtual bool Filter(t_value chunk);

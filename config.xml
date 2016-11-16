@@ -11,9 +11,13 @@
 		</filter>
 		-->
 		<view type="dump">
-			<select name="source"><string><SourceMAC/></string></select>
-			<select name="dest"><string><DestinationMAC/></string></select>
-			<select name="counter"><counter/></select>
+			<select>
+				<SourceMAC name="source"/>
+				<DestinationMAC name="dest"/>
+				<long2string><counter name="counter"/></long2string>
+				<long2string><sum><counter name="counter"/></sum></long2string>
+				<long2string><avg><counter name="counter"/></avg></long2string>
+			</select>
 		</view>
 		<parser of="DIX">
 			<parser of="IPv4">
@@ -44,11 +48,21 @@
 					</parser>
 					<parser of="TCP">
 						<parser of="TCPSession">
+							<view type="dump">
+								<select>
+									<Client>
+										<long2string><sum><RawIfaceBytes/></sum></long2string>
+									</Client>
+									<Server>
+										<long2string><sum><RawIfaceBytes/></sum></long2string>
+									</Server>
+								</select>
+							</view>
 							<filter>
 								<Client>
 									<longEq>
 										<RawIfaceBytes/>
-										<long>10</long>
+										<long>537</long>
 									</longEq>
 								</Client>
 							</filter>
