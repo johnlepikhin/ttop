@@ -19,35 +19,17 @@ public:
 template <typename IN, typename OUT>
 class Logic {
 public:
-	typedef std::function<OUT(std::shared_ptr<IN>)> t_logic;
+	typedef std::shared_ptr<IN> t_input;
+	typedef std::function<OUT(t_input)> t_logic;
 
 	OUT DefaultValue;
 
-	typedef std::function<std::string(std::shared_ptr<IN>)> t_string_value;
-	typedef std::function<long long(std::shared_ptr<IN>)> t_longlong_value;
-	typedef std::function<bool(std::shared_ptr<IN>)> t_bool_value;
-	typedef std::function<bool(t_string_value, t_string_value, std::shared_ptr<IN>)> t_string_operator2;
-	typedef std::function<bool(t_longlong_value, t_longlong_value, std::shared_ptr<IN>)> t_longlong_operator2;
+	typedef std::function<std::string(t_input)> t_string_value;
+	typedef std::function<long long(t_input)> t_longlong_value;
+	typedef std::function<bool(t_input)> t_bool_value;
 
-	typedef std::function<bool(t_bool_value, std::shared_ptr<IN>)> t_bool_operator1;
-	typedef std::function<bool(t_bool_value, t_bool_value, std::shared_ptr<IN>)> t_bool_operator2;
-
-	t_bool_operator2 BoolAnd = [](t_bool_value a, t_bool_value b, std::shared_ptr<IN> v) { return(a(v) && b(v)); };
-	t_bool_operator2 BoolOr = [](t_bool_value a, t_bool_value b, std::shared_ptr<IN> v) { return(a(v) || b(v)); };
-	t_bool_operator1 BoolNot = [](t_bool_value a, std::shared_ptr<IN> v) { return(!a(v)); };
-	t_string_operator2 StringEquals = [](t_string_value a, t_string_value b, std::shared_ptr<IN> v) { return(a(v) == b(v)); };
-	t_longlong_operator2 LongLongEquals = [](t_longlong_value a, t_longlong_value b, std::shared_ptr<IN> v) { return(a(v) == b(v)); };
-
-	t_bool_value True = [](std::shared_ptr<IN>) { return (true); };
-	t_bool_value False = [](std::shared_ptr<IN>) { return (false); };
-
-	t_string_value String(const std::string &v) { return([v](std::shared_ptr<IN>) { return (v); }); };
-	t_longlong_value LongLong(long long int &v) { return([v](std::shared_ptr<IN>) { return (v); }); };
-
-	Logic<IN, OUT> Clone() {
-		return (Logic<IN, OUT>(DefaultValue));
-	}
-
+	t_bool_value True = [](t_input) { return (true); };
+	t_bool_value False = [](t_input) { return (false); };
 
 	Logic (OUT defaultValue)
 	{
@@ -55,7 +37,7 @@ public:
 	}
 
 	t_logic GetDefault() {
-		return ([this](std::shared_ptr<IN>) { return (this->DefaultValue); });
+		return ([this](t_input) { return (this->DefaultValue); });
 	}
 
 	virtual ~Logic() {}
@@ -73,8 +55,14 @@ public:
 			std::string name(elt->Value());
 
 			if (name == "string") {
-				std::string value(elt->GetText());
-				return (String(value));
+				std::string v = elt->GetText();
+				return([v](t_input) { return (v); });
+			} else if (name == "long2string") {
+				if (tinyxml2::XMLElement *first = elt->FirstChild()->ToElement()) {
+					t_longlong_value s_first = ParseLongLong(first);
+					return ([s_first](t_input v) { return(std::to_string(s_first(v))); });
+				}
+				throw ParseError("Logic parser found no children for node '" + name + "'");
 			}
 			return (ParseStringCustom(*elt));
 		}
@@ -92,8 +80,43 @@ public:
 			if (name == "long") {
 				std::string value(elt->GetText());
 				long long v = std::stoll(value);
-				t_longlong_value r = LongLong(v);
-				return (r);
+				return([v](t_input) { return (v); });
+			} else if (name == "max" || name == "min" || name == "sum" || name == "avg") {
+				if (tinyxml2::XMLElement *first = elt->FirstChild()->ToElement()) {
+					t_longlong_value s_first = ParseLongLong(first);
+					long long current = 0;
+					if (name == "max") {
+						return ([current, s_first](t_input v) mutable {
+							current = std::max(current, s_first(v));
+							return(current);
+						});
+					} else if (name == "min") {
+						long long current = LLONG_MAX;
+						return ([current, s_first](t_input v) mutable {
+							current = std::min(current, s_first(v));
+							return(current);
+						});
+					} else if (name == "sum") {
+						return ([current, s_first](t_input v) mutable {
+							current += s_first(v);
+							return(current);
+						});
+					} else if (name == "avg") {
+						long long count = 0;
+						return ([current, count, s_first](t_input v) mutable {
+							current += s_first(v);
+							count ++;
+							return(current/count);
+						});
+					}
+				}
+				throw ParseError("Logic parser found no children for node '" + name + "'");
+			} else if (name == "counter") {
+				long long current = 0;
+				return ([current](t_input v) mutable {
+					current++;
+					return(current);
+				});
 			}
 			return (ParseLongLongCustom(*elt));
 		}
@@ -114,29 +137,18 @@ public:
 			} else if (name == "false") {
 				return (False);
 
-			} else if (name == "or") {
+			} else if (name == "or" || name == "and") {
 				tinyxml2::XMLElement *first = elt->FirstChild()->ToElement();
 				if (first) {
 					tinyxml2::XMLElement *second = first->NextSibling()->ToElement();
 					if (second) {
 						t_bool_value s_first = ParseBool(first);
 						t_bool_value s_second = ParseBool(second);
-						t_bool_value r = std::bind(BoolOr, s_first, s_second, std::placeholders::_1);
-						return (r);
-					}
-					throw ParseError("Logic parser found no second node for node '" + name + "'");
-				}
-				throw ParseError("Logic parser found no children for node '" + name + "'");
-
-			} else if (name == "and") {
-				tinyxml2::XMLElement *first = elt->FirstChild()->ToElement();
-				if (first) {
-					tinyxml2::XMLElement *second = first->NextSibling()->ToElement();
-					if (second) {
-						t_bool_value s_first = ParseBool(first);
-						t_bool_value s_second = ParseBool(second);
-						t_bool_value r = std::bind(BoolAnd, s_first, s_second, std::placeholders::_1);
-						return (r);
+						if (name == "or") {
+							return ([s_first, s_second](t_input v) { return(s_first(v) || s_second(v)); });
+						} else if (name == "and") {
+							return ([s_first, s_second](t_input v) { return(s_first(v) && s_second(v)); });
+						}
 					}
 					throw ParseError("Logic parser found no second node for node '" + name + "'");
 				}
@@ -146,8 +158,7 @@ public:
 				tinyxml2::XMLElement *first = elt->FirstChild()->ToElement();
 				if (first) {
 					t_bool_value s_first = ParseBool(first);
-					t_bool_value r = std::bind(BoolNot, s_first, std::placeholders::_1);
-					return (r);
+					return ([s_first](t_input v) { return(not(s_first(v))); });
 				}
 				throw ParseError("Logic parser found no children for node '" + name + "'");
 
@@ -159,13 +170,11 @@ public:
 						if (name == "stringEq") {
 							t_string_value s_first = ParseString(first);
 							t_string_value s_second = ParseString(second);
-							t_bool_value r = std::bind(StringEquals, s_first, s_second, std::placeholders::_1);
-							return (r);
+							return ([s_first, s_second](t_input v){return (s_first(v) == s_second(v)); });
 						} else {
 							t_longlong_value s_first = ParseLongLong(first);
 							t_longlong_value s_second = ParseLongLong(second);
-							t_bool_value r = std::bind(LongLongEquals, s_first, s_second, std::placeholders::_1);
-							return (r);
+							return ([s_first, s_second](t_input v){return (s_first(v) == s_second(v)); });
 						}
 					}
 					throw ParseError("Logic parser found no second node for node '" + name + "'");
