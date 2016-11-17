@@ -10,7 +10,9 @@
 			</or>
 		</filter>
 		-->
-		<view type="dump">
+		<view type="dump" output="/tmp/ttop.out" rseparator="
+
+" fseparator="	">
 			<select>
 				<SourceMAC name="source"/>
 				<DestinationMAC name="dest"/>
