@@ -18,18 +18,23 @@
 				<long2string><sum><counter name="counter"/></sum></long2string>
 				<long2string><avg><counter name="counter"/></avg></long2string>
 			</select>
+			<!--
 			<where>
 				<stringEq>
 					<SourceMAC/>
 					<string>00:13:c4:bc:56:80</string>
 				</stringEq>
 			</where>
+			-->
 			<trigger>
 				<longEq>
 					<counter/>
-					<long>1000</long>
+					<long>10000</long>
 				</longEq>
 			</trigger>
+			<groupBy>
+				<SourceMAC name="source"/>
+			</groupBy>
 		</view>
 		<parser of="DIX">
 			<parser of="IPv4">
@@ -60,6 +65,7 @@
 					</parser>
 					<parser of="TCP">
 						<parser of="TCPSession">
+						<!--
 							<view type="dump">
 								<select>
 									<Client>
@@ -70,6 +76,7 @@
 									</Server>
 								</select>
 							</view>
+							-->
 							<filter>
 								<Client>
 									<longEq>

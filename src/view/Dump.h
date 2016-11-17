@@ -28,14 +28,16 @@ public:
 
 	virtual void Output()
 	{
-		bool isFirst = true;
-		for (auto s : this->Selection_list) {
-			if (!isFirst)
-				std::cout << " ";
-			std::cout << s->Val;
-			isFirst = false;
+		for (auto g_it = this->Selection.begin(); g_it!=this->Selection.end(); ++g_it) {
+			bool isFirst = true;
+			for (auto it = g_it->second.begin(); it!=g_it->second.end(); ++it) {
+				if (!isFirst)
+					std::cout << " ";
+				std::cout << (*it).Val;
+				isFirst = false;
+			}
+			std::cout << std::endl;
 		}
-		std::cout << std::endl;
 	}
 };
 
