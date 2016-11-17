@@ -12,24 +12,24 @@
 namespace ttop {
 namespace view {
 
-template <typename IN>
-struct Selection {
-	typedef std::function<std::string(std::shared_ptr<IN>)> t_logic;
+template <typename IN, typename VALUE>
+struct Value {
+	typedef std::function<VALUE(std::shared_ptr<IN>)> t_logic;
 	std::string Name;
 	t_logic SavedLogic;
 	t_logic Logic;
-	std::string Value;
+	VALUE Val;
 
 	void Input(std::shared_ptr<IN> chunk) {
-		Value = Logic(chunk);
+		Val = Logic(chunk);
 	}
 
 	void Reset() {
 		Logic = SavedLogic;
-		Value = "";
 	}
 
-	Selection(std::string name, t_logic logic) : Name(name), SavedLogic(logic), Logic(logic) {};
+	Value(t_logic logic) : SavedLogic(logic), Logic(logic) {};
+	Value(std::string name, t_logic logic) : Name(name), SavedLogic(logic), Logic(logic) {};
 };
 
 template <typename IN>
@@ -37,23 +37,32 @@ class View {
 	std::shared_ptr<logic::Logic<IN, bool> > BoolParser;
 	std::shared_ptr<logic::Logic<IN, unsigned long long> > LongParser;
 	std::shared_ptr<logic::Logic<IN, std::string> > StringParser;
+	std::function<bool(std::shared_ptr<IN>)> True = [](std::shared_ptr<IN>) { return (true); };
 public:
-	std::vector< std::shared_ptr<Selection<IN> > > Selection_list;
+	std::vector< std::shared_ptr<Value<IN, std::string> > > Selection_list;
+	Value<IN, bool> Where = Value<IN, bool>(True);
+	Value<IN, bool> Trigger = Value<IN, bool>(True);
 	virtual std::string TypeID() = 0;
 	virtual void Output() {};
 
 	void Input(std::shared_ptr<IN> chunk)
 	{
-		for (auto s : Selection_list) {
-			s->Input(chunk);
+		Where.Input(chunk);
+		Trigger.Input(chunk);
+
+		if (Where.Val) {
+			for (auto s : Selection_list) {
+				s->Input(chunk);
+			}
 		}
 
-		// TODO
-		if (true) {
+		if (Trigger.Val) {
 			Output();
 			for (auto s : Selection_list) {
-//				s->Reset();
+				s->Reset();
 			}
+			Where.Reset();
+			Trigger.Reset();
 		}
 	}
 
@@ -69,9 +78,30 @@ public:
 				const char *_name = elt->Attribute("name");
 				std::string name = (_name) ? _name : "";
 				std::function<std::string(std::shared_ptr<IN>)> v = StringParser->ParseString(elt);
-				std::shared_ptr< Selection<IN> > s = std::make_shared< Selection<IN> >(name, v);
+				std::shared_ptr< Value<IN, std::string> > s
+					= std::make_shared< Value<IN, std::string> >(name, v);
 				Selection_list.push_back(s);
 				child = child->NextSibling();
+			}
+		}
+	}
+
+	void ParseWhere(tinyxml2::XMLElement *node) {
+		if (tinyxml2::XMLNode *child = node->FirstChildElement("where")) {
+			child = child->FirstChildElement();
+			if (child) {
+				tinyxml2::XMLElement *elt = child->ToElement();
+				Where = BoolParser->ParseBool(elt);
+			}
+		}
+	}
+
+	void ParseTrigger(tinyxml2::XMLElement *node) {
+		if (tinyxml2::XMLNode *child = node->FirstChildElement("trigger")) {
+			child = child->FirstChildElement();
+			if (child) {
+				tinyxml2::XMLElement *elt = child->ToElement();
+				Trigger = BoolParser->ParseBool(elt);
 			}
 		}
 	}
@@ -83,6 +113,8 @@ public:
 			if (TypeID() == _type) {
 				ParseParams(node);
 				ParseSelects(node);
+				ParseWhere(node);
+				ParseTrigger(node);
 			} else {
 				throw std::invalid_argument("unknown view type");
 			}

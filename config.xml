@@ -18,6 +18,18 @@
 				<long2string><sum><counter name="counter"/></sum></long2string>
 				<long2string><avg><counter name="counter"/></avg></long2string>
 			</select>
+			<where>
+				<stringEq>
+					<SourceMAC/>
+					<string>00:13:c4:bc:56:80</string>
+				</stringEq>
+			</where>
+			<trigger>
+				<longEq>
+					<counter/>
+					<long>1000</long>
+				</longEq>
+			</trigger>
 		</view>
 		<parser of="DIX">
 			<parser of="IPv4">

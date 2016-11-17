@@ -32,7 +32,7 @@ public:
 		for (auto s : this->Selection_list) {
 			if (!isFirst)
 				std::cout << " ";
-			std::cout << s->Value;
+			std::cout << s->Val;
 			isFirst = false;
 		}
 		std::cout << std::endl;
