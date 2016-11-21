@@ -13,61 +13,10 @@ namespace level_data {
 class DataEtherNetDIX: public logic::Logic<ChunkEtherNetDIX>
 {
 public:
-	virtual typename logic::Logic<ChunkEtherNetDIX>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
-	{
-		std::string name(elt.Value());
-		if (name == "Parent") {
-			auto child = elt.FirstChildElement();
-			if (child) {
-				DataEtherNet LogicEtherNet;
-				auto subfn = LogicEtherNet.ParseString(child);
-				auto r = [subfn](std::shared_ptr<ChunkEtherNetDIX> c) {
-					return(subfn(c->Parent));
-				};
-				return (r);
-			}
-			throw logic::ParseError("No child for <Parent/>");
-		}
-		return (ttop::logic::Logic<ChunkEtherNetDIX>::ParseStringCustom(elt));
-	}
-
-	virtual typename logic::Logic<ChunkEtherNetDIX>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
-	{
-		std::string name(elt.Value());
-		if (name == "Parent") {
-			auto child = elt.FirstChildElement();
-			if (child) {
-				DataEtherNet LogicEtherNet;
-				auto subfn = LogicEtherNet.ParseBool(child);
-				auto r = [subfn](std::shared_ptr<ChunkEtherNetDIX> c) {
-					return(subfn(c->Parent));
-				};
-				return (r);
-			}
-			throw logic::ParseError("No child for <Parent/>");
-		}
-		return (ttop::logic::Logic<ChunkEtherNetDIX>::ParseBoolCustom(elt));
-	}
-
-	virtual typename logic::Logic<ChunkEtherNetDIX>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
-	{
-		std::string name(elt.Value());
-		if (name == "Parent") {
-			auto child = elt.FirstChildElement();
-			if (child) {
-				DataEtherNet LogicEtherNet;
-				auto subfn = LogicEtherNet.ParseLongLong(child);
-				auto r = [subfn](std::shared_ptr<ChunkEtherNetDIX> c) {
-					return(subfn(c->Parent));
-				};
-				return (r);
-			}
-			throw logic::ParseError("No child for <Parent/>");
-		}
-		return (ttop::logic::Logic<ChunkEtherNetDIX>::ParseLongLongCustom(elt));
-	}
-
-	virtual ~DataEtherNetDIX() {};
+	virtual typename logic::Logic<ChunkEtherNetDIX>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkEtherNetDIX>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkEtherNetDIX>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt);
+	virtual ~DataEtherNetDIX();
 };
 
 }
