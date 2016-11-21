@@ -83,7 +83,9 @@ public:
 				long long v = std::stoll(value);
 				return([v](t_input) { return (v); });
 			} else if (name == "max" || name == "min" || name == "sum" || name == "avg") {
-				if (tinyxml2::XMLElement *first = elt->FirstChild()->ToElement()) {
+				tinyxml2::XMLNode *_first = elt->FirstChild();
+				tinyxml2::XMLElement *first;
+				if (_first && (first = _first->ToElement())) {
 					t_longlong_value s_first = ParseLongLong(first);
 					long long current = 0;
 					if (name == "max") {
@@ -110,6 +112,38 @@ public:
 							return(current/count);
 						});
 					}
+				}
+				throw ParseError("Logic parser found no children for node '" + name + "'");
+			} else if (name == "plus"
+					|| name == "minus"
+					|| name == "mul"
+					|| name == "div") {
+				tinyxml2::XMLNode *node = elt->FirstChild();
+				tinyxml2::XMLElement *first, *second;
+				if (node && (first = node->ToElement())) {
+					node = node->NextSiblingElement();
+					if (node && (second = node->ToElement())) {
+						t_longlong_value s_first = ParseLongLong(first);
+						t_longlong_value s_second = ParseLongLong(second);
+						if (name == "plus") {
+							return ([s_first, s_second](t_input v) mutable {
+								return(s_first(v) + s_second(v));
+							});
+						} else if (name == "minus") {
+							return ([s_first, s_second](t_input v) mutable {
+								return(s_first(v) - s_second(v));
+							});
+						} else if (name == "mul") {
+							return ([s_first, s_second](t_input v) mutable {
+								return(s_first(v) * s_second(v));
+							});
+						} else if (name == "div") {
+							return ([s_first, s_second](t_input v) mutable {
+								return(s_first(v) / s_second(v));
+							});
+						}
+					}
+					throw ParseError("Logic parser found no second child for node '" + name + "'");
 				}
 				throw ParseError("Logic parser found no children for node '" + name + "'");
 			} else if (name == "now_seconds") {
@@ -166,6 +200,40 @@ public:
 					return ([s_first](t_input v) { return(not(s_first(v))); });
 				}
 				throw ParseError("Logic parser found no children for node '" + name + "'");
+
+			} else if (name == "longGt"
+					|| name == "longLt"
+					|| name == "longGtEq"
+					|| name == "longLtEq") {
+				tinyxml2::XMLNode *node = elt->FirstChild();
+				tinyxml2::XMLElement *first, *second;
+				if (node && (first = node->ToElement())) {
+					node = node->NextSiblingElement();
+					if (node && (second = node->ToElement())) {
+						t_longlong_value s_first = ParseLongLong(first);
+						t_longlong_value s_second = ParseLongLong(second);
+						if (name == "longGt") {
+							return ([s_first, s_second](t_input v) mutable {
+								return(s_first(v) > s_second(v));
+							});
+						} else if (name == "longLt") {
+							return ([s_first, s_second](t_input v) mutable {
+								return(s_first(v) < s_second(v));
+							});
+						} else if (name == "longGtEq") {
+							return ([s_first, s_second](t_input v) mutable {
+								return(s_first(v) >= s_second(v));
+							});
+						} else if (name == "longLtEq") {
+							return ([s_first, s_second](t_input v) mutable {
+								return(s_first(v) <= s_second(v));
+							});
+						}
+					}
+					throw ParseError("Logic parser found no second child for node '" + name + "'");
+				}
+				throw ParseError("Logic parser found no children for node '" + name + "'");
+
 
 			} else if (name == "stringEq" || name == "longEq") {
 				tinyxml2::XMLElement *first = elt->FirstChild()->ToElement();
