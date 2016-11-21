@@ -47,130 +47,19 @@ public:
 	Value<IN, bool> Trigger = Value<IN, bool>(True);
 	Value<IN, typename std::string> GroupBy = Value<IN, typename std::string>(EmptyString);
 	virtual std::string TypeID() = 0;
-	virtual void Output() {};
+	virtual void Output();
 
-	void FillSelection(t_selection &vector, std::shared_ptr<IN> chunk) {
-		for (auto it = vector.begin(); it!=vector.end(); ++it) {
-			(*it).Input(chunk);
-		}
-	}
+	void FillSelection(t_selection &vector, std::shared_ptr<IN> chunk);
+	void Input(std::shared_ptr<IN> chunk);
+	virtual void ParseParams(tinyxml2::XMLElement *node);
 
-	void Input(std::shared_ptr<IN> chunk)
-	{
-		Where.Input(chunk);
-		Trigger.Input(chunk);
-
-		if (Where.Val) {
-			GroupBy.Input(chunk);
-			auto g = Selection.find(GroupBy.Val);
-			if (g == Selection.end()) {
-				t_selection vector = Selection_source;
-				FillSelection(vector, chunk);
-				Selection.emplace(GroupBy.Val, vector);
-			} else {
-				FillSelection(g->second, chunk);
-			}
-		}
-
-		if (Trigger.Val) {
-			Output();
-//			for (auto it = Selection_source.begin(); it!=Selection_source.end(); ++it) {
-//				(*it).Reset();
-//			}
-			Where.Reset();
-			Trigger.Reset();
-			GroupBy.Reset();
-			Selection.clear();
-		}
-	}
-
-	virtual void ParseParams(tinyxml2::XMLElement *node) {};
-
-	void ParseSelects(tinyxml2::XMLElement *node) {
-		tinyxml2::XMLHandle docHandle(node);
-		tinyxml2::XMLElement* select = docHandle.FirstChildElement("select").ToElement();
-		if (select) {
-			tinyxml2::XMLNode *child = select->FirstChild();
-			while (child) {
-				tinyxml2::XMLElement *elt = child->ToElement();
-				if (elt) {
-					const char *_name = elt->Attribute("name");
-					std::string name = (_name) ? _name : "";
-					std::function<std::string(std::shared_ptr<IN>)> v = Parser->ParseString(elt);
-					Value<IN, std::string>  s(name, v);
-					Selection_source.push_back(s);
-				}
-				child = child->NextSibling();
-			}
-		}
-	}
-
-	void ParseWhere(tinyxml2::XMLElement *node) {
-		if (tinyxml2::XMLNode *child = node->FirstChildElement("where")) {
-			child = child->FirstChildElement();
-			if (child) {
-				tinyxml2::XMLElement *elt = child->ToElement();
-				if (elt) {
-					Where = Parser->ParseBool(elt);
-					return;
-				}
-			}
-			throw logic::ParseError("Bool child node required for <where/>");
-		}
-	}
-
-	void ParseTrigger(tinyxml2::XMLElement *node) {
-		if (tinyxml2::XMLNode *child = node->FirstChildElement("trigger")) {
-			child = child->FirstChildElement();
-			if (child) {
-				tinyxml2::XMLElement *elt = child->ToElement();
-				if (elt) {
-					Trigger = Parser->ParseBool(elt);
-					return;
-				}
-			}
-			throw logic::ParseError("Bool child node required for <trigger/>");
-		}
-	}
-
-	void ParseGroupBy(tinyxml2::XMLElement *node) {
-		if (tinyxml2::XMLNode *child = node->FirstChildElement("groupBy")) {
-			child = child->FirstChildElement();
-			if (child) {
-				tinyxml2::XMLElement *elt = child->ToElement();
-				if (elt) {
-					GroupBy = Parser->ParseString(elt);
-					return;
-				}
-			}
-			throw logic::ParseError("Bool child node required for <groupBy/>");
-		}
-	}
-
-	void Parse(tinyxml2::XMLElement *node, std::string &type)
-	{
-		const char *_type = node->Attribute("type");
-		if (_type) {
-			if (TypeID() == _type) {
-				ParseParams(node);
-				ParseSelects(node);
-				ParseWhere(node);
-				ParseTrigger(node);
-				ParseGroupBy(node);
-			} else {
-				throw std::invalid_argument("unknown view type");
-			}
-		} else {
-			throw logic::ParseError("type= is required for <view/>");
-		}
-	}
-
-	View(std::shared_ptr<logic::Logic<IN> > parser)
-		: Parser(parser)
-	{
-	}
-
-	virtual ~View() {}
+	void ParseSelects(tinyxml2::XMLElement *node);
+	void ParseWhere(tinyxml2::XMLElement *node);
+	void ParseTrigger(tinyxml2::XMLElement *node);
+	void ParseGroupBy(tinyxml2::XMLElement *node);
+	void Parse(tinyxml2::XMLElement *node, std::string &type);
+	View(std::shared_ptr<logic::Logic<IN> > parser);
+	virtual ~View();
 };
 
 } /* namespace view */
