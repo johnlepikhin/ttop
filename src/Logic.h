@@ -146,7 +146,7 @@ public:
 					throw ParseError("Logic parser found no second child for node '" + name + "'");
 				}
 				throw ParseError("Logic parser found no children for node '" + name + "'");
-			} else if (name == "now_seconds") {
+			} else if (name == "nowSeconds") {
 				return ([](t_input v) mutable {
 					return(std::time(nullptr));
 				});

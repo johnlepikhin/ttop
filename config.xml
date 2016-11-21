@@ -30,8 +30,8 @@
 			-->
 			<trigger>
 				<longGtEq>
-					<minus><now_seconds/><long>4</long></minus>
-					<min><now_seconds/></min>
+					<minus><nowSeconds/><long>4</long></minus>
+					<min><nowSeconds/></min>
 				</longGtEq>
 			</trigger>
 			<groupBy>
