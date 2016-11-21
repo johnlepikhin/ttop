@@ -23,11 +23,8 @@ public:
 		return ((std::string)"dump");
 	}
 
-	Dump(std::shared_ptr<logic::Logic<IN, bool> > boolParser
-			, std::shared_ptr<logic::Logic<IN, unsigned long long> > longParser
-			, std::shared_ptr<logic::Logic<IN, std::string> > stringParser
-			)
-		: View<IN>(boolParser, longParser, stringParser)
+	Dump(std::shared_ptr<logic::Logic<IN> > parser)
+		: View<IN>(parser)
 	{
 
 	}

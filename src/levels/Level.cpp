@@ -37,7 +37,7 @@ template<typename PARSER>
 void Level<PARSER>::ParseXMLSettingsFilter(tinyxml2::XMLElement *node)
 {
 	tinyxml2::XMLElement *logic = node->FirstChildElement();
-	FilterAlgorithm = BoolLogicParser->ParseBool(logic);
+	FilterAlgorithm = Parser->ParseBool(logic);
 }
 
 template<typename PARSER>
@@ -48,7 +48,7 @@ void Level<PARSER>::ParseXMLSettingsView(tinyxml2::XMLElement *node)
 		std::string type(_type);
 		if (type == "dump") {
 			std::shared_ptr<view::View<THIS_T> > View
-			= std::make_shared<view::Dump<THIS_T> >(BoolLogicParser, LongLogicParser, StringLogicParser);
+			= std::make_shared<view::Dump<THIS_T> >(Parser);
 			View->Parse(node, type);
 			Views.push_back(View);
 		} else {
@@ -76,13 +76,8 @@ void Level<PARSER>::ParseXMLSettings(tinyxml2::XMLElement *node)
 }
 
 template<typename PARSER>
-Level<PARSER>::Level(t_bool_parser boolParser
-		, t_long_parser longParser
-		, t_string_parser stringParser
-)
-	: BoolLogicParser(boolParser)
-	, LongLogicParser(longParser)
-	, StringLogicParser(stringParser)
+Level<PARSER>::Level(t_parser parser)
+	: Parser(parser)
 {
 }
 

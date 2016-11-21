@@ -9,18 +9,10 @@
 namespace ttop {
 namespace level_data {
 
-template <typename OUT>
-class DataPacketIPVariant: public logic::Logic<PacketIPVariant, OUT>
+class DataPacketIPVariant: public logic::Logic<PacketIPVariant>
 {
-	OUT DefaultValue;
 public:
-	DataPacketIPVariant(OUT defaultValue)
-		: logic::Logic<PacketIPVariant, OUT>(defaultValue)
-		, DefaultValue(defaultValue)
-	{
-	}
-
-	virtual typename logic::Logic<PacketIPVariant, OUT>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<PacketIPVariant>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "IsIPv4") {
@@ -36,7 +28,7 @@ public:
 		} else if (name == "IPv4") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataPacketIPv4<OUT> LogicIPv4(DefaultValue);
+				DataPacketIPv4 LogicIPv4;
 				auto subfn = LogicIPv4.ParseBool(child);
 				auto r = [subfn](std::shared_ptr<PacketIPVariant> c) {
 					return(subfn(c->IPv4));
@@ -45,16 +37,16 @@ public:
 			}
 			throw logic::ParseError("No child for <IPv4/>");
 		}
-		return (ttop::logic::Logic<PacketIPVariant, OUT>::ParseBoolCustom(elt));
+		return (ttop::logic::Logic<PacketIPVariant>::ParseBoolCustom(elt));
 	}
 
-	virtual typename logic::Logic<PacketIPVariant, OUT>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<PacketIPVariant>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "IPv4") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataPacketIPv4<OUT> LogicIPv4(DefaultValue);
+				DataPacketIPv4 LogicIPv4;
 				auto subfn = LogicIPv4.ParseString(child);
 				auto r = [subfn](std::shared_ptr<PacketIPVariant> c) {
 					return(subfn(c->IPv4));
@@ -63,16 +55,16 @@ public:
 			}
 			throw logic::ParseError("No child for <IPv4/>");
 		}
-		return (ttop::logic::Logic<PacketIPVariant, OUT>::ParseStringCustom(elt));
+		return (ttop::logic::Logic<PacketIPVariant>::ParseStringCustom(elt));
 	}
 
-	virtual typename logic::Logic<PacketIPVariant, OUT>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<PacketIPVariant>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "IPv4") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataPacketIPv4<OUT> LogicIPv4(DefaultValue);
+				DataPacketIPv4 LogicIPv4;
 				auto subfn = LogicIPv4.ParseLongLong(child);
 				auto r = [subfn](std::shared_ptr<PacketIPVariant> c) {
 					return(subfn(c->IPv4));
@@ -81,23 +73,10 @@ public:
 			}
 			throw logic::ParseError("No child for <IPv4/>");
 		}
-		return (ttop::logic::Logic<PacketIPVariant, OUT>::ParseLongLongCustom(elt));
+		return (ttop::logic::Logic<PacketIPVariant>::ParseLongLongCustom(elt));
 	}
 
 	virtual ~DataPacketIPVariant() {};
-};
-
-class BoolPacketIPVariant : public DataPacketIPVariant<bool> {
-public:
-	BoolPacketIPVariant() : DataPacketIPVariant<bool>(true) {}
-};
-class LongPacketIPVariant : public DataPacketIPVariant<unsigned long long> {
-public:
-	LongPacketIPVariant() : DataPacketIPVariant<unsigned long long>(0) {}
-};
-class StringPacketIPVariant : public DataPacketIPVariant<std::string> {
-public:
-	StringPacketIPVariant() : DataPacketIPVariant<std::string>("") {}
 };
 
 }

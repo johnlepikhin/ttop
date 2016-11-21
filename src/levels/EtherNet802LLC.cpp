@@ -10,10 +10,7 @@ parserDescription::info EtherNet802LLC::GetDescription()
 }
 
 EtherNet802LLC::EtherNet802LLC()
-	: Level(std::make_shared<logic::Logic<THIS_T, bool> >(true)
-			, std::make_shared<logic::Logic<THIS_T, unsigned long long> >(0)
-			, std::make_shared<logic::Logic<THIS_T, std::string> >("")
-			)
+	: Level(std::make_shared<logic::Logic<THIS_T> >())
 {
 }
 

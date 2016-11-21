@@ -10,20 +10,16 @@ namespace ttop {
 
 namespace level_data {
 
-template <typename OUT>
-class DataTCP: public logic::Logic<ChunkTCP, OUT>
+class DataTCP: public logic::Logic<ChunkTCP>
 {
-	OUT DefaultValue;
 public:
-	DataTCP(OUT defaultValue) : logic::Logic<ChunkTCP, OUT>(defaultValue) {}
-
-	virtual typename logic::Logic<ChunkTCP, OUT>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkTCP>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "Parent") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataPacketIPVariant<OUT> LogiIPVariant(DefaultValue);
+				DataPacketIPVariant LogiIPVariant;
 				auto subfn = LogiIPVariant.ParseString(child);
 				auto r = [subfn](std::shared_ptr<ChunkTCP> c) {
 					return(subfn(c->Parent));
@@ -32,16 +28,16 @@ public:
 			}
 			throw logic::ParseError("No child for <Parent/>");
 		}
-		return (ttop::logic::Logic<ChunkTCP, OUT>::ParseStringCustom(elt));
+		return (ttop::logic::Logic<ChunkTCP>::ParseStringCustom(elt));
 	}
 
-	virtual typename logic::Logic<ChunkTCP, OUT>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkTCP>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "Parent") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataPacketIPVariant<OUT> LogicIPVariant(DefaultValue);
+				DataPacketIPVariant LogicIPVariant;
 				auto subfn = LogicIPVariant.ParseBool(child);
 				auto r = [subfn](std::shared_ptr<ChunkTCP> c) {
 					return(subfn(c->Parent));
@@ -80,10 +76,10 @@ public:
 			};
 			return (r);
 		}
-		return (ttop::logic::Logic<ChunkTCP, OUT>::ParseBoolCustom(elt));
+		return (ttop::logic::Logic<ChunkTCP>::ParseBoolCustom(elt));
 	}
 
-	virtual typename logic::Logic<ChunkTCP, OUT>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkTCP>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "PayloadLength") {
@@ -129,7 +125,7 @@ public:
 		} else if (name == "Parent") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataPacketIPVariant<OUT> LogicIPVariant(DefaultValue);
+				DataPacketIPVariant LogicIPVariant;
 				auto subfn = LogicIPVariant.ParseLongLong(child);
 				auto r = [subfn](std::shared_ptr<ChunkTCP> c) {
 					return(subfn(c->Parent));
@@ -138,23 +134,10 @@ public:
 			}
 			throw logic::ParseError("No child for <Parent/>");
 		}
-		return (ttop::logic::Logic<ChunkTCP, OUT>::ParseLongLongCustom(elt));
+		return (ttop::logic::Logic<ChunkTCP>::ParseLongLongCustom(elt));
 	}
 
 	virtual ~DataTCP() {};
-};
-
-class BoolTCP : public DataTCP<bool> {
-public:
-	BoolTCP() : DataTCP<bool>(true) {}
-};
-class LongTCP : public DataTCP<unsigned long long> {
-public:
-	LongTCP() : DataTCP<unsigned long long>(0) {}
-};
-class StringTCP : public DataTCP<std::string> {
-public:
-	StringTCP() : DataTCP<std::string>("") {}
 };
 
 }

@@ -9,30 +9,27 @@ namespace ttop {
 
 namespace level_data {
 
-template <typename OUT>
-class DataEtherNet: public logic::Logic<ChunkEtherNet, OUT>
+class DataEtherNet: public logic::Logic<ChunkEtherNet>
 {
 public:
-	DataEtherNet(OUT defaultValue) : logic::Logic<ChunkEtherNet, OUT>(defaultValue) {}
-
-	virtual typename logic::Logic<ChunkEtherNet, OUT>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkEtherNet>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "SourceMAC") {
-			typename ttop::logic::Logic<ChunkEtherNet, OUT>::t_string_value r = [](std::shared_ptr<ChunkEtherNet> c) {
+			typename ttop::logic::Logic<ChunkEtherNet>::t_string_value r = [](std::shared_ptr<ChunkEtherNet> c) {
 				return (MAC::asString(c->SourceMAC));
 			};
 			return (r);
 		} else if (name == "DestinationMAC") {
-			typename ttop::logic::Logic<ChunkEtherNet, OUT>::t_string_value r = [](std::shared_ptr<ChunkEtherNet> c) {
+			typename ttop::logic::Logic<ChunkEtherNet>::t_string_value r = [](std::shared_ptr<ChunkEtherNet> c) {
 				return (MAC::asString(c->DestinationMAC));
 			};
 			return (r);
 		}
-		return (ttop::logic::Logic<ChunkEtherNet, OUT>::ParseStringCustom(elt));
+		return (ttop::logic::Logic<ChunkEtherNet>::ParseStringCustom(elt));
 	}
 
-	virtual typename logic::Logic<ChunkEtherNet, OUT>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkEtherNet>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "Seconds") {
@@ -44,22 +41,9 @@ public:
 				return (c->BaseData->USeconds);
 			});
 		}
-		return (ttop::logic::Logic<ChunkEtherNet, OUT>::ParseLongLongCustom(elt));
+		return (ttop::logic::Logic<ChunkEtherNet>::ParseLongLongCustom(elt));
 	}
 	virtual ~DataEtherNet() {};
-};
-
-class BoolEtherNet : public DataEtherNet<bool> {
-public:
-	BoolEtherNet() : DataEtherNet<bool>(true) {}
-};
-class LongEtherNet : public DataEtherNet<unsigned long long> {
-public:
-	LongEtherNet() : DataEtherNet<unsigned long long>(0) {}
-};
-class StringEtherNet : public DataEtherNet<std::string> {
-public:
-	StringEtherNet() : DataEtherNet<std::string>("") {}
 };
 
 }

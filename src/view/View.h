@@ -35,9 +35,7 @@ struct Value {
 
 template <typename IN>
 class View {
-	std::shared_ptr<logic::Logic<IN, bool> > BoolParser;
-	std::shared_ptr<logic::Logic<IN, unsigned long long> > LongParser;
-	std::shared_ptr<logic::Logic<IN, std::string> > StringParser;
+	std::shared_ptr<logic::Logic<IN> > Parser;
 	std::function<bool(std::shared_ptr<IN>)> True = [](std::shared_ptr<IN>) { return (true); };
 	std::function<std::string(std::shared_ptr<IN>)> EmptyString = [](std::shared_ptr<IN>) { return (""); };
 public:
@@ -98,7 +96,7 @@ public:
 				if (elt) {
 					const char *_name = elt->Attribute("name");
 					std::string name = (_name) ? _name : "";
-					std::function<std::string(std::shared_ptr<IN>)> v = StringParser->ParseString(elt);
+					std::function<std::string(std::shared_ptr<IN>)> v = Parser->ParseString(elt);
 					Value<IN, std::string>  s(name, v);
 					Selection_source.push_back(s);
 				}
@@ -113,7 +111,7 @@ public:
 			if (child) {
 				tinyxml2::XMLElement *elt = child->ToElement();
 				if (elt) {
-					Where = BoolParser->ParseBool(elt);
+					Where = Parser->ParseBool(elt);
 					return;
 				}
 			}
@@ -127,7 +125,7 @@ public:
 			if (child) {
 				tinyxml2::XMLElement *elt = child->ToElement();
 				if (elt) {
-					Trigger = BoolParser->ParseBool(elt);
+					Trigger = Parser->ParseBool(elt);
 					return;
 				}
 			}
@@ -141,7 +139,7 @@ public:
 			if (child) {
 				tinyxml2::XMLElement *elt = child->ToElement();
 				if (elt) {
-					GroupBy = StringParser->ParseString(elt);
+					GroupBy = Parser->ParseString(elt);
 					return;
 				}
 			}
@@ -167,13 +165,8 @@ public:
 		}
 	}
 
-	View(std::shared_ptr<logic::Logic<IN, bool> > boolParser
-			, std::shared_ptr<logic::Logic<IN, unsigned long long> > longParser
-			, std::shared_ptr<logic::Logic<IN, std::string> > stringParser
-			)
-		: BoolParser(boolParser)
-		, LongParser(longParser)
-		, StringParser(stringParser)
+	View(std::shared_ptr<logic::Logic<IN> > parser)
+		: Parser(parser)
 	{
 	}
 

@@ -17,13 +17,10 @@ public:
 	ParseError(const std::string &msg) : std::runtime_error(msg) {};
 };
 
-template <typename IN, typename OUT>
+template <typename IN>
 class Logic {
 public:
 	typedef std::shared_ptr<IN> t_input;
-	typedef std::function<OUT(t_input)> t_logic;
-
-	OUT DefaultValue;
 
 	typedef std::function<std::string(t_input)> t_string_value;
 	typedef std::function<long long(t_input)> t_longlong_value;
@@ -31,15 +28,6 @@ public:
 
 	t_bool_value True = [](t_input) { return (true); };
 	t_bool_value False = [](t_input) { return (false); };
-
-	Logic (OUT defaultValue)
-	{
-		DefaultValue = defaultValue;
-	}
-
-	t_logic GetDefault() {
-		return ([this](t_input) { return (this->DefaultValue); });
-	}
 
 	virtual ~Logic() {}
 

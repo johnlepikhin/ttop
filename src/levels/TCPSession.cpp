@@ -11,10 +11,7 @@ parserDescription::info TCPSession::GetDescription()
 }
 
 TCPSession::TCPSession()
-	: Level(std::make_shared<ttop::level_data::BoolTCPSession>()
-			, std::make_shared<ttop::level_data::LongTCPSession>()
-			, std::make_shared<ttop::level_data::StringTCPSession>()
-			)
+	: Level(std::make_shared<ttop::level_data::DataTCPSession>())
 {
 }
 

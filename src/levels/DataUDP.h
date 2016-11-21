@@ -10,20 +10,16 @@ namespace ttop {
 
 namespace level_data {
 
-template <typename OUT>
-class DataUDP: public logic::Logic<ChunkUDP, OUT>
+class DataUDP: public logic::Logic<ChunkUDP>
 {
-	OUT DefaultValue;
 public:
-	DataUDP(OUT defaultValue) : logic::Logic<ChunkUDP, OUT>(defaultValue) {}
-
-	virtual typename logic::Logic<ChunkUDP, OUT>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkUDP>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "Parent") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataPacketIPVariant<OUT> LogiIPVariant(DefaultValue);
+				DataPacketIPVariant LogiIPVariant;
 				auto subfn = LogiIPVariant.ParseString(child);
 				auto r = [subfn](std::shared_ptr<ChunkUDP> c) {
 					return(subfn(c->Parent));
@@ -32,16 +28,16 @@ public:
 			}
 			throw logic::ParseError("No child for <Parent/>");
 		}
-		return (ttop::logic::Logic<ChunkUDP, OUT>::ParseStringCustom(elt));
+		return (ttop::logic::Logic<ChunkUDP>::ParseStringCustom(elt));
 	}
 
-	virtual typename logic::Logic<ChunkUDP, OUT>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkUDP>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "Parent") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataPacketIPVariant<OUT> LogicIPVariant(DefaultValue);
+				DataPacketIPVariant LogicIPVariant;
 				auto subfn = LogicIPVariant.ParseBool(child);
 				auto r = [subfn](std::shared_ptr<ChunkUDP> c) {
 					return(subfn(c->Parent));
@@ -50,10 +46,10 @@ public:
 			}
 			throw logic::ParseError("No child for <Parent/>");
 		}
-		return (ttop::logic::Logic<ChunkUDP, OUT>::ParseBoolCustom(elt));
+		return (ttop::logic::Logic<ChunkUDP>::ParseBoolCustom(elt));
 	}
 
-	virtual typename logic::Logic<ChunkUDP, OUT>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkUDP>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "PayloadLength") {
@@ -79,7 +75,7 @@ public:
 		} else if (name == "Parent") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataPacketIPVariant<OUT> LogicIPVariant(DefaultValue);
+				DataPacketIPVariant LogicIPVariant;
 				auto subfn = LogicIPVariant.ParseLongLong(child);
 				auto r = [subfn](std::shared_ptr<ChunkUDP> c) {
 					return(subfn(c->Parent));
@@ -88,23 +84,10 @@ public:
 			}
 			throw logic::ParseError("No child for <Parent/>");
 		}
-		return (ttop::logic::Logic<ChunkUDP, OUT>::ParseLongLongCustom(elt));
+		return (ttop::logic::Logic<ChunkUDP>::ParseLongLongCustom(elt));
 	}
 
 	virtual ~DataUDP() {};
-};
-
-class BoolUDP : public DataUDP<bool> {
-public:
-	BoolUDP() : DataUDP<bool>(true) {}
-};
-class LongUDP : public DataUDP<unsigned long long> {
-public:
-	LongUDP() : DataUDP<unsigned long long>(0) {}
-};
-class StringUDP : public DataUDP<std::string> {
-public:
-	StringUDP() : DataUDP<std::string>("") {}
 };
 
 }

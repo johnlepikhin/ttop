@@ -10,14 +10,10 @@ namespace ttop {
 
 namespace level_data {
 
-template <typename OUT>
-class DataTCPEndPoint: public logic::Logic<EndPoint, OUT>
+class DataTCPEndPoint: public logic::Logic<EndPoint>
 {
-	OUT DefaultValue;
 public:
-	DataTCPEndPoint(OUT defaultValue) : logic::Logic<EndPoint, OUT>(defaultValue) {}
-
-	virtual typename logic::Logic<EndPoint, OUT>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<EndPoint>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "PayloadPreview") {
@@ -36,7 +32,7 @@ public:
 		} else if (name == "LastChunk") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataTCP<OUT> LogicTCP(DefaultValue);
+				DataTCP LogicTCP;
 				auto subfn = LogicTCP.ParseString(child);
 				auto r = [subfn](std::shared_ptr<EndPoint> c) {
 					return(subfn(c->LastChunk));
@@ -45,10 +41,10 @@ public:
 			}
 			throw logic::ParseError("No child for <LastChunk/>");
 		}
-		return (ttop::logic::Logic<EndPoint, OUT>::ParseStringCustom(elt));
+		return (ttop::logic::Logic<EndPoint>::ParseStringCustom(elt));
 	}
 
-	virtual typename logic::Logic<EndPoint, OUT>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<EndPoint>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "HasLastChunk") {
@@ -59,7 +55,7 @@ public:
 		} else if (name == "LastChunk") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataTCP<OUT> LogicTCP(DefaultValue);
+				DataTCP LogicTCP;
 				auto subfn = LogicTCP.ParseBool(child);
 				auto r = [subfn](std::shared_ptr<EndPoint> c) {
 					return(subfn(c->LastChunk));
@@ -68,10 +64,10 @@ public:
 			}
 			throw logic::ParseError("No child for <LastChunk/>");
 		}
-		return (ttop::logic::Logic<EndPoint, OUT>::ParseBoolCustom(elt));
+		return (ttop::logic::Logic<EndPoint>::ParseBoolCustom(elt));
 	}
 
-	virtual typename logic::Logic<EndPoint, OUT>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<EndPoint>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "NextExpectedSEQ") {
@@ -92,7 +88,7 @@ public:
 		} else if (name == "LastChunk") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataTCP<OUT> LogicTCP(DefaultValue);
+				DataTCP LogicTCP;
 				auto subfn = LogicTCP.ParseLongLong(child);
 				auto r = [subfn](std::shared_ptr<EndPoint> c) {
 					return(subfn(c->LastChunk));
@@ -101,27 +97,23 @@ public:
 			}
 			throw logic::ParseError("No child for <LastChunk/>");
 		}
-		return (ttop::logic::Logic<EndPoint, OUT>::ParseLongLongCustom(elt));
+		return (ttop::logic::Logic<EndPoint>::ParseLongLongCustom(elt));
 	}
 
 	virtual ~DataTCPEndPoint() {};
 };
 
-template <typename OUT>
-class DataTCPSession: public logic::Logic<SessionTCP, OUT>
+class DataTCPSession: public logic::Logic<SessionTCP>
 {
-	OUT DefaultValue;
 public:
-	DataTCPSession(OUT defaultValue) : logic::Logic<SessionTCP, OUT>(defaultValue) {}
-
-	virtual typename logic::Logic<SessionTCP, OUT>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<SessionTCP>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 
 		if (name == "Client") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataTCPEndPoint<OUT> LogicTCPEndPoint(DefaultValue);
+				DataTCPEndPoint LogicTCPEndPoint;
 				auto subfn = LogicTCPEndPoint.ParseString(child);
 				auto r = [subfn](std::shared_ptr<SessionTCP> c) {
 					return(subfn(c->Client));
@@ -132,7 +124,7 @@ public:
 		} else if (name == "Server") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataTCPEndPoint<OUT> LogicTCPEndPoint(DefaultValue);
+				DataTCPEndPoint LogicTCPEndPoint;
 				auto subfn = LogicTCPEndPoint.ParseString(child);
 				auto r = [subfn](std::shared_ptr<SessionTCP> c) {
 					return(subfn(c->Server));
@@ -141,10 +133,10 @@ public:
 			}
 			throw logic::ParseError("No child for <Server/>");
 		}
-		return (ttop::logic::Logic<SessionTCP, OUT>::ParseStringCustom(elt));
+		return (ttop::logic::Logic<SessionTCP>::ParseStringCustom(elt));
 	}
 
-	virtual typename logic::Logic<SessionTCP, OUT>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<SessionTCP>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "DirectionDetected") {
@@ -155,7 +147,7 @@ public:
 		} else if (name == "Client") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataTCPEndPoint<OUT> LogicTCPEndPoint(DefaultValue);
+				DataTCPEndPoint LogicTCPEndPoint;
 				auto subfn = LogicTCPEndPoint.ParseBool(child);
 				auto r = [subfn](std::shared_ptr<SessionTCP> c) {
 					return(subfn(c->Client));
@@ -166,7 +158,7 @@ public:
 		} else if (name == "Server") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataTCPEndPoint<OUT> LogicTCPEndPoint(DefaultValue);
+				DataTCPEndPoint LogicTCPEndPoint;
 				auto subfn = LogicTCPEndPoint.ParseBool(child);
 				auto r = [subfn](std::shared_ptr<SessionTCP> c) {
 					return(subfn(c->Server));
@@ -175,10 +167,10 @@ public:
 			}
 			throw logic::ParseError("No child for <Server/>");
 		}
-		return (ttop::logic::Logic<SessionTCP, OUT>::ParseBoolCustom(elt));
+		return (ttop::logic::Logic<SessionTCP>::ParseBoolCustom(elt));
 	}
 
-	virtual typename logic::Logic<SessionTCP, OUT>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<SessionTCP>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "LastInternalID") {
@@ -189,7 +181,7 @@ public:
 		} else if (name == "Client") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataTCPEndPoint<OUT> LogicTCPEndPoint(DefaultValue);
+				DataTCPEndPoint LogicTCPEndPoint;
 				auto subfn = LogicTCPEndPoint.ParseLongLong(child);
 				auto r = [subfn](std::shared_ptr<SessionTCP> c) {
 					return(subfn(c->Client));
@@ -200,7 +192,7 @@ public:
 		} else if (name == "Server") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				DataTCPEndPoint<OUT> LogicTCPEndPoint(DefaultValue);
+				DataTCPEndPoint LogicTCPEndPoint;
 				auto subfn = LogicTCPEndPoint.ParseLongLong(child);
 				auto r = [subfn](std::shared_ptr<SessionTCP> c) {
 					return(subfn(c->Server));
@@ -209,23 +201,10 @@ public:
 			}
 			throw logic::ParseError("No child for <Server/>");
 		}
-		return (ttop::logic::Logic<SessionTCP, OUT>::ParseLongLongCustom(elt));
+		return (ttop::logic::Logic<SessionTCP>::ParseLongLongCustom(elt));
 	}
 
 	virtual ~DataTCPSession() {};
-};
-
-class BoolTCPSession : public DataTCPSession<bool> {
-public:
-	BoolTCPSession() : DataTCPSession<bool>(true) {}
-};
-class LongTCPSession : public DataTCPSession<unsigned long long> {
-public:
-	LongTCPSession() : DataTCPSession<unsigned long long>(0) {}
-};
-class StringTCPSession : public DataTCPSession<std::string> {
-public:
-	StringTCPSession() : DataTCPSession<std::string>("") {}
 };
 
 }

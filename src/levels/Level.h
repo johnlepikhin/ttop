@@ -17,28 +17,20 @@ public:
 	typedef typename PARSER::THIS_T THIS_T;
 
 	typedef std::function<bool(std::shared_ptr<THIS_T>)> t_bool;
-	typedef std::shared_ptr<logic::Logic<THIS_T, bool> > t_bool_parser;
-	typedef std::shared_ptr<logic::Logic<THIS_T, unsigned long long> > t_long_parser;
-	typedef std::shared_ptr<logic::Logic<THIS_T, std::string> > t_string_parser;
+	typedef std::shared_ptr<logic::Logic<THIS_T> > t_parser;
 
-	typedef logic::Logic<THIS_T, bool> t_string;
-	typedef logic::Logic<THIS_T, bool> t_longlong;
+	typedef logic::Logic<THIS_T> t_eval_value;
 
 	typedef view::View<THIS_T> t_view;
 	typedef std::shared_ptr<THIS_T> t_value;
 
-	t_bool_parser BoolLogicParser = t_bool_parser(true);
-	t_long_parser LongLogicParser = t_long_parser(0);
-	t_string_parser StringLogicParser = t_string_parser("");
+	t_parser Parser;
 
-	t_bool FilterAlgorithm = BoolLogicParser->True;
+	t_bool FilterAlgorithm = Parser->True;
 
 	std::vector<std::shared_ptr<t_view > > Views;
 
-	Level(t_bool_parser boolParser
-			, t_long_parser longParser
-			, t_string_parser stringParser
-			);
+	Level(t_parser parser);
 	virtual ~Level();
 
 	virtual struct parserDescription::Description GetDescription() = 0;

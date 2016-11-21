@@ -11,10 +11,7 @@ parserDescription::info TCP::GetDescription()
 }
 
 TCP::TCP()
-	: Level(std::make_shared<ttop::level_data::BoolTCP>()
-			, std::make_shared<ttop::level_data::LongTCP>()
-			, std::make_shared<ttop::level_data::StringTCP>()
-			)
+	: Level(std::make_shared<ttop::level_data::DataTCP>())
 {
 }
 

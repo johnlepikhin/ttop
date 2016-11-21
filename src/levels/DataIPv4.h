@@ -9,20 +9,16 @@
 namespace ttop {
 namespace level_data {
 
-template <typename OUT>
-class DataIPv4: public logic::Logic<ChunkIPv4, OUT>
+class DataIPv4: public logic::Logic<ChunkIPv4>
 {
-	OUT DefaultValue;
 public:
-	DataIPv4(OUT defaultValue) : logic::Logic<ChunkIPv4, OUT>(defaultValue) {}
-
-	virtual typename logic::Logic<ChunkIPv4, OUT>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkIPv4>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "Parent") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				level_data::DataEtherNetDIX<OUT> LogicEtherNetDIX(DefaultValue);
+				level_data::DataEtherNetDIX LogicEtherNetDIX;
 				auto subfn = LogicEtherNetDIX.ParseBool(child);
 				auto r = [subfn](std::shared_ptr<ChunkIPv4> c) {
 					return(subfn(c->Parent));
@@ -31,10 +27,10 @@ public:
 			}
 			throw logic::ParseError("No child for <Parent/>");
 		}
-		return (ttop::logic::Logic<ChunkIPv4, OUT>::ParseBoolCustom(elt));
+		return (ttop::logic::Logic<ChunkIPv4>::ParseBoolCustom(elt));
 	}
 
-	virtual typename logic::Logic<ChunkIPv4, OUT>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkIPv4>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "SourceIP") {
@@ -50,7 +46,7 @@ public:
 		} else if (name == "Parent") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				level_data::DataEtherNetDIX<OUT> LogicEtherNetDIX(DefaultValue);
+				level_data::DataEtherNetDIX LogicEtherNetDIX;
 				auto subfn = LogicEtherNetDIX.ParseString(child);
 				auto r = [subfn](std::shared_ptr<ChunkIPv4> c) {
 					return(subfn(c->Parent));
@@ -59,10 +55,10 @@ public:
 			}
 			throw logic::ParseError("No child for <Parent/>");
 		}
-		return (ttop::logic::Logic<ChunkIPv4, OUT>::ParseStringCustom(elt));
+		return (ttop::logic::Logic<ChunkIPv4>::ParseStringCustom(elt));
 	}
 
-	virtual typename logic::Logic<ChunkIPv4, OUT>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
+	virtual typename logic::Logic<ChunkIPv4>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
 	{
 		std::string name(elt.Value());
 		if (name == "IHL") {
@@ -113,7 +109,7 @@ public:
 		} else if (name == "Parent") {
 			auto child = elt.FirstChildElement();
 			if (child) {
-				level_data::DataEtherNetDIX<OUT> LogicEtherNetDIX(DefaultValue);
+				level_data::DataEtherNetDIX LogicEtherNetDIX;
 				auto subfn = LogicEtherNetDIX.ParseLongLong(child);
 				auto r = [subfn](std::shared_ptr<ChunkIPv4> c) {
 					return(subfn(c->Parent));
@@ -122,23 +118,10 @@ public:
 			}
 			throw logic::ParseError("No child for <Parent/>");
 		}
-		return (ttop::logic::Logic<ChunkIPv4, OUT>::ParseLongLongCustom(elt));
+		return (ttop::logic::Logic<ChunkIPv4>::ParseLongLongCustom(elt));
 	}
 
 	virtual ~DataIPv4() {};
-};
-
-class BoolIPv4 : public DataIPv4<bool> {
-public:
-	BoolIPv4() : DataIPv4<bool>(true) {}
-};
-class LongIPv4 : public DataIPv4<unsigned long long> {
-public:
-	LongIPv4() : DataIPv4<unsigned long long>(0) {}
-};
-class StringIPv4 : public DataIPv4<std::string> {
-public:
-	StringIPv4() : DataIPv4<std::string>("") {}
 };
 
 }
