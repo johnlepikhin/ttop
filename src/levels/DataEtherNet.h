@@ -32,6 +32,20 @@ public:
 		return (ttop::logic::Logic<ChunkEtherNet, OUT>::ParseStringCustom(elt));
 	}
 
+	virtual typename logic::Logic<ChunkEtherNet, OUT>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt)
+	{
+		std::string name(elt.Value());
+		if (name == "Seconds") {
+			return ([](std::shared_ptr<ChunkEtherNet> c) {
+				return (c->BaseData->Seconds);
+			});
+		} else if (name == "USeconds") {
+			return ([](std::shared_ptr<ChunkEtherNet> c) {
+				return (c->BaseData->USeconds);
+			});
+		}
+		return (ttop::logic::Logic<ChunkEtherNet, OUT>::ParseLongLongCustom(elt));
+	}
 	virtual ~DataEtherNet() {};
 };
 

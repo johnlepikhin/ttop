@@ -10,10 +10,10 @@
 			</or>
 		</filter>
 		-->
-		<view type="dump" output="/tmp/ttop.out" rseparator="
-
-" fseparator="	">
+		<view type="dump" output="-">
 			<select>
+				<long2string><Seconds/></long2string>
+				<long2string><USeconds/></long2string>
 				<SourceMAC name="source"/>
 				<DestinationMAC name="dest"/>
 				<long2string><counter name="counter"/></long2string>
@@ -31,7 +31,7 @@
 			<trigger>
 				<longEq>
 					<counter/>
-					<long>10000</long>
+					<long>100</long>
 				</longEq>
 			</trigger>
 			<groupBy>
