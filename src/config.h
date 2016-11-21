@@ -9,6 +9,7 @@ namespace ttop {
 namespace config {
 
 extern std::string parsersXmlFile;
+extern std::string inputFile;
 
 };
 };

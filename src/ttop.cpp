@@ -13,6 +13,7 @@
 #include <fcntl.h>
 
 std::string ttop::config::parsersXmlFile;
+std::string ttop::config::inputFile;
 
 void parseCmdLine (int argc, char** argv)
 {
@@ -21,9 +22,12 @@ void parseCmdLine (int argc, char** argv)
 
 		TCLAP::ValueArg<std::string> parsersXml("c","config","Path to config file",false,"/etc/ttop/parsers.xml","file");
 
+		TCLAP::ValueArg<std::string> inputFile("i","input","Path to input file (use '-' for STDIN, this is default)",false,"-","file");
+
 		TCLAP::SwitchArg helpParsers("p", "help-parsers", "Print available parsers and exit");
 
 		cmd.add(parsersXml);
+		cmd.add(inputFile);
 		cmd.add(helpParsers);
 
 		cmd.parse(argc, argv);
@@ -43,6 +47,7 @@ void parseCmdLine (int argc, char** argv)
 		}
 
 		ttop::config::parsersXmlFile = parsersXml.getValue();
+		ttop::config::inputFile = inputFile.getValue();
 	} catch (TCLAP::ArgException &e) {
 		const std::string msg = e.error() + "for arg " + e.argId();
 		ttop::utils::fatalError(msg);
@@ -57,7 +62,11 @@ int main (int argc, char** argv)
 
 	// TMP
 	bool done = false;
-	int FD = open("/home/eugene/workspace/TrafficAccounting/dumps/dump-l28", 0);
+	int FD = 0;
+
+	if (ttop::config::inputFile != "-")
+		FD = open(ttop::config::inputFile.c_str(), 0);
+
 	util::skipBytesInFD(FD, sizeof (pcap_file_header));
 	while (!done) {
 		try {
