@@ -10,7 +10,8 @@
 			</or>
 		</filter>
 		-->
-		<view type="dump" output="-">
+		<view type="dump" output="-" gseparator="--------------------------------
+">
 			<select>
 				<long2string><Seconds/></long2string>
 				<long2string><USeconds/></long2string>

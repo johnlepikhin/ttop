@@ -39,6 +39,7 @@ void Dump<IN>::Output()
 		}
 		o << RecordSeparator;
 	}
+	o << GroupSeparator;
 }
 
 template <typename IN>
@@ -58,6 +59,10 @@ void Dump<IN>::ParseParams(tinyxml2::XMLElement *node)
 	_attr = node->Attribute("fseparator");
 	if (_attr) {
 		FieldSeparator = _attr;
+	}
+	_attr = node->Attribute("gseparator");
+	if (_attr) {
+		GroupSeparator = _attr;
 	}
 }
 

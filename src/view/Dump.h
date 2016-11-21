@@ -17,6 +17,7 @@ public:
 	std::ofstream OutputStream;
 	std::string FieldSeparator = " ";
 	std::string RecordSeparator = "\n";
+	std::string GroupSeparator = "";
 
 	virtual std::string TypeID();
 	Dump(std::shared_ptr<logic::Logic<IN> > parser);
