@@ -29,10 +29,12 @@
 			</where>
 			-->
 			<trigger>
-				<longEq>
-					<counter/>
-					<long>100</long>
-				</longEq>
+				<not>
+					<longEq>
+						<max><now_seconds/></max>
+						<min><now_seconds/></min>
+					</longEq>
+				</not>
 			</trigger>
 			<groupBy>
 				<SourceMAC name="source"/>

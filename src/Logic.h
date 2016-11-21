@@ -6,6 +6,7 @@
 #include <exception>
 #include <memory>
 #include "tinyxml2.h"
+#include <ctime>
 
 namespace ttop {
 namespace logic {
@@ -111,6 +112,10 @@ public:
 					}
 				}
 				throw ParseError("Logic parser found no children for node '" + name + "'");
+			} else if (name == "now_seconds") {
+				return ([](t_input v) mutable {
+					return(std::time(nullptr));
+				});
 			} else if (name == "counter") {
 				long long current = 0;
 				return ([current](t_input v) mutable {
