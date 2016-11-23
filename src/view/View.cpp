@@ -160,6 +160,7 @@ template class View<PacketIPv4>;
 template class View<PacketIPVariant>;
 template class View<SessionTCP>;
 template class View<EndPoint>;
+template class View<ChunkHTTP>;
 
 } /* namespace view */
 } /* namespace ttop */

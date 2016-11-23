@@ -2,6 +2,7 @@
 #ifndef SRC_PARSERDESCRIPTION_H_
 #define SRC_PARSERDESCRIPTION_H_
 
+#include <levels/ParserHTTP.h>
 #include <TrafficAccounting/levels/ParserEtherNet.h>
 #include <TrafficAccounting/levels/ParserEtherNetDIX.h>
 #include <TrafficAccounting/levels/ParserEtherNetRAW.h>
@@ -15,9 +16,6 @@
 #include <TrafficAccounting/levels/ParserTCP.h>
 #include <TrafficAccounting/levels/ParserSessionTCP.h>
 #include <TrafficAccounting/levels/ParserUDP.h>
-
-
-
 #include <tinyxml2.h>
 #include <map>
 
@@ -31,6 +29,8 @@ struct Description {
 };
 
 typedef struct Description info;
+
+extern info HTTP;
 
 extern info TCPSession;
 

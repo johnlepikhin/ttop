@@ -80,6 +80,7 @@ template class Dump<PacketIPv4>;
 template class Dump<PacketIPVariant>;
 template class Dump<SessionTCP>;
 template class Dump<EndPoint>;
+template class Dump<ChunkHTTP>;
 
 
 } /* namespace view */

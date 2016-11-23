@@ -101,6 +101,7 @@ template class Level<ParserTCP>;
 template class Level<ParserUDP>;
 template class Level<ParserPacketIPv4>;
 template class Level<ParserSessionTCP>;
+template class Level<ParserHTTP>;
 
 } /* namespace level */
 } /* namespace ttop */

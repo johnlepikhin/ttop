@@ -10,25 +10,16 @@
 			</or>
 		</filter>
 		-->
-		<view type="dump" output="-" gseparator="--------------------------------
-">
+		<view type="dump" output="-">
 			<select>
 				<long2string><Seconds/></long2string>
 				<long2string><USeconds/></long2string>
 				<SourceMAC name="source"/>
 				<DestinationMAC name="dest"/>
 				<long2string><counter name="counter"/></long2string>
-				<long2string><sum><counter name="counter"/></sum></long2string>
-				<long2string><avg><counter name="counter"/></avg></long2string>
+				<long2string><sum><Captured/></sum></long2string>
+				<long2string><sum><Length/></sum></long2string>
 			</select>
-			<!--
-			<where>
-				<stringEq>
-					<SourceMAC/>
-					<string>00:13:c4:bc:56:80</string>
-				</stringEq>
-			</where>
-			-->
 			<trigger>
 				<longGtEq>
 					<minus><nowSeconds/><long>4</long></minus>
@@ -68,8 +59,7 @@
 					</parser>
 					<parser of="TCP">
 						<parser of="TCPSession">
-						<!--
-							<view type="dump">
+							<view type="dump" gseparator="=======">
 								<select>
 									<Client>
 										<long2string><sum><RawIfaceBytes/></sum></long2string>
@@ -78,16 +68,36 @@
 										<long2string><sum><RawIfaceBytes/></sum></long2string>
 									</Server>
 								</select>
+								<!--
+								<trigger>
+									<longGtEq>
+										<minus><nowSeconds/><long>1</long></minus>
+										<min><nowSeconds/></min>
+									</longGtEq>
+								</trigger>
+								-->
+								<groupBy>
+									<long2string>
+										<Client>
+											<LastChunk>
+												<DestinationPort/>
+											</LastChunk>
+										</Client>
+									</long2string>
+								</groupBy>
 							</view>
-							-->
-							<filter>
-								<Client>
-									<longEq>
-										<RawIfaceBytes/>
-										<long>537</long>
-									</longEq>
-								</Client>
-							</filter>
+							<parser of="HTTP">
+								<view type="dump">
+									<select>
+										<Method/>
+										<Host/>
+										<URI/>
+									</select>
+									<where>
+										<HasRequest/>
+									</where>
+								</view>
+							</parser>
 						</parser>
 					</parser>
 				</parser>

@@ -173,6 +173,17 @@ bool AppSettings::BuildParser(level::TCP &parser, tinyxml2::XMLElement *containe
 }
 
 bool AppSettings::BuildParser(level::TCPSession &parser, tinyxml2::XMLElement *container, const std::string &name) {
+	if (name == "HTTP") {
+		level::HTTP *child = new level::HTTP();
+		parser.AddFollower(child->AsFollower());
+		ParseParsers(*child, container);
+		return (true);
+	}
+
+	return (false);
+}
+
+bool AppSettings::BuildParser(level::HTTP &parser, tinyxml2::XMLElement *container, const std::string &name) {
 	return (false);
 }
 

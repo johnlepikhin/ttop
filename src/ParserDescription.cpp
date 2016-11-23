@@ -10,6 +10,12 @@
 namespace ttop {
 namespace parserDescription {
 
+info HTTP = {
+		.id = "HTTP",
+		.description = "HTTP chunks",
+		.children = {}
+};
+
 info UDP = {
 		.id = "UDP",
 		.description = "UDP datagram",
@@ -19,7 +25,7 @@ info UDP = {
 info TCPSession = {
 		.id = "TCPSession",
 		.description = "TCP sessions",
-		.children = {}
+		.children = {HTTP}
 };
 
 info TCP = {
