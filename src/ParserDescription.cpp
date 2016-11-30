@@ -87,7 +87,7 @@ info EtherNet = {
 		.children = { EtherNetDIX, EtherNetRAW, EtherNet802LLC, EtherNetSNAP }
 };
 
-std::string generateAccepts(info &root)
+std::string generateAccepts(const info &root)
 {
 	std::string r = root.id + ": ";
 	if (root.children.size()) {
@@ -105,7 +105,7 @@ std::string generateAccepts(info &root)
 	return (r);
 }
 
-std::string generateDescription(info &root)
+std::string generateDescription(const info &root)
 {
 	std::string r = root.id + ": " + root.description + "\n";
 	for (auto c : root.children) {

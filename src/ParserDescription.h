@@ -56,8 +56,8 @@ extern info EtherNet802LLC;
 
 extern info EtherNet;
 
-std::string generateAccepts(info &root);
-std::string generateDescription(info &root);
+std::string generateAccepts(const info &root);
+std::string generateDescription(const info &root);
 
 }
 

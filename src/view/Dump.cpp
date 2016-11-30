@@ -51,7 +51,7 @@ void Dump<IN>::ParseParams(tinyxml2::XMLElement *node)
 	if (_attr) {
 		OutputFile = _attr;
 		if (static_cast<std::string>("-") != _attr) {
-			OutputStream.open(_attr, std::ios::out | std::ios::app);
+			OutputStream.open(_attr, std::ios::out | std::ios::app); //-V2006
 		}
 	}
 	_attr = node->Attribute("rseparator");
