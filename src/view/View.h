@@ -29,8 +29,15 @@ struct Value {
 		Logic = SavedLogic;
 	}
 
-	Value(t_logic logic) : SavedLogic(logic), Logic(logic) {};
-	Value(std::string name, t_logic logic) : Name(name), SavedLogic(logic), Logic(logic) {};
+	Value(t_logic logic, VALUE initialValue)
+		: SavedLogic(logic)
+		, Logic(logic)
+		, Val(initialValue) {};
+	Value(std::string name, t_logic logic, VALUE initialValue)
+		: Name(name)
+		, SavedLogic(logic)
+		, Logic(logic)
+		, Val(initialValue) {};
 };
 
 template <typename IN>
@@ -43,9 +50,9 @@ public:
 	typedef std::vector< t_select > t_selection;
 	t_selection Selection_source;
 	std::unordered_map<std::string, t_selection> Selection;
-	Value<IN, bool> Where = Value<IN, bool>(True);
-	Value<IN, bool> Trigger = Value<IN, bool>(True);
-	Value<IN, typename std::string> GroupBy = Value<IN, typename std::string>(EmptyString);
+	Value<IN, bool> Where = Value<IN, bool>(True, true);
+	Value<IN, bool> Trigger = Value<IN, bool>(True, true);
+	Value<IN, typename std::string> GroupBy = Value<IN, typename std::string>(EmptyString, "");
 	virtual std::string TypeID() = 0;
 	virtual void Output();
 

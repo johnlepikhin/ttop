@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 /*
  * View.cpp
  *
@@ -65,7 +67,7 @@ void View<IN>::ParseSelects(tinyxml2::XMLElement *node) {
 				const char *_name = elt->Attribute("name");
 				std::string name = (_name) ? _name : "";
 				std::function<std::string(std::shared_ptr<IN>)> v = Parser->ParseString(elt);
-				Value<IN, std::string>  s(name, v);
+				Value<IN, std::string>  s(name, v, std::string(""));
 				Selection_source.push_back(s);
 			}
 			child = child->NextSibling();
@@ -80,7 +82,7 @@ void View<IN>::ParseWhere(tinyxml2::XMLElement *node) {
 		if (child) {
 			tinyxml2::XMLElement *elt = child->ToElement();
 			if (elt) {
-				Where = Parser->ParseBool(elt);
+				Where = Value<IN, bool>(Parser->ParseBool(elt), true);
 				return;
 			}
 		}
@@ -95,7 +97,7 @@ void View<IN>::ParseTrigger(tinyxml2::XMLElement *node) {
 		if (child) {
 			tinyxml2::XMLElement *elt = child->ToElement();
 			if (elt) {
-				Trigger = Parser->ParseBool(elt);
+				Trigger = Value<IN, bool>(Parser->ParseBool(elt), true);
 				return;
 			}
 		}
@@ -110,7 +112,7 @@ void View<IN>::ParseGroupBy(tinyxml2::XMLElement *node) {
 		if (child) {
 			tinyxml2::XMLElement *elt = child->ToElement();
 			if (elt) {
-				GroupBy = Parser->ParseString(elt);
+				GroupBy = Value<IN, std::string>(Parser->ParseString(elt), "");
 				return;
 			}
 		}

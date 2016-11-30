@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "DataTCPSession.h"
 
@@ -15,7 +17,7 @@ typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCust
 		}
 		auto r = [defaultPreview](std::shared_ptr<EndPoint> c) {
 			std::string r = c->GetPayloadPreview();
-			if (r == "") {
+			if (r.empty()) {
 				return (std::string(defaultPreview));
 			}
 			return (r);

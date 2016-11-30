@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "Dump.h"
 #include "../ParserDescription.h"
@@ -8,7 +10,7 @@ namespace view {
 template <typename IN>
 std::string Dump<IN>::TypeID()
 {
-	return ((std::string)"dump");
+	return ("dump");
 }
 
 template <typename IN>
@@ -48,7 +50,7 @@ void Dump<IN>::ParseParams(tinyxml2::XMLElement *node)
 	const char *_attr = node->Attribute("output");
 	if (_attr) {
 		OutputFile = _attr;
-		if ((std::string)"-" != _attr) {
+		if (static_cast<std::string>("-") != _attr) {
 			OutputStream.open(_attr, std::ios::out | std::ios::app);
 		}
 	}

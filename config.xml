@@ -59,6 +59,7 @@
 					</parser>
 					<parser of="TCP">
 						<parser of="TCPSession">
+						<!--
 							<view type="dump" gseparator="=======">
 								<select>
 									<Client>
@@ -68,14 +69,6 @@
 										<long2string><sum><RawIfaceBytes/></sum></long2string>
 									</Server>
 								</select>
-								<!--
-								<trigger>
-									<longGtEq>
-										<minus><nowSeconds/><long>1</long></minus>
-										<min><nowSeconds/></min>
-									</longGtEq>
-								</trigger>
-								-->
 								<groupBy>
 									<long2string>
 										<Client>
@@ -86,6 +79,7 @@
 									</long2string>
 								</groupBy>
 							</view>
+							-->
 							<parser of="HTTP">
 								<view type="dump">
 									<select>

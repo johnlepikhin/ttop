@@ -1,3 +1,5 @@
+// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "Logic.h"
 #include "ParserDescription.h"
@@ -20,7 +22,7 @@ typename Logic<IN>::t_bool_value Logic<IN>::ToBoolValue(t_longlong_value &v) { r
 
 template <typename IN>
 typename Logic<IN>::t_string_value Logic<IN>::ParseStringCustom (tinyxml2::XMLElement &elt) {
-	throw ParseError((std::string)"Logic parser got unexpected XML node where string value expected: " + elt.Value());
+	throw ParseError(static_cast<std::string>("Logic parser got unexpected XML node where string value expected: ") + elt.Value());
 }
 
 template <typename IN>
@@ -45,7 +47,7 @@ typename Logic<IN>::t_string_value Logic<IN>::ParseString(tinyxml2::XMLElement *
 
 template <typename IN>
 typename Logic<IN>::t_longlong_value Logic<IN>::ParseLongLongCustom (tinyxml2::XMLElement &elt) {
-	throw ParseError((std::string)"Logic parser got unexpected XML node where long value expected: " + elt.Value());
+	throw ParseError(static_cast<std::string>("Logic parser got unexpected XML node where long value expected: ") + elt.Value());
 }
 
 template <typename IN>
@@ -69,7 +71,7 @@ typename Logic<IN>::t_longlong_value Logic<IN>::ParseLongLong(tinyxml2::XMLEleme
 						return(current);
 					});
 				} else if (name == "min") {
-					long long current = LLONG_MAX;
+					current = LLONG_MAX;
 					return ([current, s_first](t_input v) mutable {
 						current = std::min(current, s_first(v));
 						return(current);
@@ -139,7 +141,7 @@ typename Logic<IN>::t_longlong_value Logic<IN>::ParseLongLong(tinyxml2::XMLEleme
 
 template <typename IN>
 typename Logic<IN>::t_bool_value Logic<IN>::ParseBoolCustom (tinyxml2::XMLElement &elt) {
-	throw ParseError((std::string)"Logic parser got unexpected XML node where bool value expected: " + elt.Value());
+	throw ParseError(static_cast<std::string>("Logic parser got unexpected XML node where bool value expected: ") + elt.Value());
 }
 
 template <typename IN>
