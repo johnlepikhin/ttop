@@ -11,13 +11,13 @@ namespace ttop {
 namespace level {
 
 template<typename PARSER>
-bool Level<PARSER>::Filter(t_value chunk)
+bool Level<PARSER>::Filter(const t_value &chunk)
 {
 	return (FilterAlgorithm(chunk));
 }
 
 template<typename PARSER>
-bool Level<PARSER>::BeforeRecursionHook(t_value chunk)
+bool Level<PARSER>::BeforeRecursionHook(const t_value &chunk)
 {
 	try {
 		PARSER::BeforeRecursionHook(chunk);
@@ -38,7 +38,7 @@ bool Level<PARSER>::BeforeRecursionHook(t_value chunk)
 template<typename PARSER>
 void Level<PARSER>::ParseXMLSettingsFilter(tinyxml2::XMLElement *node)
 {
-	tinyxml2::XMLElement *logic = node->FirstChildElement();
+	const tinyxml2::XMLElement *logic = node->FirstChildElement();
 	FilterAlgorithm = Parser->ParseBool(logic);
 }
 

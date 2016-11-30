@@ -12,9 +12,9 @@ namespace level_data {
 class DataIPv4: public logic::Logic<ChunkIPv4>
 {
 public:
-	virtual typename logic::Logic<ChunkIPv4>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt);
-	virtual typename logic::Logic<ChunkIPv4>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt);
-	virtual typename logic::Logic<ChunkIPv4>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkIPv4>::t_bool_value ParseBoolCustom(const tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkIPv4>::t_string_value ParseStringCustom(const tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkIPv4>::t_longlong_value ParseLongLongCustom(const tinyxml2::XMLElement &elt);
 	virtual ~DataIPv4();
 };
 

@@ -56,14 +56,14 @@ public:
 	virtual std::string TypeID() = 0;
 	virtual void Output();
 
-	void FillSelection(t_selection &vector, std::shared_ptr<IN> chunk);
-	void Input(std::shared_ptr<IN> chunk);
-	virtual void ParseParams(tinyxml2::XMLElement *node);
+	void FillSelection(t_selection &vector, const std::shared_ptr<IN> &chunk);
+	void Input(const std::shared_ptr<IN> &chunk);
+	virtual void ParseParams(const tinyxml2::XMLElement *node);
 
 	void ParseSelects(tinyxml2::XMLElement *node);
-	void ParseWhere(tinyxml2::XMLElement *node);
-	void ParseTrigger(tinyxml2::XMLElement *node);
-	void ParseGroupBy(tinyxml2::XMLElement *node);
+	void ParseWhere(const tinyxml2::XMLElement *node);
+	void ParseTrigger(const tinyxml2::XMLElement *node);
+	void ParseGroupBy(const tinyxml2::XMLElement *node);
 	void Parse(tinyxml2::XMLElement *node, std::string &type);
 	View(std::shared_ptr<logic::Logic<IN> > parser);
 	virtual ~View();

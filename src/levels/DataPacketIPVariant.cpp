@@ -7,16 +7,16 @@ namespace ttop {
 
 namespace level_data {
 
-typename logic::Logic<PacketIPVariant>::t_bool_value DataPacketIPVariant::ParseBoolCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<PacketIPVariant>::t_bool_value DataPacketIPVariant::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "IsIPv4") {
-		auto r = [](std::shared_ptr<PacketIPVariant> c) {
+		auto r = [](const std::shared_ptr<PacketIPVariant> &c) {
 			return (c->IPv4 != nullptr);
 		};
 		return (r);
 	} else if (name == "IsIPv6") {
-		auto r = [](std::shared_ptr<PacketIPVariant> c) {
+		auto r = [](const std::shared_ptr<PacketIPVariant> &c) {
 			return (c->IPv6 != nullptr);
 		};
 		return (r);
@@ -25,7 +25,7 @@ typename logic::Logic<PacketIPVariant>::t_bool_value DataPacketIPVariant::ParseB
 		if (child) {
 			DataPacketIPv4 LogicIPv4;
 			auto subfn = LogicIPv4.ParseBool(child);
-			auto r = [subfn](std::shared_ptr<PacketIPVariant> c) {
+			auto r = [subfn](const std::shared_ptr<PacketIPVariant> &c) {
 				return(subfn(c->IPv4));
 			};
 			return (r);
@@ -35,7 +35,7 @@ typename logic::Logic<PacketIPVariant>::t_bool_value DataPacketIPVariant::ParseB
 	return (ttop::logic::Logic<PacketIPVariant>::ParseBoolCustom(elt));
 }
 
-typename logic::Logic<PacketIPVariant>::t_string_value DataPacketIPVariant::ParseStringCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<PacketIPVariant>::t_string_value DataPacketIPVariant::ParseStringCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "IPv4") {
@@ -43,7 +43,7 @@ typename logic::Logic<PacketIPVariant>::t_string_value DataPacketIPVariant::Pars
 		if (child) {
 			DataPacketIPv4 LogicIPv4;
 			auto subfn = LogicIPv4.ParseString(child);
-			auto r = [subfn](std::shared_ptr<PacketIPVariant> c) {
+			auto r = [subfn](const std::shared_ptr<PacketIPVariant> &c) {
 				return(subfn(c->IPv4));
 			};
 			return (r);
@@ -53,7 +53,7 @@ typename logic::Logic<PacketIPVariant>::t_string_value DataPacketIPVariant::Pars
 	return (ttop::logic::Logic<PacketIPVariant>::ParseStringCustom(elt));
 }
 
-typename logic::Logic<PacketIPVariant>::t_longlong_value DataPacketIPVariant::ParseLongLongCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<PacketIPVariant>::t_longlong_value DataPacketIPVariant::ParseLongLongCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "IPv4") {
@@ -61,7 +61,7 @@ typename logic::Logic<PacketIPVariant>::t_longlong_value DataPacketIPVariant::Pa
 		if (child) {
 			DataPacketIPv4 LogicIPv4;
 			auto subfn = LogicIPv4.ParseLongLong(child);
-			auto r = [subfn](std::shared_ptr<PacketIPVariant> c) {
+			auto r = [subfn](const std::shared_ptr<PacketIPVariant> &c) {
 				return(subfn(c->IPv4));
 			};
 			return (r);

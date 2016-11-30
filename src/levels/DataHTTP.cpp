@@ -9,22 +9,22 @@
 namespace ttop {
 namespace level_data {
 
-typename logic::Logic<ChunkHTTP>::t_string_value DataHTTP::ParseStringCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<ChunkHTTP>::t_string_value DataHTTP::ParseStringCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "Method") {
-		return ([](std::shared_ptr<ChunkHTTP> c) { return(c->Request->Method); });
+		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Request->Method); });
 	} else if (name == "URI") {
-		return ([](std::shared_ptr<ChunkHTTP> c) { return(c->Request->URI); });
+		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Request->URI); });
 	} else if (name == "Host") {
-		return ([](std::shared_ptr<ChunkHTTP> c) { return(c->Request->Host); });
+		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Request->Host); });
 	} else if (name == "Message") {
-		return ([](std::shared_ptr<ChunkHTTP> c) { return(c->Response->Message); });
+		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Response->Message); });
 	} else if (name == "ReqHeader" || name == "RespHeader") {
 		const char *_type = elt.Attribute("default");
 		std::string _default = (_type) ? _type : "";
 		std::string hdrname(elt.GetText());
-		return ([&name, &_default, &hdrname](std::shared_ptr<ChunkHTTP> c) {
+		return ([&name, &_default, &hdrname](const std::shared_ptr<ChunkHTTP> &c) {
 			std::vector<std::pair<std::string, std::string> > headers
 			= (name == "ReqHeader") ? c->Request->Headers : c->Response->Headers;
 			auto it = std::find_if(headers.begin()
@@ -44,22 +44,22 @@ typename logic::Logic<ChunkHTTP>::t_string_value DataHTTP::ParseStringCustom(tin
 	return (ttop::logic::Logic<ChunkHTTP>::ParseStringCustom(elt));
 }
 
-typename logic::Logic<ChunkHTTP>::t_longlong_value DataHTTP::ParseLongLongCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<ChunkHTTP>::t_longlong_value DataHTTP::ParseLongLongCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "Code") {
-		return ([](std::shared_ptr<ChunkHTTP> c) { return(c->Response->Code); });
+		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Response->Code); });
 	}
 	return (ttop::logic::Logic<ChunkHTTP>::ParseLongLongCustom(elt));
 }
 
-typename logic::Logic<ChunkHTTP>::t_bool_value DataHTTP::ParseBoolCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<ChunkHTTP>::t_bool_value DataHTTP::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "HasRequest") {
-		return ([](std::shared_ptr<ChunkHTTP> c) { return(c->Request != nullptr); });
+		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Request != nullptr); });
 	} else if (name == "HasResponse") {
-		return ([](std::shared_ptr<ChunkHTTP> c) { return(c->Response != nullptr); });
+		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Response != nullptr); });
 	}
 	return (ttop::logic::Logic<ChunkHTTP>::ParseBoolCustom(elt));
 }

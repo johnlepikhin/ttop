@@ -1,11 +1,5 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-/*
- * View.cpp
- *
- *  Created on: 11 нояб. 2016 г.
- *      Author: eugene
- */
 
 #include "View.h"
 #include <iostream>
@@ -19,14 +13,14 @@ template <typename IN>
 void View<IN>::Output() {};
 
 template <typename IN>
-void View<IN>::FillSelection(View<IN>::t_selection &vector, std::shared_ptr<IN> chunk) {
+void View<IN>::FillSelection(View<IN>::t_selection &vector, const std::shared_ptr<IN> &chunk) {
 	for (auto it = vector.begin(); it!=vector.end(); ++it) {
 		(*it).Input(chunk);
 	}
 }
 
 template <typename IN>
-void View<IN>::Input(std::shared_ptr<IN> chunk)
+void View<IN>::Input(const std::shared_ptr<IN> &chunk)
 {
 	Where.Input(chunk);
 	Trigger.Input(chunk);
@@ -53,16 +47,16 @@ void View<IN>::Input(std::shared_ptr<IN> chunk)
 }
 
 template <typename IN>
-void View<IN>::ParseParams(tinyxml2::XMLElement *node) {};
+void View<IN>::ParseParams(const tinyxml2::XMLElement *node) {};
 
 template <typename IN>
 void View<IN>::ParseSelects(tinyxml2::XMLElement *node) {
 	tinyxml2::XMLHandle docHandle(node);
 	tinyxml2::XMLElement* select = docHandle.FirstChildElement("select").ToElement();
 	if (select) {
-		tinyxml2::XMLNode *child = select->FirstChild();
+		const tinyxml2::XMLNode *child = select->FirstChild();
 		while (child) {
-			tinyxml2::XMLElement *elt = child->ToElement();
+			const tinyxml2::XMLElement *elt = child->ToElement();
 			if (elt) {
 				const char *_name = elt->Attribute("name");
 				std::string name = (_name) ? _name : "";
@@ -76,11 +70,11 @@ void View<IN>::ParseSelects(tinyxml2::XMLElement *node) {
 }
 
 template <typename IN>
-void View<IN>::ParseWhere(tinyxml2::XMLElement *node) {
-	if (tinyxml2::XMLNode *child = node->FirstChildElement("where")) {
+void View<IN>::ParseWhere(const tinyxml2::XMLElement *node) {
+	if (const tinyxml2::XMLNode *child = node->FirstChildElement("where")) {
 		child = child->FirstChildElement();
 		if (child) {
-			tinyxml2::XMLElement *elt = child->ToElement();
+			const tinyxml2::XMLElement *elt = child->ToElement();
 			if (elt) {
 				Where = Value<IN, bool>(Parser->ParseBool(elt), true);
 				return;
@@ -91,11 +85,11 @@ void View<IN>::ParseWhere(tinyxml2::XMLElement *node) {
 }
 
 template <typename IN>
-void View<IN>::ParseTrigger(tinyxml2::XMLElement *node) {
-	if (tinyxml2::XMLNode *child = node->FirstChildElement("trigger")) {
+void View<IN>::ParseTrigger(const tinyxml2::XMLElement *node) {
+	if (const tinyxml2::XMLNode *child = node->FirstChildElement("trigger")) {
 		child = child->FirstChildElement();
 		if (child) {
-			tinyxml2::XMLElement *elt = child->ToElement();
+			const tinyxml2::XMLElement *elt = child->ToElement();
 			if (elt) {
 				Trigger = Value<IN, bool>(Parser->ParseBool(elt), true);
 				return;
@@ -106,11 +100,11 @@ void View<IN>::ParseTrigger(tinyxml2::XMLElement *node) {
 }
 
 template <typename IN>
-void View<IN>::ParseGroupBy(tinyxml2::XMLElement *node) {
-	if (tinyxml2::XMLNode *child = node->FirstChildElement("groupBy")) {
+void View<IN>::ParseGroupBy(const tinyxml2::XMLElement *node) {
+	if (const tinyxml2::XMLNode *child = node->FirstChildElement("groupBy")) {
 		child = child->FirstChildElement();
 		if (child) {
-			tinyxml2::XMLElement *elt = child->ToElement();
+			const tinyxml2::XMLElement *elt = child->ToElement();
 			if (elt) {
 				GroupBy = Value<IN, std::string>(Parser->ParseString(elt), "");
 				return;

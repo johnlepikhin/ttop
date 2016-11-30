@@ -13,9 +13,9 @@ namespace level_data {
 class DataUDP: public logic::Logic<ChunkUDP>
 {
 public:
-	virtual typename logic::Logic<ChunkUDP>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt);
-	virtual typename logic::Logic<ChunkUDP>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt);
-	virtual typename logic::Logic<ChunkUDP>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkUDP>::t_string_value ParseStringCustom(const tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkUDP>::t_bool_value ParseBoolCustom(const tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkUDP>::t_longlong_value ParseLongLongCustom(const tinyxml2::XMLElement &elt);
 	virtual ~DataUDP();
 };
 

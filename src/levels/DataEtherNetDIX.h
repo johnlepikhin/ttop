@@ -13,9 +13,9 @@ namespace level_data {
 class DataEtherNetDIX: public logic::Logic<ChunkEtherNetDIX>
 {
 public:
-	virtual typename logic::Logic<ChunkEtherNetDIX>::t_string_value ParseStringCustom(tinyxml2::XMLElement &elt);
-	virtual typename logic::Logic<ChunkEtherNetDIX>::t_bool_value ParseBoolCustom(tinyxml2::XMLElement &elt);
-	virtual typename logic::Logic<ChunkEtherNetDIX>::t_longlong_value ParseLongLongCustom(tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkEtherNetDIX>::t_string_value ParseStringCustom(const tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkEtherNetDIX>::t_bool_value ParseBoolCustom(const tinyxml2::XMLElement &elt);
+	virtual typename logic::Logic<ChunkEtherNetDIX>::t_longlong_value ParseLongLongCustom(const tinyxml2::XMLElement &elt);
 	virtual ~DataEtherNetDIX();
 };
 

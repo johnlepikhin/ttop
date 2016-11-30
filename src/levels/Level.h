@@ -34,8 +34,8 @@ public:
 	virtual ~Level();
 
 	virtual struct parserDescription::Description GetDescription() = 0;
-	virtual bool Filter(t_value chunk);
-	virtual bool BeforeRecursionHook(t_value chunk);
+	virtual bool Filter(const t_value &chunk);
+	virtual bool BeforeRecursionHook(const t_value &chunk);
 
 	void ParseXMLSettings(tinyxml2::XMLElement *node);
 	void ParseXMLSettingsFilter(tinyxml2::XMLElement *node);

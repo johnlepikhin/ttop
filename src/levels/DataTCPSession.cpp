@@ -7,7 +7,7 @@ namespace ttop {
 
 namespace level_data {
 
-typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "PayloadPreview") {
@@ -15,7 +15,7 @@ typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCust
 		if (!defaultPreview) {
 			throw logic::ParseError("No default=... attribute for <PayloadPreview/>");
 		}
-		auto r = [defaultPreview](std::shared_ptr<EndPoint> c) {
+		auto r = [defaultPreview](const std::shared_ptr<EndPoint> &c) {
 			std::string r = c->GetPayloadPreview();
 			if (r.empty()) {
 				return (std::string(defaultPreview));
@@ -28,7 +28,7 @@ typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCust
 		if (child) {
 			DataTCP LogicTCP;
 			auto subfn = LogicTCP.ParseString(child);
-			auto r = [subfn](std::shared_ptr<EndPoint> c) {
+			auto r = [subfn](const std::shared_ptr<EndPoint> &c) {
 				return(subfn(c->LastChunk));
 			};
 			return (r);
@@ -38,11 +38,11 @@ typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCust
 	return (ttop::logic::Logic<EndPoint>::ParseStringCustom(elt));
 }
 
-typename logic::Logic<EndPoint>::t_bool_value DataTCPEndPoint::ParseBoolCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<EndPoint>::t_bool_value DataTCPEndPoint::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "HasLastChunk") {
-		auto r = [](std::shared_ptr<EndPoint> c) {
+		auto r = [](const std::shared_ptr<EndPoint> &c) {
 			return (c->LastChunk != nullptr);
 		};
 		return (r);
@@ -51,7 +51,7 @@ typename logic::Logic<EndPoint>::t_bool_value DataTCPEndPoint::ParseBoolCustom(t
 		if (child) {
 			DataTCP LogicTCP;
 			auto subfn = LogicTCP.ParseBool(child);
-			auto r = [subfn](std::shared_ptr<EndPoint> c) {
+			auto r = [subfn](const std::shared_ptr<EndPoint> &c) {
 				return(subfn(c->LastChunk));
 			};
 			return (r);
@@ -61,21 +61,21 @@ typename logic::Logic<EndPoint>::t_bool_value DataTCPEndPoint::ParseBoolCustom(t
 	return (ttop::logic::Logic<EndPoint>::ParseBoolCustom(elt));
 }
 
-typename logic::Logic<EndPoint>::t_longlong_value DataTCPEndPoint::ParseLongLongCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<EndPoint>::t_longlong_value DataTCPEndPoint::ParseLongLongCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "NextExpectedSEQ") {
-		auto r = [](std::shared_ptr<EndPoint> c) {
+		auto r = [](const std::shared_ptr<EndPoint> &c) {
 			return (c->NextExpectedSEQ);
 		};
 		return (r);
 	} else if (name == "RawIfaceBytes") {
-		auto r = [](std::shared_ptr<EndPoint> c) {
+		auto r = [](const std::shared_ptr<EndPoint> &c) {
 			return (c->RawIfaceBytes);
 		};
 		return (r);
 	} else if (name == "PayloadBytes") {
-		auto r = [](std::shared_ptr<EndPoint> c) {
+		auto r = [](const std::shared_ptr<EndPoint> &c) {
 			return (c->PayloadBytes);
 		};
 		return (r);
@@ -84,7 +84,7 @@ typename logic::Logic<EndPoint>::t_longlong_value DataTCPEndPoint::ParseLongLong
 		if (child) {
 			DataTCP LogicTCP;
 			auto subfn = LogicTCP.ParseLongLong(child);
-			auto r = [subfn](std::shared_ptr<EndPoint> c) {
+			auto r = [subfn](const std::shared_ptr<EndPoint> &c) {
 				return(subfn(c->LastChunk));
 			};
 			return (r);
@@ -99,7 +99,7 @@ DataTCPEndPoint::~DataTCPEndPoint() {};
 //////////////
 
 
-typename logic::Logic<SessionTCP>::t_string_value DataTCPSession::ParseStringCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<SessionTCP>::t_string_value DataTCPSession::ParseStringCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 
@@ -108,7 +108,7 @@ typename logic::Logic<SessionTCP>::t_string_value DataTCPSession::ParseStringCus
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseString(child);
-			auto r = [subfn](std::shared_ptr<SessionTCP> c) {
+			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
 				return(subfn(c->Client));
 			};
 			return (r);
@@ -119,7 +119,7 @@ typename logic::Logic<SessionTCP>::t_string_value DataTCPSession::ParseStringCus
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseString(child);
-			auto r = [subfn](std::shared_ptr<SessionTCP> c) {
+			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
 				return(subfn(c->Server));
 			};
 			return (r);
@@ -129,11 +129,11 @@ typename logic::Logic<SessionTCP>::t_string_value DataTCPSession::ParseStringCus
 	return (ttop::logic::Logic<SessionTCP>::ParseStringCustom(elt));
 }
 
-typename logic::Logic<SessionTCP>::t_bool_value DataTCPSession::ParseBoolCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<SessionTCP>::t_bool_value DataTCPSession::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "DirectionDetected") {
-		auto r = [](std::shared_ptr<SessionTCP> c) {
+		auto r = [](const std::shared_ptr<SessionTCP> &c) {
 			return (c->DirectionDetected);
 		};
 		return (r);
@@ -142,7 +142,7 @@ typename logic::Logic<SessionTCP>::t_bool_value DataTCPSession::ParseBoolCustom(
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseBool(child);
-			auto r = [subfn](std::shared_ptr<SessionTCP> c) {
+			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
 				return(subfn(c->Client));
 			};
 			return (r);
@@ -153,7 +153,7 @@ typename logic::Logic<SessionTCP>::t_bool_value DataTCPSession::ParseBoolCustom(
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseBool(child);
-			auto r = [subfn](std::shared_ptr<SessionTCP> c) {
+			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
 				return(subfn(c->Server));
 			};
 			return (r);
@@ -163,11 +163,11 @@ typename logic::Logic<SessionTCP>::t_bool_value DataTCPSession::ParseBoolCustom(
 	return (ttop::logic::Logic<SessionTCP>::ParseBoolCustom(elt));
 }
 
-typename logic::Logic<SessionTCP>::t_longlong_value DataTCPSession::ParseLongLongCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<SessionTCP>::t_longlong_value DataTCPSession::ParseLongLongCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "LastInternalID") {
-		auto r = [](std::shared_ptr<SessionTCP> c) {
+		auto r = [](const std::shared_ptr<SessionTCP> &c) {
 			return (c->LastInternalID);
 		};
 		return (r);
@@ -176,7 +176,7 @@ typename logic::Logic<SessionTCP>::t_longlong_value DataTCPSession::ParseLongLon
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseLongLong(child);
-			auto r = [subfn](std::shared_ptr<SessionTCP> c) {
+			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
 				return(subfn(c->Client));
 			};
 			return (r);
@@ -187,7 +187,7 @@ typename logic::Logic<SessionTCP>::t_longlong_value DataTCPSession::ParseLongLon
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseLongLong(child);
-			auto r = [subfn](std::shared_ptr<SessionTCP> c) {
+			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
 				return(subfn(c->Server));
 			};
 			return (r);

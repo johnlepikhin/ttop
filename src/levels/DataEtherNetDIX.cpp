@@ -7,7 +7,7 @@ namespace ttop {
 
 namespace level_data {
 
-typename logic::Logic<ChunkEtherNetDIX>::t_string_value DataEtherNetDIX::ParseStringCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<ChunkEtherNetDIX>::t_string_value DataEtherNetDIX::ParseStringCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "Parent") {
@@ -15,7 +15,7 @@ typename logic::Logic<ChunkEtherNetDIX>::t_string_value DataEtherNetDIX::ParseSt
 		if (child) {
 			DataEtherNet LogicEtherNet;
 			auto subfn = LogicEtherNet.ParseString(child);
-			auto r = [subfn](std::shared_ptr<ChunkEtherNetDIX> c) {
+			auto r = [subfn](const std::shared_ptr<ChunkEtherNetDIX> &c) {
 				return(subfn(c->Parent));
 			};
 			return (r);
@@ -25,7 +25,7 @@ typename logic::Logic<ChunkEtherNetDIX>::t_string_value DataEtherNetDIX::ParseSt
 	return (ttop::logic::Logic<ChunkEtherNetDIX>::ParseStringCustom(elt));
 }
 
-typename logic::Logic<ChunkEtherNetDIX>::t_bool_value DataEtherNetDIX::ParseBoolCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<ChunkEtherNetDIX>::t_bool_value DataEtherNetDIX::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "Parent") {
@@ -33,7 +33,7 @@ typename logic::Logic<ChunkEtherNetDIX>::t_bool_value DataEtherNetDIX::ParseBool
 		if (child) {
 			DataEtherNet LogicEtherNet;
 			auto subfn = LogicEtherNet.ParseBool(child);
-			auto r = [subfn](std::shared_ptr<ChunkEtherNetDIX> c) {
+			auto r = [subfn](const std::shared_ptr<ChunkEtherNetDIX> &c) {
 				return(subfn(c->Parent));
 			};
 			return (r);
@@ -43,7 +43,7 @@ typename logic::Logic<ChunkEtherNetDIX>::t_bool_value DataEtherNetDIX::ParseBool
 	return (ttop::logic::Logic<ChunkEtherNetDIX>::ParseBoolCustom(elt));
 }
 
-typename logic::Logic<ChunkEtherNetDIX>::t_longlong_value DataEtherNetDIX::ParseLongLongCustom(tinyxml2::XMLElement &elt)
+typename logic::Logic<ChunkEtherNetDIX>::t_longlong_value DataEtherNetDIX::ParseLongLongCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
 	if (name == "Parent") {
@@ -51,7 +51,7 @@ typename logic::Logic<ChunkEtherNetDIX>::t_longlong_value DataEtherNetDIX::Parse
 		if (child) {
 			DataEtherNet LogicEtherNet;
 			auto subfn = LogicEtherNet.ParseLongLong(child);
-			auto r = [subfn](std::shared_ptr<ChunkEtherNetDIX> c) {
+			auto r = [subfn](const std::shared_ptr<ChunkEtherNetDIX> &c) {
 				return(subfn(c->Parent));
 			};
 			return (r);
