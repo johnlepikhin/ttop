@@ -99,10 +99,17 @@
 										<QueryType/>
 										<ServerVersion/>
 										<Username/>
+										<long2string order="numeric" orderDesc="true"><counter/></long2string>
 									</select>
 									<where>
 										<HasRequest/>
 									</where>
+									<groupBy>
+										<QueryType/>
+									</groupBy>
+									<trigger>
+										<false/>
+									</trigger>
 								</view>
 							</parser>
 

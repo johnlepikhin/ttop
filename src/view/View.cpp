@@ -4,13 +4,39 @@
 #include "View.h"
 #include <iostream>
 #include "../ParserDescription.h"
-
+#include <algorithm>
+#include <functional>
 
 namespace ttop {
 namespace view {
 
 template <typename IN>
-void View<IN>::Output() {};
+void View<IN>::DoOutput(const std::vector<t_selection> &output) {};
+
+template <typename IN>
+void View<IN>::Output()
+{
+	std::vector<t_selection> output;
+	for (auto it : Selection)
+		output.push_back(it.second);
+
+	if (OrderBy >= 0) {
+		std::sort(output.begin(), output.end(), [this](t_selection &left, t_selection &right) {
+			t_selection *_left = &left;
+			t_selection *_right = &right;
+			if (OrderDesc)
+				std::swap(_left, _right);
+			switch (OrderType) {
+			case NUMERIC:
+				return (std::stoll(_left->at(OrderBy).Val) < std::stoll(_right->at(OrderBy).Val));
+			case STRING:
+				return (_left->at(OrderBy).Val < _right->at(OrderBy).Val);
+			}
+		});
+	}
+
+	DoOutput(output);
+}
 
 template <typename IN>
 void View<IN>::FillSelection(View<IN>::t_selection &vector, const std::shared_ptr<IN> &chunk) {
@@ -55,6 +81,7 @@ void View<IN>::ParseSelects(tinyxml2::XMLElement *node) {
 	tinyxml2::XMLElement* select = docHandle.FirstChildElement("select").ToElement();
 	if (select) {
 		const tinyxml2::XMLNode *child = select->FirstChild();
+		int pos=0;
 		while (child) {
 			const tinyxml2::XMLElement *elt = child->ToElement();
 			if (elt) {
@@ -63,8 +90,27 @@ void View<IN>::ParseSelects(tinyxml2::XMLElement *node) {
 				std::function<std::string(std::shared_ptr<IN>)> v = Parser->ParseString(elt);
 				Value<IN, std::string>  s(name, v, std::string(""));
 				Selection_source.push_back(s);
+
+				const char *_order = elt->Attribute("order");
+				if (_order) {
+					std::string order(_order);
+					std::cout << "Order by " << pos << "\n";
+					OrderBy = pos;
+					if (order == "numeric") {
+						OrderType = NUMERIC;
+					} else if (order == "string") {
+						OrderType = STRING;
+					} else {
+						throw logic::ParseError("Invalid order type: '" + order + "'");
+					}
+				}
+
+				const char *_orderDesc = elt->Attribute("orderDesc");
+				if (_orderDesc && std::string(_orderDesc) == "true")
+					OrderDesc = true;
 			}
 			child = child->NextSibling();
+			pos++;
 		}
 	}
 }

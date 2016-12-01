@@ -27,16 +27,16 @@ Dump<IN>::~Dump() {
 };
 
 template <typename IN>
-void Dump<IN>::Output()
+void Dump<IN>::DoOutput(const std::vector<typename View<IN>::t_selection> &output)
 {
 	std::ostream &o = (OutputStream.is_open()) ? OutputStream : std::cout;
 
-	for (auto g_it = this->Selection.begin(); g_it!=this->Selection.end(); ++g_it) {
+	for (auto const &row : output) {
 		bool isFirst = true;
-		for (auto it = g_it->second.begin(); it!=g_it->second.end(); ++it) {
+		for (auto const &field : row) {
 			if (!isFirst)
 				o << FieldSeparator;
-			o << (*it).Val;
+			o << field.Val;
 			isFirst = false;
 		}
 		o << RecordSeparator;

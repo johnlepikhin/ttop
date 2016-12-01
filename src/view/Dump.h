@@ -22,7 +22,7 @@ public:
 	virtual std::string TypeID();
 	Dump(std::shared_ptr<logic::Logic<IN> > parser);
 	virtual ~Dump();
-	virtual void Output();
+	virtual void DoOutput(const std::vector<typename View<IN>::t_selection> &output);
 	virtual void ParseParams(tinyxml2::XMLElement *node);
 };
 

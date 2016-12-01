@@ -40,6 +40,8 @@ struct Value {
 		, Val(initialValue) {};
 };
 
+enum OrderType { STRING, NUMERIC };
+
 template <typename IN>
 class View {
 	std::shared_ptr<logic::Logic<IN> > Parser;
@@ -53,8 +55,12 @@ public:
 	Value<IN, bool> Where = Value<IN, bool>(True, true);
 	Value<IN, bool> Trigger = Value<IN, bool>(True, true);
 	Value<IN, typename std::string> GroupBy = Value<IN, typename std::string>(EmptyString, "");
+	int16_t OrderBy = -1;
+	bool OrderDesc = false;
+	char OrderType = STRING;
 	virtual std::string TypeID() = 0;
-	virtual void Output();
+	virtual void DoOutput(const std::vector<t_selection> &output);
+	void Output();
 
 	void FillSelection(t_selection &vector, const std::shared_ptr<IN> &chunk);
 	void Input(const std::shared_ptr<IN> &chunk);
