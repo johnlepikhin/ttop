@@ -254,6 +254,7 @@ template class Logic<PacketIPVariant>;
 template class Logic<SessionTCP>;
 template class Logic<EndPoint>;
 template class Logic<ChunkHTTP>;
+template class Logic<PacketMySQL>;
 
 } /* namespace logic */
 } /* namespace ttop */

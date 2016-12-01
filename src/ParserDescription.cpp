@@ -1,11 +1,5 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-/*
- * ParseTreeBuilder.cpp
- *
- *  Created on: 25 окт. 2016 г.
- *      Author: eugene
- */
 
 #include "ParserDescription.h"
 
@@ -18,6 +12,12 @@ info HTTP = {
 		.children = {}
 };
 
+info MySQL = {
+		.id = "MySQL",
+		.description = "MySQL packets",
+		.children = {}
+};
+
 info UDP = {
 		.id = "UDP",
 		.description = "UDP datagram",
@@ -27,7 +27,7 @@ info UDP = {
 info TCPSession = {
 		.id = "TCPSession",
 		.description = "TCP sessions",
-		.children = {HTTP}
+		.children = {HTTP, MySQL}
 };
 
 info TCP = {

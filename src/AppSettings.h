@@ -17,6 +17,7 @@
 #include "levels/UDP.h"
 #include "levels/TCPSession.h"
 #include "levels/HTTP.h"
+#include "levels/MySQL.h"
 
 namespace ttop {
 
@@ -48,6 +49,7 @@ private:
 	bool BuildParser(level::TCP &parser, tinyxml2::XMLElement *container, const std::string &name);
 	bool BuildParser(level::TCPSession &parser, tinyxml2::XMLElement *container, const std::string &name);
 	bool BuildParser(level::HTTP &parser, tinyxml2::XMLElement *container, const std::string &name);
+	bool BuildParser(level::MySQL &parser, tinyxml2::XMLElement *container, const std::string &name);
 };
 
 } /* namespace ttop */

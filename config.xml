@@ -92,6 +92,20 @@
 									</where>
 								</view>
 							</parser>
+
+							<parser of="MySQL">
+								<view type="dump">
+									<select>
+										<QueryType/>
+										<ServerVersion/>
+										<Username/>
+									</select>
+									<where>
+										<HasRequest/>
+									</where>
+								</view>
+							</parser>
+
 						</parser>
 					</parser>
 				</parser>

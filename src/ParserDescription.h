@@ -3,6 +3,7 @@
 #define SRC_PARSERDESCRIPTION_H_
 
 #include <levels/ParserHTTP.h>
+#include <levels/ParserPacketMySQL.h>
 #include <TrafficAccounting/levels/ParserEtherNet.h>
 #include <TrafficAccounting/levels/ParserEtherNetDIX.h>
 #include <TrafficAccounting/levels/ParserEtherNetRAW.h>
@@ -29,6 +30,8 @@ struct Description {
 };
 
 typedef struct Description info;
+
+extern info MySQL;
 
 extern info HTTP;
 

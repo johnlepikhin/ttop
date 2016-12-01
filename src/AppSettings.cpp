@@ -180,12 +180,21 @@ bool AppSettings::BuildParser(level::TCPSession &parser, tinyxml2::XMLElement *c
 		parser.AddFollower(child->AsFollower());
 		ParseParsers(*child, container);
 		return (true);
+	} else if (name == "MySQL") {
+		level::MySQL *child = new level::MySQL();
+		parser.AddFollower(child->AsFollower());
+		ParseParsers(*child, container);
+		return (true);
 	}
 
 	return (false);
 }
 
 bool AppSettings::BuildParser(level::HTTP &parser, tinyxml2::XMLElement *container, const std::string &name) {
+	return (false);
+}
+
+bool AppSettings::BuildParser(level::MySQL &parser, tinyxml2::XMLElement *container, const std::string &name) {
 	return (false);
 }
 

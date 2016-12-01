@@ -83,6 +83,7 @@ template class Dump<PacketIPVariant>;
 template class Dump<SessionTCP>;
 template class Dump<EndPoint>;
 template class Dump<ChunkHTTP>;
+template class Dump<PacketMySQL>;
 
 
 } /* namespace view */

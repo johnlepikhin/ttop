@@ -157,6 +157,7 @@ template class View<PacketIPVariant>;
 template class View<SessionTCP>;
 template class View<EndPoint>;
 template class View<ChunkHTTP>;
+template class View<PacketMySQL>;
 
 } /* namespace view */
 } /* namespace ttop */
