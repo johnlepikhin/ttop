@@ -95,7 +95,6 @@ void View<IN>::ParseSelects(tinyxml2::XMLElement *node) {
 				const char *_order = elt->Attribute("order");
 				if (_order) {
 					std::string order(_order);
-					std::cout << "Order by " << pos << "\n";
 					OrderBy = pos;
 					if (order == "numeric") {
 						OrderType = NUMERIC;
