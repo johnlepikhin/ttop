@@ -16,11 +16,11 @@ typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCust
 			throw logic::ParseError("No default=... attribute for <PayloadPreview/>");
 		}
 		auto r = [defaultPreview](const std::shared_ptr<EndPoint> &c) {
-			std::string r = c->GetPayloadPreview();
-			if (r.empty()) {
+			std::string *r = c->GetPayloadPreview();
+			if (r == nullptr) {
 				return (std::string(defaultPreview));
 			}
-			return (r);
+			return (*r);
 		};
 		return (r);
 	} else if (name == "LastChunk") {
