@@ -32,6 +32,7 @@ void View<IN>::Output()
 			case STRING:
 				return (_left->at(OrderBy).Val < _right->at(OrderBy).Val);
 			}
+			return (false);
 		});
 	}
 
