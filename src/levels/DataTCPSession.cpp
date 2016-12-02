@@ -164,6 +164,11 @@ typename logic::Logic<SessionTCP>::t_bool_value DataTCPSession::ParseBoolCustom(
 			return (c->DirectionDetected);
 		};
 		return (r);
+	} else if (name == "FollowerDetected") {
+			auto r = [](const std::shared_ptr<SessionTCP> &c) {
+				return (c->Follower != nullptr);
+			};
+			return (r);
 	} else if (name == "Client") {
 		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
 		bool defaultValue((std::string(_defaultValue) == "true") ? true : false);
@@ -206,6 +211,11 @@ typename logic::Logic<SessionTCP>::t_longlong_value DataTCPSession::ParseLongLon
 	if (name == "LastInternalID") {
 		auto r = [](const std::shared_ptr<SessionTCP> &c) {
 			return (c->LastInternalID);
+		};
+		return (r);
+	} else if (name == "SessionID") {
+		auto r = [](const std::shared_ptr<SessionTCP> &c) {
+			return (c->SessionID);
 		};
 		return (r);
 	} else if (name == "Client") {

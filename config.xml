@@ -61,9 +61,15 @@
 					</parser>
 					<parser of="TCP">
 						<parser of="TCPSession">
-							<view type="dump" processedByFollowers="false">
+							<view type="dump">
 								<select>
-									<string>unknown_TCP_data</string>
+									<string>TCP_data</string>
+									<long2string>
+										<SessionID/>
+									</long2string>
+									<bool2string>
+										<FollowerDetected/>
+									</bool2string>
 									<long2string>
 										<Client default="0">
 											<LastChunk default="0">
@@ -78,27 +84,20 @@
 											</LastChunk>
 										</Client>
 									</long2string>
-									<Client default="0" order="numeric">
-										<long2string><sum><RawIfaceBytes/></sum></long2string>
+									<Client default="(noclient)">
+										<PayloadPreview default="(nolast-client-chunk)"/>
 									</Client>
-									<Server default="0">
-										<long2string><sum><RawIfaceBytes/></sum></long2string>
+									<Server default="(noserver)">
+										<PayloadPreview default="(nolast-server-chunk)"/>
 									</Server>
 								</select>
 								<groupBy>
 									<long2string>
-										<Client default="0">
-											<LastChunk default="0">
-												<DestinationPort/>
-											</LastChunk>
-										</Client>
+										<SessionID/>
 									</long2string>
 								</groupBy>
 								<trigger>
-									<longGtEq>
-										<minus><nowSeconds/><long>4</long></minus>
-										<min><nowSeconds/></min>
-									</longGtEq>
+									<false/>
 								</trigger>
 							</view>
 
