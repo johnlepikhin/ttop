@@ -17,11 +17,17 @@ bool Level<PARSER>::Filter(const t_value &chunk)
 }
 
 template<typename PARSER>
-bool Level<PARSER>::BeforeRecursionHook(const t_value &chunk)
+int32_t Level<PARSER>::BeforeRecursionHook(const t_value &chunk)
 {
 	try {
 		PARSER::BeforeRecursionHook(chunk);
 		bool r = Filter(chunk);
+
+		if (r) {
+			return (0);
+		} else {
+			return (-1);
+		}
 
 		return (r);
 	} catch (...) {
@@ -30,16 +36,16 @@ bool Level<PARSER>::BeforeRecursionHook(const t_value &chunk)
 }
 
 template<typename PARSER>
-bool Level<PARSER>::AfterRecursionHook(const t_value &chunk, const std::exception *exn, bool found)
+int32_t Level<PARSER>::AfterRecursionHook(const t_value &chunk, const std::exception *exn, int32_t followersProcessed)
 {
 	try {
 		if (chunk != nullptr) {
 			for (auto view : Views) {
-				view->Input(chunk, found);
+				view->Input(chunk, followersProcessed);
 			}
 		}
 
-		return (PARSER::AfterRecursionHook(chunk, exn, found));
+		return (PARSER::AfterRecursionHook(chunk, exn, followersProcessed));
 	} catch (...) {
 		throw;
 	}

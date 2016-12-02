@@ -47,10 +47,10 @@ void View<IN>::FillSelection(View<IN>::t_selection &vector, const std::shared_pt
 }
 
 template <typename IN>
-void View<IN>::Input(const std::shared_ptr<IN> &chunk, bool isProcessedByFollowers)
+void View<IN>::Input(const std::shared_ptr<IN> &chunk, int32_t followersProcessed)
 {
-	if ((isProcessedByFollowers && ProcessedByFollowersCondition == IF_FALSE)
-			|| (!isProcessedByFollowers && ProcessedByFollowersCondition == IF_TRUE))
+	if ((followersProcessed > 0 && ProcessedByFollowersCondition == IF_FALSE)
+			|| (followersProcessed <= 0 && ProcessedByFollowersCondition == IF_TRUE))
 		return;
 
 	Where.Input(chunk);

@@ -67,7 +67,7 @@ public:
 	void Output();
 
 	void FillSelection(t_selection &vector, const std::shared_ptr<IN> &chunk);
-	void Input(const std::shared_ptr<IN> &chunk, bool isProcessedByFollowers);
+	void Input(const std::shared_ptr<IN> &chunk, int32_t followersProcessed);
 	virtual void ParseParams(const tinyxml2::XMLElement *node);
 
 	void ParseSelects(tinyxml2::XMLElement *node);
