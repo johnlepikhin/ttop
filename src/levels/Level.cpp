@@ -37,9 +37,9 @@ bool Level<PARSER>::AfterRecursionHook(const t_value &chunk, const std::exceptio
 			view->Input(chunk, found);
 		}
 
-		PARSER::AfterRecursionHook(chunk, exn, found);
+		return (PARSER::AfterRecursionHook(chunk, exn, found));
 	} catch (...) {
-
+		throw;
 	}
 }
 
