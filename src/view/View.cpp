@@ -47,8 +47,12 @@ void View<IN>::FillSelection(View<IN>::t_selection &vector, const std::shared_pt
 }
 
 template <typename IN>
-void View<IN>::Input(const std::shared_ptr<IN> &chunk)
+void View<IN>::Input(const std::shared_ptr<IN> &chunk, bool isProcessedByFollowers)
 {
+	if ((isProcessedByFollowers && ProcessedByFollowersCondition == IF_FALSE)
+			|| (!isProcessedByFollowers && ProcessedByFollowersCondition == IF_TRUE))
+		return;
+
 	Where.Input(chunk);
 	Trigger.Input(chunk);
 
@@ -74,7 +78,21 @@ void View<IN>::Input(const std::shared_ptr<IN> &chunk)
 }
 
 template <typename IN>
-void View<IN>::ParseParams(const tinyxml2::XMLElement *node) {};
+void View<IN>::ParseParams(const tinyxml2::XMLElement *node) {
+	const char *_a = node->Attribute("processedByFollowers");
+	if (_a) {
+		std::string a(_a);
+		if (a == "true") {
+			ProcessedByFollowersCondition = IF_TRUE;
+		} else if (a == "false") {
+			ProcessedByFollowersCondition = IF_FALSE;
+		} else if (a == "no matter") {
+			ProcessedByFollowersCondition = NO_MATTER;
+		} else {
+			throw logic::ParseError("Attribute processedByFollowers='...' expects 'true', 'false' or 'no matter'");
+		}
+	}
+};
 
 template <typename IN>
 void View<IN>::ParseSelects(tinyxml2::XMLElement *node) {

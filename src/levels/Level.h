@@ -36,6 +36,7 @@ public:
 	virtual struct parserDescription::Description GetDescription() = 0;
 	virtual bool Filter(const t_value &chunk);
 	virtual bool BeforeRecursionHook(const t_value &chunk);
+	virtual bool AfterRecursionHook(const t_value &chunk, const std::exception *exn, bool found);
 
 	void ParseXMLSettings(tinyxml2::XMLElement *node);
 	void ParseXMLSettingsFilter(tinyxml2::XMLElement *node);

@@ -23,15 +23,23 @@ bool Level<PARSER>::BeforeRecursionHook(const t_value &chunk)
 		PARSER::BeforeRecursionHook(chunk);
 		bool r = Filter(chunk);
 
-		if (r) {
-			for (auto view : Views) {
-				view->Input(chunk);
-			}
-		}
-
 		return (r);
 	} catch (...) {
 		throw;
+	}
+}
+
+template<typename PARSER>
+bool Level<PARSER>::AfterRecursionHook(const t_value &chunk, const std::exception *exn, bool found)
+{
+	try {
+		for (auto view : Views) {
+			view->Input(chunk, found);
+		}
+
+		PARSER::AfterRecursionHook(chunk, exn, found);
+	} catch (...) {
+
 	}
 }
 

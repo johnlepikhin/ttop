@@ -42,6 +42,8 @@ struct Value {
 
 enum OrderType { STRING, NUMERIC };
 
+enum TripleCondition { NO_MATTER, IF_TRUE, IF_FALSE };
+
 template <typename IN>
 class View {
 	std::shared_ptr<logic::Logic<IN> > Parser;
@@ -58,12 +60,13 @@ public:
 	int16_t OrderBy = -1;
 	bool OrderDesc = false;
 	char OrderType = STRING;
+	TripleCondition ProcessedByFollowersCondition = NO_MATTER;
 	virtual std::string TypeID() = 0;
 	virtual void DoOutput(const std::vector<t_selection> &output);
 	void Output();
 
 	void FillSelection(t_selection &vector, const std::shared_ptr<IN> &chunk);
-	void Input(const std::shared_ptr<IN> &chunk);
+	void Input(const std::shared_ptr<IN> &chunk, bool isProcessedByFollowers);
 	virtual void ParseParams(const tinyxml2::XMLElement *node);
 
 	void ParseSelects(tinyxml2::XMLElement *node);
