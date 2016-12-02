@@ -23,11 +23,17 @@ typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCust
 		};
 		return (r);
 	} else if (name == "LastChunk") {
+		const char *_defaultValue;
+		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
+		std::string defaultValue(_defaultValue);
+
 		auto child = elt.FirstChildElement();
 		if (child) {
 			DataTCP LogicTCP;
 			auto subfn = LogicTCP.ParseString(child);
-			auto r = [subfn](const std::shared_ptr<EndPoint> &c) {
+			auto r = [defaultValue, subfn](const std::shared_ptr<EndPoint> &c) {
+				if (c->LastChunk == nullptr)
+					return (defaultValue);
 				return(subfn(c->LastChunk));
 			};
 			return (r);
@@ -46,11 +52,17 @@ typename logic::Logic<EndPoint>::t_bool_value DataTCPEndPoint::ParseBoolCustom(c
 		};
 		return (r);
 	} else if (name == "LastChunk") {
+		const char *_defaultValue;
+		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
+		bool defaultValue((std::string(_defaultValue) == "true") ? true : false);
+
 		auto child = elt.FirstChildElement();
 		if (child) {
 			DataTCP LogicTCP;
 			auto subfn = LogicTCP.ParseBool(child);
-			auto r = [subfn](const std::shared_ptr<EndPoint> &c) {
+			auto r = [defaultValue, subfn](const std::shared_ptr<EndPoint> &c) {
+				if (c->LastChunk == nullptr)
+					return (defaultValue);
 				return(subfn(c->LastChunk));
 			};
 			return (r);
@@ -79,11 +91,17 @@ typename logic::Logic<EndPoint>::t_longlong_value DataTCPEndPoint::ParseLongLong
 		};
 		return (r);
 	} else if (name == "LastChunk") {
+		const char *_defaultValue;
+		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
+		long long defaultValue(stoll(std::string(_defaultValue)));
+
 		auto child = elt.FirstChildElement();
 		if (child) {
 			DataTCP LogicTCP;
 			auto subfn = LogicTCP.ParseLongLong(child);
-			auto r = [subfn](const std::shared_ptr<EndPoint> &c) {
+			auto r = [defaultValue, subfn](const std::shared_ptr<EndPoint> &c) {
+				if (c->LastChunk == nullptr)
+					return (defaultValue);
 				return(subfn(c->LastChunk));
 			};
 			return (r);
@@ -97,28 +115,36 @@ DataTCPEndPoint::~DataTCPEndPoint() {};
 
 //////////////
 
-
 typename logic::Logic<SessionTCP>::t_string_value DataTCPSession::ParseStringCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
+	const char *_defaultValue;
 
 	if (name == "Client") {
+		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
+		std::string defaultValue(_defaultValue);
 		auto child = elt.FirstChildElement();
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseString(child);
-			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
+			auto r = [defaultValue, subfn](const std::shared_ptr<SessionTCP> &c) {
+				if (c->Client == nullptr)
+					return (defaultValue);
 				return(subfn(c->Client));
 			};
 			return (r);
 		}
 		throw logic::ParseError("No child for <Client/>");
 	} else if (name == "Server") {
+		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
+		std::string defaultValue(_defaultValue);
 		auto child = elt.FirstChildElement();
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseString(child);
-			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
+			auto r = [defaultValue, subfn](const std::shared_ptr<SessionTCP> &c) {
+				if (c->Server == nullptr)
+					return (defaultValue);
 				return(subfn(c->Server));
 			};
 			return (r);
@@ -131,28 +157,38 @@ typename logic::Logic<SessionTCP>::t_string_value DataTCPSession::ParseStringCus
 typename logic::Logic<SessionTCP>::t_bool_value DataTCPSession::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
+	const char *_defaultValue;
+
 	if (name == "DirectionDetected") {
 		auto r = [](const std::shared_ptr<SessionTCP> &c) {
 			return (c->DirectionDetected);
 		};
 		return (r);
 	} else if (name == "Client") {
+		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
+		bool defaultValue((std::string(_defaultValue) == "true") ? true : false);
 		auto child = elt.FirstChildElement();
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseBool(child);
-			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
+			auto r = [defaultValue, subfn](const std::shared_ptr<SessionTCP> &c) {
+				if (c->Client == nullptr)
+					return (defaultValue);
 				return(subfn(c->Client));
 			};
 			return (r);
 		}
 		throw logic::ParseError("No child for <Client/>");
 	} else if (name == "Server") {
+		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
+		bool defaultValue((std::string(_defaultValue) == "true") ? true : false);
 		auto child = elt.FirstChildElement();
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseBool(child);
-			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
+			auto r = [defaultValue, subfn](const std::shared_ptr<SessionTCP> &c) {
+				if (c->Server == nullptr)
+					return (defaultValue);
 				return(subfn(c->Server));
 			};
 			return (r);
@@ -165,28 +201,38 @@ typename logic::Logic<SessionTCP>::t_bool_value DataTCPSession::ParseBoolCustom(
 typename logic::Logic<SessionTCP>::t_longlong_value DataTCPSession::ParseLongLongCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
+	const char *_defaultValue;
+
 	if (name == "LastInternalID") {
 		auto r = [](const std::shared_ptr<SessionTCP> &c) {
 			return (c->LastInternalID);
 		};
 		return (r);
 	} else if (name == "Client") {
+		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
+		long long defaultValue(stoll(std::string(_defaultValue)));
 		auto child = elt.FirstChildElement();
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseLongLong(child);
-			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
+			auto r = [defaultValue, subfn](const std::shared_ptr<SessionTCP> &c) {
+				if (c->Client == nullptr)
+					return (defaultValue);
 				return(subfn(c->Client));
 			};
 			return (r);
 		}
 		throw logic::ParseError("No child for <Client/>");
 	} else if (name == "Server") {
+		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
+		long long defaultValue(stoll(std::string(_defaultValue)));
 		auto child = elt.FirstChildElement();
 		if (child) {
 			DataTCPEndPoint LogicTCPEndPoint;
 			auto subfn = LogicTCPEndPoint.ParseLongLong(child);
-			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
+			auto r = [defaultValue, subfn](const std::shared_ptr<SessionTCP> &c) {
+				if (c->Server == nullptr)
+					return (defaultValue);
 				return(subfn(c->Server));
 			};
 			return (r);
