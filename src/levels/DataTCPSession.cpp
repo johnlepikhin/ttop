@@ -12,14 +12,13 @@ typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCust
 	std::string name(elt.Value());
 	if (name == "PayloadPreview") {
 		const char *defaultPreview = elt.Attribute("default");
-		if (!defaultPreview) {
+		if (!defaultPreview)
 			throw logic::ParseError("No default=... attribute for <PayloadPreview/>");
-		}
-		auto r = [defaultPreview](const std::shared_ptr<EndPoint> &c) {
+		std::string defaultValue(defaultPreview);
+		auto r = [defaultValue](const std::shared_ptr<EndPoint> &c) {
 			std::string *r = c->GetPayloadPreview();
-			if (r == nullptr) {
-				return (std::string(defaultPreview));
-			}
+			if (r == nullptr)
+				return (defaultValue);
 			return (*r);
 		};
 		return (r);
