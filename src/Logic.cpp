@@ -39,6 +39,12 @@ typename Logic<IN>::t_string_value Logic<IN>::ParseString(const tinyxml2::XMLEle
 				return ([s_first](const t_input &v) { return(std::to_string(s_first(v))); });
 			}
 			throw ParseError("Logic parser found no children for node '" + name + "'");
+		} else if (name == "bool2string") {
+			if (const tinyxml2::XMLElement *first = elt->FirstChild()->ToElement()) {
+				t_bool_value s_first = ParseBool(first);
+				return ([s_first](const t_input &v) { return((s_first(v) ? "true" : "false")); });
+			}
+			throw ParseError("Logic parser found no children for node '" + name + "'");
 		}
 		return (ParseStringCustom(*elt));
 	}
