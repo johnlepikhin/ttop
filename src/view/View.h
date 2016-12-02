@@ -49,6 +49,7 @@ class View {
 	std::shared_ptr<logic::Logic<IN> > Parser;
 	std::function<bool(std::shared_ptr<IN>)> True = [](std::shared_ptr<IN>) { return (true); };
 	std::function<std::string(std::shared_ptr<IN>)> EmptyString = [](std::shared_ptr<IN>) { return (""); };
+	void ParseLocalParams(const tinyxml2::XMLElement *node);
 public:
 	typedef Value<IN, std::string> t_select;
 	typedef std::vector< t_select > t_selection;

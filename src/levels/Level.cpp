@@ -33,8 +33,10 @@ template<typename PARSER>
 bool Level<PARSER>::AfterRecursionHook(const t_value &chunk, const std::exception *exn, bool found)
 {
 	try {
-		for (auto view : Views) {
-			view->Input(chunk, found);
+		if (chunk != nullptr) {
+			for (auto view : Views) {
+				view->Input(chunk, found);
+			}
 		}
 
 		return (PARSER::AfterRecursionHook(chunk, exn, found));

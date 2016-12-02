@@ -78,7 +78,13 @@ void View<IN>::Input(const std::shared_ptr<IN> &chunk, bool isProcessedByFollowe
 }
 
 template <typename IN>
-void View<IN>::ParseParams(const tinyxml2::XMLElement *node) {
+void View<IN>::ParseParams(const tinyxml2::XMLElement *node)
+{
+}
+
+template <typename IN>
+void View<IN>::ParseLocalParams(const tinyxml2::XMLElement *node)
+{
 	const char *_a = node->Attribute("processedByFollowers");
 	if (_a) {
 		std::string a(_a);
@@ -184,6 +190,7 @@ void View<IN>::Parse(tinyxml2::XMLElement *node, std::string &type)
 	const char *_type = node->Attribute("type");
 	if (_type) {
 		if (TypeID() == _type) {
+			ParseLocalParams(node);
 			ParseParams(node);
 			ParseSelects(node);
 			ParseWhere(node);
