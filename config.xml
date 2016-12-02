@@ -10,6 +10,7 @@
 			</or>
 		</filter>
 		-->
+		<!--
 		<view type="dump" output="-">
 			<select>
 				<long2string><Seconds/></long2string>
@@ -30,6 +31,7 @@
 				<SourceMAC name="source"/>
 			</groupBy>
 		</view>
+		-->
 		<parser of="DIX">
 			<parser of="IPv4">
 				<parser of="IPv4Packet">
@@ -59,40 +61,49 @@
 					</parser>
 					<parser of="TCP">
 						<parser of="TCPSession">
-							<view type="dump" gseparator="=======" processedByFollowers="false">
+							<view type="dump" processedByFollowers="false">
 								<select>
+									<string>unknown_TCP_data</string>
 									<long2string>
-										<Client>
-											<LastChunk>
+										<Client default="0">
+											<LastChunk default="0">
 												<DestinationPort/>
 											</LastChunk>
 										</Client>
 									</long2string>
 									<long2string>
-										<Client>
-											<LastChunk>
+										<Client default="0">
+											<LastChunk default="0">
 												<SourcePort/>
 											</LastChunk>
 										</Client>
 									</long2string>
-									<Client>
+									<Client default="0" order="numeric">
 										<long2string><sum><RawIfaceBytes/></sum></long2string>
 									</Client>
-									<Server>
+									<Server default="0">
 										<long2string><sum><RawIfaceBytes/></sum></long2string>
 									</Server>
 								</select>
 								<groupBy>
 									<long2string>
-										<Client>
-											<LastChunk>
+										<Client default="0">
+											<LastChunk default="0">
 												<DestinationPort/>
 											</LastChunk>
 										</Client>
 									</long2string>
 								</groupBy>
+								<trigger>
+									<longGtEq>
+										<minus><nowSeconds/><long>4</long></minus>
+										<min><nowSeconds/></min>
+									</longGtEq>
+								</trigger>
 							</view>
+
 							<parser of="HTTP">
+							<!--
 								<view type="dump">
 									<select>
 										<Method/>
@@ -103,9 +114,11 @@
 										<HasRequest/>
 									</where>
 								</view>
+								-->
 							</parser>
 
 							<parser of="MySQL">
+							<!--
 								<view type="dump">
 									<select>
 										<Database/>
@@ -124,6 +137,7 @@
 										<false/>
 									</trigger>
 								</view>
+								-->
 							</parser>
 						</parser>
 					</parser>
