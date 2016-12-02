@@ -23,7 +23,7 @@ public:
 	Dump(std::shared_ptr<logic::Logic<IN> > parser);
 	virtual ~Dump();
 	virtual void DoOutput(const std::vector<typename View<IN>::t_selection> &output);
-	virtual void ParseParams(tinyxml2::XMLElement *node);
+	virtual void ParseParams(const tinyxml2::XMLElement *node);
 };
 
 } /* namespace view */

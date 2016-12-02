@@ -45,7 +45,7 @@ void Dump<IN>::DoOutput(const std::vector<typename View<IN>::t_selection> &outpu
 }
 
 template <typename IN>
-void Dump<IN>::ParseParams(tinyxml2::XMLElement *node)
+void Dump<IN>::ParseParams(const tinyxml2::XMLElement *node)
 {
 	const char *_attr = node->Attribute("output");
 	if (_attr) {
@@ -54,6 +54,7 @@ void Dump<IN>::ParseParams(tinyxml2::XMLElement *node)
 			OutputStream.open(_attr, std::ios::out | std::ios::app); //-V2006
 		}
 	}
+
 	_attr = node->Attribute("rseparator");
 	if (_attr) {
 		RecordSeparator = _attr;
