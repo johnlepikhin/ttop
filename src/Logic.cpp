@@ -33,6 +33,20 @@ typename Logic<IN>::t_string_value Logic<IN>::ParseString(const tinyxml2::XMLEle
 		if (name == "string") {
 			std::string v = elt->GetText();
 			return([v](const t_input &) { return (v); });
+		} else if (name == "substr") {
+			if (const tinyxml2::XMLElement *first = elt->FirstChild()->ToElement()) {
+				t_string_value s_first = ParseString(first);
+
+				const char *_v;
+				if(!(_v = elt->Attribute("position"))) throw logic::ParseError("No attribute position='...' for <"+name+"/>");
+				long long pos(stoll(std::string(_v)));
+				if(!(_v = elt->Attribute("length"))) throw logic::ParseError("No attribute length='...' for <"+name+"/>");
+				long long length(stoll(std::string(_v)));
+
+				return ([s_first, pos, length](const t_input &v) {
+					return(s_first(v).substr(pos, length)); });
+			}
+			throw ParseError("Logic parser found no children for node '" + name + "'");
 		} else if (name == "long2string") {
 			if (const tinyxml2::XMLElement *first = elt->FirstChild()->ToElement()) {
 				t_longlong_value s_first = ParseLongLong(first);
@@ -43,6 +57,24 @@ typename Logic<IN>::t_string_value Logic<IN>::ParseString(const tinyxml2::XMLEle
 			if (const tinyxml2::XMLElement *first = elt->FirstChild()->ToElement()) {
 				t_bool_value s_first = ParseBool(first);
 				return ([s_first](const t_input &v) { return((s_first(v) ? "true" : "false")); });
+			}
+			throw ParseError("Logic parser found no children for node '" + name + "'");
+		} else if (name == "concat") {
+			const tinyxml2::XMLNode *node = elt->FirstChild();
+			const tinyxml2::XMLElement *first, *second;
+			if (node && (first = node->ToElement())) {
+				node = node->NextSiblingElement();
+				if (node && (second = node->ToElement())) {
+					t_string_value s_first = ParseString(first);
+					t_string_value s_second = ParseString(second);
+					// additional 'if' for future use
+					if (name == "concat") {
+						return ([s_first, s_second](const t_input &v) {
+							return(s_first(v) + s_second(v)); }
+						);
+					}
+				}
+				throw ParseError("Logic parser found no second child for node '" + name + "'");
 			}
 			throw ParseError("Logic parser found no children for node '" + name + "'");
 		}

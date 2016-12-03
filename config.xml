@@ -63,7 +63,7 @@
 						<parser of="TCPSession">
 							<view type="dump">
 								<select>
-									<string>TCP_data</string>
+									<concat><string>TCP_data</string><substr position='3' length='3'><string>12345</string></substr></concat>
 									<long2string>
 										<SessionID/>
 									</long2string>
