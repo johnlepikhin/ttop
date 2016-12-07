@@ -2,6 +2,7 @@
 #ifndef SRC_PARSERDESCRIPTION_H_
 #define SRC_PARSERDESCRIPTION_H_
 
+#include <levels/ParserChunkSSL.h>
 #include <levels/ParserHTTP.h>
 #include <levels/ParserPacketMySQL.h>
 #include <TrafficAccounting/levels/ParserEtherNet.h>
@@ -30,6 +31,8 @@ struct Description {
 };
 
 typedef struct Description info;
+
+extern info SSL;
 
 extern info MySQL;
 

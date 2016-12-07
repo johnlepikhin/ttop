@@ -293,6 +293,7 @@ template class Logic<SessionTCP>;
 template class Logic<EndPoint>;
 template class Logic<ChunkHTTP>;
 template class Logic<PacketMySQL>;
+template class Logic<ChunkSSL>;
 
 } /* namespace logic */
 } /* namespace ttop */

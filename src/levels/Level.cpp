@@ -121,6 +121,7 @@ template class Level<ParserPacketIPv4>;
 template class Level<ParserSessionTCP>;
 template class Level<ParserHTTP>;
 template class Level<ParserPacketMySQL>;
+template class Level<ParserChunkSSL>;
 
 } /* namespace level */
 } /* namespace ttop */

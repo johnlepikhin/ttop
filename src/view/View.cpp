@@ -229,6 +229,7 @@ template class View<SessionTCP>;
 template class View<EndPoint>;
 template class View<ChunkHTTP>;
 template class View<PacketMySQL>;
+template class View<ChunkSSL>;
 
 } /* namespace view */
 } /* namespace ttop */

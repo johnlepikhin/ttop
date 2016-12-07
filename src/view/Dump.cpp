@@ -85,6 +85,7 @@ template class Dump<SessionTCP>;
 template class Dump<EndPoint>;
 template class Dump<ChunkHTTP>;
 template class Dump<PacketMySQL>;
+template class Dump<ChunkSSL>;
 
 
 } /* namespace view */
