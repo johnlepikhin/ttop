@@ -6,6 +6,7 @@
 #include "../ParserDescription.h"
 #include <algorithm>
 #include <functional>
+#include <chrono>
 
 namespace ttop {
 namespace view {
@@ -155,8 +156,37 @@ void View<IN>::ParseWhere(const tinyxml2::XMLElement *node) {
 }
 
 template <typename IN>
+void View<IN>::TimeIntervalTrigger()
+{
+	while (true) {
+		uint16_t sleep_for = (TimeInterval) ? TimeInterval : 1;
+		std::this_thread::sleep_for(std::chrono::seconds(sleep_for));
+
+		if (TimeInterval) {
+			Output();
+			Where.Reset();
+			Trigger.Reset();
+			GroupBy.Reset();
+			Selection.clear();
+		}
+	}
+}
+
+template <typename IN>
 void View<IN>::ParseTrigger(const tinyxml2::XMLElement *node) {
-	if (const tinyxml2::XMLNode *child = node->FirstChildElement("trigger")) {
+	TimeIntervalThread = std::thread( [=] { TimeIntervalTrigger(); } );
+
+	if (const tinyxml2::XMLElement *child = node->FirstChildElement("trigger")) {
+		const char *_timeInterval = child->Attribute("timeInterval");
+		if (_timeInterval) {
+			try {
+				TimeInterval = std::stoi(_timeInterval);
+
+			} catch (...) {
+				throw logic::ParseError("Interger value (in seconds) required for <trigger timeInterval=...>");
+			}
+		}
+
 		child = child->FirstChildElement();
 		if (child) {
 			const tinyxml2::XMLElement *elt = child->ToElement();
