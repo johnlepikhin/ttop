@@ -17,12 +17,11 @@ void requestExit(int code) {
 	for (auto fn : onExitHooks) {
 		fn(code);
 	}
-
-	exit(code);
 }
 
 void fatalError (const std::string &msg)
 {
+	requestExit(EXIT_FAILURE);
 	std::cerr << "Error: " << msg << std::endl;
 	exit (EXIT_FAILURE);
 }
