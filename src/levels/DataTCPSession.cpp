@@ -46,7 +46,12 @@ typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCust
 typename logic::Logic<EndPoint>::t_bool_value DataTCPEndPoint::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "HasLastChunk") {
+	if (name == "HasPayload") {
+		auto r = [](const std::shared_ptr<EndPoint> &c) {
+			return (c->Payload != nullptr && c->Payload->CoveredSize);
+		};
+		return (r);
+	} else if (name == "HasLastChunk") {
 		auto r = [](const std::shared_ptr<EndPoint> &c) {
 			return (c->LastChunk != nullptr);
 		};
