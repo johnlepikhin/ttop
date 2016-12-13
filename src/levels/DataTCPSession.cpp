@@ -120,7 +120,16 @@ typename logic::Logic<SessionTCP>::t_string_value DataTCPSession::ParseStringCus
 	std::string name(elt.Value());
 	const char *_defaultValue;
 
-	if (name == "Client") {
+	if (name == "FollowerProtocol") {
+		auto r = [](const std::shared_ptr<SessionTCP> &c) {
+			if (c->Follower != nullptr) {
+				return (c->Follower->ID());
+			} else {
+				return (std::string(""));
+			}
+		};
+		return (r);
+	} else if (name == "Client") {
 		if(!(_defaultValue = elt.Attribute("default"))) throw logic::ParseError("No attribute default='...' for <"+name+"/>");
 		std::string defaultValue(_defaultValue);
 		auto child = elt.FirstChildElement();
