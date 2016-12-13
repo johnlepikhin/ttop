@@ -13,9 +13,12 @@
 #include "ParserDescription.h"
 
 #include <fcntl.h>
+#include <unistd.h>
+#include <csignal>
 
 std::string ttop::config::parsersXmlFile;
 std::string ttop::config::inputFile;
+
 
 void parseCmdLine (int argc, char** argv)
 {
@@ -56,6 +59,10 @@ void parseCmdLine (int argc, char** argv)
 	}
 }
 
+void signal_handler(int signal) {
+	if (signal == SIGINT)
+		ttop::utils::requestExit(0);
+}
 
 int main (int argc, char** argv)
 {
@@ -79,5 +86,5 @@ int main (int argc, char** argv)
 		}
 	}
 
-	return (0);
+	ttop::utils::requestExit(0);
 }

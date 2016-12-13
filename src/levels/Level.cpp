@@ -5,7 +5,7 @@
 
 #include <memory>
 #include "../view/Dump.h"
-#include "../view/View.h"
+#include "../view/Top.h"
 
 namespace ttop {
 namespace level {
@@ -67,6 +67,11 @@ void Level<PARSER>::ParseXMLSettingsView(tinyxml2::XMLElement *node)
 		if (type == "dump") {
 			std::shared_ptr<view::View<THIS_T> > View
 			= std::make_shared<view::Dump<THIS_T> >(Parser);
+			View->Parse(node, type);
+			Views.push_back(View);
+		} else if (type == "top") {
+			std::shared_ptr<view::View<THIS_T> > View
+			= std::make_shared<view::Top<THIS_T> >(Parser);
 			View->Parse(node, type);
 			Views.push_back(View);
 		} else {

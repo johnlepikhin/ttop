@@ -61,33 +61,32 @@
 					</parser>
 					<parser of="TCP">
 						<parser of="TCPSession">
-							<view type="dump">
+							<view type="top">
 								<select>
-									<concat><string>TCP_data</string><substr position='3' length='3'><string>12345</string></substr></concat>
-									<long2string>
+									<long2string name="ID">
 										<SessionID/>
 									</long2string>
-									<bool2string>
+									<bool2string name="HasFollower">
 										<FollowerDetected/>
 									</bool2string>
-									<long2string>
+									<long2string name="DstPort">
 										<Client default="0">
 											<LastChunk default="0">
 												<DestinationPort/>
 											</LastChunk>
 										</Client>
 									</long2string>
-									<long2string>
+									<long2string name="SrcPort">
 										<Client default="0">
 											<LastChunk default="0">
 												<SourcePort/>
 											</LastChunk>
 										</Client>
 									</long2string>
-									<Client default="(noclient)">
+									<Client default="(noclient)" name="CliData">
 										<PayloadPreview default="(nolast-client-chunk)"/>
 									</Client>
-									<Server default="(noserver)">
+									<Server default="(noserver)" name="SrvDate">
 										<PayloadPreview default="(nolast-server-chunk)"/>
 									</Server>
 								</select>
@@ -97,7 +96,10 @@
 									</long2string>
 								</groupBy>
 								<trigger>
-									<false/>
+									<longGtEq>
+										<minus><nowSeconds/><long>1</long></minus>
+										<min><nowSeconds/></min>
+									</longGtEq>
 								</trigger>
 							</view>
 

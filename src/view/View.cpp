@@ -190,12 +190,12 @@ void View<IN>::Parse(tinyxml2::XMLElement *node, std::string &type)
 	const char *_type = node->Attribute("type");
 	if (_type) {
 		if (TypeID() == _type) {
-			ParseLocalParams(node);
-			ParseParams(node);
 			ParseSelects(node);
 			ParseWhere(node);
 			ParseTrigger(node);
 			ParseGroupBy(node);
+			ParseLocalParams(node);
+			ParseParams(node);
 		} else {
 			throw std::invalid_argument("unknown view type");
 		}
