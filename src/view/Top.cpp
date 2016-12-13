@@ -69,6 +69,7 @@ Top<IN>::Top(std::shared_ptr<logic::Logic<IN> > parser)
 	});
 
 	CursesThread = std::thread( [=] { NCursesListenser(); } );
+	CursesThread.detach();
 }
 
 template <typename IN>

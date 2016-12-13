@@ -175,6 +175,7 @@ void View<IN>::TimeIntervalTrigger()
 template <typename IN>
 void View<IN>::ParseTrigger(const tinyxml2::XMLElement *node) {
 	TimeIntervalThread = std::thread( [=] { TimeIntervalTrigger(); } );
+	TimeIntervalThread.detach();
 
 	if (const tinyxml2::XMLElement *child = node->FirstChildElement("trigger")) {
 		const char *_timeInterval = child->Attribute("timeInterval");

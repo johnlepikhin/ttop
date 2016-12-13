@@ -120,15 +120,20 @@ void processFile (ttop::AppSettings settings) {
 
 int main (int argc, char** argv)
 {
-	parseCmdLine(argc, argv);
-	ttop::AppSettings settings(ttop::config::parsersXmlFile);
+	try {
+		parseCmdLine(argc, argv);
+		ttop::AppSettings settings(ttop::config::parsersXmlFile);
 
-	if (!ttop::config::inputFile.compare(0, iface_prefix.size(), iface_prefix)) {
-		processPcapIface(settings);
-	} else {
-		processFile(settings);
+		if (!ttop::config::inputFile.compare(0, iface_prefix.size(), iface_prefix)) {
+			processPcapIface(settings);
+		} else {
+			processFile(settings);
+		}
+		ttop::utils::requestExit(0);
+	} catch (...) {
+		ttop::utils::requestExit(0);
+		throw;
 	}
 
-	ttop::utils::requestExit(0);
 	return (0);
 }
