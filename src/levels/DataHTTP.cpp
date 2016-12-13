@@ -11,25 +11,38 @@ namespace level_data {
 
 typename logic::Logic<ChunkHTTP>::t_string_value DataHTTP::ParseStringCustom(const tinyxml2::XMLElement &elt)
 {
+	const char *_type = elt.Attribute("default");
+	std::string _default = (_type) ? _type : "";
+
 	std::string name(elt.Value());
 	if (name == "Method") {
-		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Request->Method); });
+		return ([_default](const std::shared_ptr<ChunkHTTP> &c) {
+			if (c->Request != nullptr) return(c->Request->Method);
+			return (_default);
+		});
 	} else if (name == "URI") {
-		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Request->URI); });
+		return ([_default](const std::shared_ptr<ChunkHTTP> &c) {
+			if (c->Request != nullptr) return(c->Request->URI);
+			return (_default);
+		});
 	} else if (name == "Host") {
-		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Request->Host); });
+		return ([_default](const std::shared_ptr<ChunkHTTP> &c) {
+			if (c->Request != nullptr) return(c->Request->Host);
+			return (_default);
+		});
 	} else if (name == "Message") {
-		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Response->Message); });
+		return ([_default](const std::shared_ptr<ChunkHTTP> &c) {
+			if (c->Response != nullptr) return(c->Response->Message);
+			return (_default);
+		});
 	} else if (name == "ReqHeader" || name == "RespHeader") {
-		const char *_type = elt.Attribute("default");
-		std::string _default = (_type) ? _type : "";
 		std::string hdrname(elt.GetText());
-		return ([&name, &_default, &hdrname](const std::shared_ptr<ChunkHTTP> &c) {
+		return ([name, _default, hdrname](const std::shared_ptr<ChunkHTTP> &c) {
 			std::vector<std::pair<std::string, std::string> > headers
 			= (name == "ReqHeader") ? c->Request->Headers : c->Response->Headers;
 			auto it = std::find_if(headers.begin()
 					, headers.end()
-					, [&hdrname](const std::pair<std::string, std::string>& h) {
+					, [hdrname](const std::pair<std::string, std::string>& h) {
 				return (util::iequals(h.first, hdrname));
 			});
 
@@ -47,8 +60,20 @@ typename logic::Logic<ChunkHTTP>::t_string_value DataHTTP::ParseStringCustom(con
 typename logic::Logic<ChunkHTTP>::t_longlong_value DataHTTP::ParseLongLongCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
+
+	const char *_type = elt.Attribute("default");
+	uint64_t _default;
+	try {
+		_default = (_type) ? std::stoll(_type) : 0;
+	} catch (...) {
+		throw logic::ParseError(std::string("Long numeric value expected for default='..' attribute, but got ") + std::string(_type));
+	}
+
 	if (name == "Code") {
-		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Response->Code); });
+		return ([_default](const std::shared_ptr<ChunkHTTP> &c) {
+			if (c->Response != nullptr) return(static_cast<uint64_t>(c->Response->Code));
+			return (_default);
+		});
 	}
 	return (ttop::logic::Logic<ChunkHTTP>::ParseLongLongCustom(elt));
 }
