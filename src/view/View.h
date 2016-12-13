@@ -10,6 +10,7 @@
 #include <vector>
 #include <unordered_map>
 #include <thread>
+#include <mutex>
 
 namespace ttop {
 namespace view {
@@ -52,6 +53,7 @@ class View {
 	std::function<std::string(std::shared_ptr<IN>)> EmptyString = [](std::shared_ptr<IN>) { return (""); };
 	uint32_t TimeInterval = 0;
 	std::thread TimeIntervalThread;
+	std::mutex DataMutex;
 	void ParseLocalParams(const tinyxml2::XMLElement *node);
 	void TimeIntervalTrigger();
 public:
@@ -69,6 +71,7 @@ public:
 	virtual std::string TypeID() = 0;
 	virtual void DoOutput(const std::vector<t_selection> &output);
 	void Output();
+	void OutputAndRestart();
 
 	void FillSelection(t_selection &vector, const std::shared_ptr<IN> &chunk);
 	void Input(const std::shared_ptr<IN> &chunk, int32_t followersProcessed);

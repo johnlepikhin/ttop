@@ -48,34 +48,53 @@ void View<IN>::FillSelection(View<IN>::t_selection &vector, const std::shared_pt
 }
 
 template <typename IN>
-void View<IN>::Input(const std::shared_ptr<IN> &chunk, int32_t followersProcessed)
+void View<IN>::OutputAndRestart()
 {
-	if ((followersProcessed > 0 && ProcessedByFollowersCondition == IF_FALSE)
-			|| (followersProcessed <= 0 && ProcessedByFollowersCondition == IF_TRUE))
-		return;
-
-	Where.Input(chunk);
-	Trigger.Input(chunk);
-
-	if (Where.Val) {
-		GroupBy.Input(chunk);
-		auto g = Selection.find(GroupBy.Val);
-		if (g == Selection.end()) {
-			t_selection vector = Selection_source;
-			FillSelection(vector, chunk);
-			Selection.emplace(GroupBy.Val, vector);
-		} else {
-			FillSelection(g->second, chunk);
-		}
-	}
-
-	if (Trigger.Val) {
+	DataMutex.lock();
+	try {
 		Output();
 		Where.Reset();
 		Trigger.Reset();
 		GroupBy.Reset();
 		Selection.clear();
+	} catch (...) {
+		DataMutex.unlock();
+		throw;
 	}
+	DataMutex.unlock();
+}
+
+template <typename IN>
+void View<IN>::Input(const std::shared_ptr<IN> &chunk, int32_t followersProcessed)
+{
+	DataMutex.lock();
+	try {
+		if ((followersProcessed > 0 && ProcessedByFollowersCondition == IF_FALSE)
+				|| (followersProcessed <= 0 && ProcessedByFollowersCondition == IF_TRUE))
+			return;
+
+		Where.Input(chunk);
+		Trigger.Input(chunk);
+
+		if (Where.Val) {
+			GroupBy.Input(chunk);
+			auto g = Selection.find(GroupBy.Val);
+			if (g == Selection.end()) {
+				t_selection vector = Selection_source;
+				FillSelection(vector, chunk);
+				Selection.emplace(GroupBy.Val, vector);
+			} else {
+				FillSelection(g->second, chunk);
+			}
+		}
+		DataMutex.unlock();
+	} catch (...) {
+		DataMutex.unlock();
+		throw;
+	}
+
+	if (Trigger.Val)
+		OutputAndRestart();
 }
 
 template <typename IN>
@@ -162,13 +181,8 @@ void View<IN>::TimeIntervalTrigger()
 		uint16_t sleep_for = (TimeInterval) ? TimeInterval : 1;
 		std::this_thread::sleep_for(std::chrono::seconds(sleep_for));
 
-		if (TimeInterval) {
-			Output();
-			Where.Reset();
-			Trigger.Reset();
-			GroupBy.Reset();
-			Selection.clear();
-		}
+		if (TimeInterval)
+			OutputAndRestart();
 	}
 }
 

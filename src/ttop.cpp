@@ -130,9 +130,8 @@ int main (int argc, char** argv)
 			processFile(settings);
 		}
 		ttop::utils::requestExit(0);
-	} catch (...) {
-		ttop::utils::requestExit(0);
-		throw;
+	} catch (std::exception &exn) {
+		ttop::utils::fatalError(exn.what());
 	}
 
 	return (0);
