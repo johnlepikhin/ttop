@@ -177,6 +177,7 @@ void Top<IN>::NCursesListenser()
 
 		if (c == 'q') {
 			ttop::utils::requestExit(0);
+			exit(0);
 		} else if (c == 'p') {
 			TogglePause();
 		} else if (c == '>') {
@@ -342,16 +343,19 @@ void Top<IN>::ParseParams(const tinyxml2::XMLElement *node)
 	uint16_t windowPos=0;
 	uint16_t defaultWidth = 15;
 	for (auto i=this->Selection_source.begin(); i!=this->Selection_source.end(); ++i) {
+		std::string name = ((*i).Name.empty()) ? (std::string("Col ") + std::to_string(pos)) : (*i).Name;
 		struct ColumnInfo col = {
 				Width : defaultWidth,
 				WindowPosition : windowPos,
 				Position : static_cast<uint16_t>(pos),
-				Name : (*i).Name
+				Name : name
 		};
 		Columns.push_back(col);
 		pos++;
 		windowPos += defaultWidth+1;
 	}
+
+	Redraw();
 
 }
 
