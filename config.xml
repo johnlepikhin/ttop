@@ -1,74 +1,42 @@
 <?xml version="1.0" ?>
 <ttop xmlns:ref="x-schema:refSchema.xml" xmlns:data="x-schema:idSchema.xml">
 	<parsers>
-	<!--
-		<filter>
-			<stringEq>
-				<SourceMAC/>
-				<string>00:11:22:33:44:55</string>
-			</stringEq>
-			</or>
-		</filter>
-		-->
 		<!--
-		<view type="dump" output="-">
+		<view type="top" output="-">
 			<select>
-				<long2string><Seconds/></long2string>
-				<long2string><USeconds/></long2string>
+				<long2string name="seconds"><Seconds/></long2string>
+				<long2string name="usec"><USeconds/></long2string>
 				<SourceMAC name="source"/>
 				<DestinationMAC name="dest"/>
-				<long2string><counter name="counter"/></long2string>
-				<long2string order="numeric"><sum><Captured/></sum></long2string>
-				<long2string><sum><Length/></sum></long2string>
+				<long2string  name="counter"><counter/></long2string>
+				<long2string order="numeric" name="captured"><sum><Captured/></sum></long2string>
+				<long2string name="length"><sum><Length/></sum></long2string>
 			</select>
-			<trigger>
-				<longGtEq>
-					<minus><nowSeconds/><long>4</long></minus>
-					<min><nowSeconds/></min>
-				</longGtEq>
+			<trigger timeInterval="1">
+				<false/>
 			</trigger>
 			<groupBy>
-				<SourceMAC name="source"/>
+				<concat>
+					<SourceMAC/>
+					<DestinationMAC/>
+				</concat>
 			</groupBy>
 		</view>
 		-->
-		<parser of="DIX">
+		<parser of="802LLC">
 			<parser of="IPv4">
 				<parser of="IPv4Packet">
-<!--
-					<filter>
-						<and>
-							<IsIPv4/>
-							<IPv4>
-								<and>
-									<IsComplete/>
-									<Parent>
-										<Parent>
-											<Parent>
-												<stringEq>
-													<SourceMAC/>
-													<string>00:13:c4:bc:56:80</string>
-												</stringEq>
-											</Parent>
-										</Parent>
-									</Parent>
-								</and>
-							</IPv4>
-						</and>
-					</filter>
--->
 					<parser of="UDP">
 					</parser>
 					<parser of="TCP">
 						<parser of="TCPSession">
+						<!--
 							<view type="top">
 								<select>
 									<long2string name="ID">
 										<SessionID/>
 									</long2string>
-									<bool2string name="HasFollower">
-										<FollowerDetected/>
-									</bool2string>
+									<FollowerProtocol name="Follower"/>
 									<long2string name="DstPort">
 										<Client default="0">
 											<LastChunk default="0">
@@ -86,38 +54,69 @@
 									<Client default="(noclient)" name="CliData">
 										<PayloadPreview default="(nolast-client-chunk)"/>
 									</Client>
-									<Server default="(noserver)" name="SrvDate">
+									<Server default="(noserver)" name="SrvData">
 										<PayloadPreview default="(nolast-server-chunk)"/>
 									</Server>
 								</select>
 								<groupBy>
-									<long2string>
-										<SessionID/>
-									</long2string>
+									<concat>
+										<long2string><SessionID/></long2string>
+										<bool2string><Client default='false'><HasPayload/></Client></bool2string>
+										<bool2string><Server default='false'><HasPayload/></Server></bool2string>
+									</concat>
 								</groupBy>
-								<trigger>
-									<longGtEq>
-										<minus><nowSeconds/><long>1</long></minus>
-										<min><nowSeconds/></min>
-									</longGtEq>
+								<trigger timeInterval="1">
+									<false/>
 								</trigger>
 							</view>
-
+							-->
 							<parser of="SSL"/>
 
 							<parser of="HTTP">
-							<!--
 								<view type="dump">
 									<select>
 										<Method/>
 										<Host/>
 										<URI/>
+										<long2string><Code/></long2string>
+										<Message/>
+										<long2string><counter/></long2string>
+										<concat>
+											<Method/>
+											<concat>
+												<Host/>
+												<concat>
+													<URI/>
+													<concat>
+														<long2string><Code/></long2string>
+														<Message/>
+													</concat>
+												</concat>
+											</concat>
+										</concat>
 									</select>
 									<where>
 										<HasRequest/>
 									</where>
+									<groupBy>
+										<concat>
+											<Method/>
+											<concat>
+												<Host/>
+												<concat>
+													<URI/>
+													<concat>
+														<long2string><Code/></long2string>
+														<Message/>
+													</concat>
+												</concat>
+											</concat>
+										</concat>
+									</groupBy>
+									<trigger timeInterval="1">
+										<false/>
+									</trigger>
 								</view>
-								-->
 							</parser>
 
 							<parser of="MySQL">

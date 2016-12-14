@@ -13,8 +13,8 @@ typename logic::Logic<ChunkIPv4>::t_bool_value DataIPv4::ParseBoolCustom(const t
 	if (name == "Parent") {
 		auto child = elt.FirstChildElement();
 		if (child) {
-			level_data::DataEtherNetDIX LogicEtherNetDIX;
-			auto subfn = LogicEtherNetDIX.ParseBool(child);
+			level_data::DataEtherNetTraits LogicEtherNetTraits;
+			auto subfn = LogicEtherNetTraits.ParseBool(child);
 			auto r = [subfn](const std::shared_ptr<ChunkIPv4> &c) {
 				return(subfn(c->Parent));
 			};
@@ -41,8 +41,8 @@ typename logic::Logic<ChunkIPv4>::t_string_value DataIPv4::ParseStringCustom(con
 	} else if (name == "Parent") {
 		auto child = elt.FirstChildElement();
 		if (child) {
-			level_data::DataEtherNetDIX LogicEtherNetDIX;
-			auto subfn = LogicEtherNetDIX.ParseString(child);
+			level_data::DataEtherNetTraits LogicEtherNetTraits;
+			auto subfn = LogicEtherNetTraits.ParseString(child);
 			auto r = [subfn](const std::shared_ptr<ChunkIPv4> &c) {
 				return(subfn(c->Parent));
 			};
@@ -104,8 +104,8 @@ typename logic::Logic<ChunkIPv4>::t_longlong_value DataIPv4::ParseLongLongCustom
 	} else if (name == "Parent") {
 		auto child = elt.FirstChildElement();
 		if (child) {
-			level_data::DataEtherNetDIX LogicEtherNetDIX;
-			auto subfn = LogicEtherNetDIX.ParseLongLong(child);
+			level_data::DataEtherNetTraits LogicEtherNetTraits;
+			auto subfn = LogicEtherNetTraits.ParseLongLong(child);
 			auto r = [subfn](const std::shared_ptr<ChunkIPv4> &c) {
 				return(subfn(c->Parent));
 			};

@@ -63,7 +63,7 @@ info IPv6 = {
 		.children = { }
 };
 
-info EtherNetDIX = {
+info EtherNetTraits = {
 		.id = "DIX",
 		.description = "Ethernet DIX frame",
 		.children = { IPv4, IPv6 }
@@ -90,7 +90,7 @@ info EtherNetSNAP = {
 info EtherNet = {
 		.id = "Ethernet",
 		.description = "Main Ethernet parser",
-		.children = { EtherNetDIX, EtherNetRAW, EtherNet802LLC, EtherNetSNAP }
+		.children = { EtherNetTraits, EtherNetRAW, EtherNet802LLC, EtherNetSNAP }
 };
 
 std::string generateAccepts(const info &root)

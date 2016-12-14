@@ -6,10 +6,10 @@
 #include <tinyxml2.h>
 
 #include "levels/EtherNet.h"
-#include "levels/EtherNetDIX.h"
 #include "levels/EtherNetRAW.h"
 #include "levels/EtherNetSNAP.h"
 #include "levels/EtherNet802LLC.h"
+#include "levels/EtherNetDIX.h"
 #include "levels/IPv4.h"
 #include "levels/IPv6.h"
 #include "levels/IPv4Packet.h"

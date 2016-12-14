@@ -4,7 +4,8 @@
 
 #include "../Logic.h"
 #include "../src/levels/ChunkIPv4.h"
-#include "DataEtherNetDIX.h"
+
+#include "DataEtherNetTraits.h"
 
 namespace ttop {
 namespace level_data {

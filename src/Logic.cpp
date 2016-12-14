@@ -278,6 +278,7 @@ typename Logic<IN>::t_bool_value Logic<IN>::ParseBool(const tinyxml2::XMLElement
 
 
 template class Logic<ChunkEtherNet>;
+template class Logic<ChunkEtherNetTraits>;
 template class Logic<ChunkEtherNetDIX>;
 template class Logic<ChunkEtherNetSNAP>;
 template class Logic<ChunkEtherNetRAW>;

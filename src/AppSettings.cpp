@@ -100,13 +100,47 @@ bool AppSettings::BuildParser(level::EtherNet &parser, tinyxml2::XMLElement *con
 bool AppSettings::BuildParser(level::EtherNetDIX &parser, tinyxml2::XMLElement *container, const std::string &name) {
 	if (name == "IPv4") {
 		level::IPv4 *child = new level::IPv4();
-		parser.AddFollower(child->AsFollower());
+		parser.AddFollower(reinterpret_cast<Processor<ChunkEtherNetDIX, void> *>(child));
 		ParseParsers(*child, container);
 		return (true);
 	}
 	if (name == "IPv6") {
 		level::IPv6 *child = new level::IPv6();
-		parser.AddFollower(child->AsFollower());
+		parser.AddFollower(reinterpret_cast<Processor<ChunkEtherNetDIX, void> *>(child));
+		ParseParsers(*child, container);
+		return (true);
+	}
+
+	return (false);
+}
+
+bool AppSettings::BuildParser(level::EtherNet802LLC &parser, tinyxml2::XMLElement *container, const std::string &name) {
+	if (name == "IPv4") {
+		level::IPv4 *child = new level::IPv4();
+		parser.AddFollower(reinterpret_cast<Processor<ChunkEtherNet802LLC, void> *>(child));
+		ParseParsers(*child, container);
+		return (true);
+	}
+	if (name == "IPv6") {
+		level::IPv6 *child = new level::IPv6();
+		parser.AddFollower(reinterpret_cast<Processor<ChunkEtherNet802LLC, void> *>(child));
+		ParseParsers(*child, container);
+		return (true);
+	}
+
+	return (false);
+}
+
+bool AppSettings::BuildParser(level::EtherNetSNAP &parser, tinyxml2::XMLElement *container, const std::string &name) {
+	if (name == "IPv4") {
+		level::IPv4 *child = new level::IPv4();
+		parser.AddFollower(reinterpret_cast<Processor<ChunkEtherNetSNAP, void> *>(child));
+		ParseParsers(*child, container);
+		return (true);
+	}
+	if (name == "IPv6") {
+		level::IPv6 *child = new level::IPv6();
+		parser.AddFollower(reinterpret_cast<Processor<ChunkEtherNetSNAP, void> *>(child));
 		ParseParsers(*child, container);
 		return (true);
 	}
@@ -115,14 +149,19 @@ bool AppSettings::BuildParser(level::EtherNetDIX &parser, tinyxml2::XMLElement *
 }
 
 bool AppSettings::BuildParser(level::EtherNetRAW &parser, tinyxml2::XMLElement *container, const std::string &name) {
-	return (false);
-}
+	if (name == "IPv4") {
+		level::IPv4 *child = new level::IPv4();
+		parser.AddFollower(reinterpret_cast<Processor<ChunkEtherNetRAW, void> *>(child));
+		ParseParsers(*child, container);
+		return (true);
+	}
+	if (name == "IPv6") {
+		level::IPv6 *child = new level::IPv6();
+		parser.AddFollower(reinterpret_cast<Processor<ChunkEtherNetRAW, void> *>(child));
+		ParseParsers(*child, container);
+		return (true);
+	}
 
-bool AppSettings::BuildParser(level::EtherNet802LLC &parser, tinyxml2::XMLElement *container, const std::string &name) {
-	return (false);
-}
-
-bool AppSettings::BuildParser(level::EtherNetSNAP &parser, tinyxml2::XMLElement *container, const std::string &name) {
 	return (false);
 }
 

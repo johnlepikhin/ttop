@@ -52,7 +52,7 @@ extern info UDP;
 
 extern info TCP;
 
-extern info EtherNetDIX;
+extern info EtherNetTraits;
 
 extern info EtherNetRAW;
 

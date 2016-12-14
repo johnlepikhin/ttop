@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "EtherNetDIX.h"
+
 #include "DataEtherNetDIX.h"
 
 namespace ttop {
@@ -9,7 +10,7 @@ namespace level {
 
 parserDescription::info EtherNetDIX::GetDescription()
 {
-	return (parserDescription::EtherNetDIX);
+	return (parserDescription::EtherNetTraits);
 }
 
 EtherNetDIX::EtherNetDIX()
