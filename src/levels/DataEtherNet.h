@@ -3,7 +3,7 @@
 #define SRC_LEVELS_DATAETHERNET_H_
 
 #include "../Logic.h"
-#include "../src/levels/ChunkEtherNet.h"
+#include "levels/ChunkEtherNet.h"
 
 namespace ttop {
 

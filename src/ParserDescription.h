@@ -2,22 +2,22 @@
 #ifndef SRC_PARSERDESCRIPTION_H_
 #define SRC_PARSERDESCRIPTION_H_
 
-#include <levels/ParserChunkSSL.h>
-#include <levels/ParserHTTP.h>
-#include <levels/ParserPacketMySQL.h>
-#include <TrafficAccounting/levels/ParserEtherNet.h>
-#include <TrafficAccounting/levels/ParserEtherNetDIX.h>
-#include <TrafficAccounting/levels/ParserEtherNetRAW.h>
-#include <TrafficAccounting/levels/ParserEtherNet802LLC.h>
-#include <TrafficAccounting/levels/ParserEtherNetSNAP.h>
+#include "levels/ParserChunkSSL.h"
+#include "levels/ParserHTTP.h"
+#include "levels/ParserPacketMySQL.h"
+#include "levels/ParserEtherNet.h"
+#include "levels/ParserEtherNetDIX.h"
+#include "levels/ParserEtherNetRAW.h"
+#include "levels/ParserEtherNet802LLC.h"
+#include "levels/ParserEtherNetSNAP.h"
 
-#include <TrafficAccounting/levels/ParserIPv4.h>
-#include <TrafficAccounting/levels/ParserIPv6.h>
+#include "levels/ParserIPv4.h"
+#include "levels/ParserIPv6.h"
 
-#include <TrafficAccounting/levels/ParserPacketIPv4.h>
-#include <TrafficAccounting/levels/ParserTCP.h>
-#include <TrafficAccounting/levels/ParserSessionTCP.h>
-#include <TrafficAccounting/levels/ParserUDP.h>
+#include "levels/ParserPacketIPv4.h"
+#include "levels/ParserTCP.h"
+#include "levels/ParserSessionTCP.h"
+#include "levels/ParserUDP.h"
 #include <tinyxml2.h>
 #include <map>
 

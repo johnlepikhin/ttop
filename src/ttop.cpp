@@ -8,7 +8,7 @@
 #include "config.h"
 #include "utils.h"
 #include "AppSettings.h"
-#include <TrafficAccounting/core/utils.h>
+#include <core/utils.h>
 #include <pcap.h>
 #include "ParserDescription.h"
 
