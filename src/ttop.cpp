@@ -103,8 +103,15 @@ void processPcapIface (ttop::AppSettings settings) {
 void processFile (ttop::AppSettings settings) {
 	int FD = 0;
 
+	if (ttop::config::inputFile.empty())
+		ttop::utils::fatalError("No input file specified");
+
 	if (ttop::config::inputFile != "-")
 		FD = open(ttop::config::inputFile.c_str(), 0);
+
+	if (FD == -1)
+		ttop::utils::fatalError(std::string("Cannot open file '")
+			+ ttop::config::inputFile + "': " + strerror(errno));
 
 	util::skipBytesInFD(FD, sizeof (pcap_file_header));
 	bool done = false;
