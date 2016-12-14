@@ -23,7 +23,7 @@
 			</groupBy>
 		</view>
 		-->
-		<parser of="802LLC">
+		<parser of="DIX">
 			<parser of="IPv4">
 				<parser of="IPv4Packet">
 					<parser of="UDP">
@@ -83,16 +83,10 @@
 										<long2string><counter/></long2string>
 										<concat>
 											<Method/>
-											<concat>
-												<Host/>
-												<concat>
-													<URI/>
-													<concat>
-														<long2string><Code/></long2string>
-														<Message/>
-													</concat>
-												</concat>
-											</concat>
+											<Host/>
+											<URI/>
+											<long2string><Code/></long2string>
+											<Message/>
 										</concat>
 									</select>
 									<where>
@@ -101,16 +95,10 @@
 									<groupBy>
 										<concat>
 											<Method/>
-											<concat>
-												<Host/>
-												<concat>
-													<URI/>
-													<concat>
-														<long2string><Code/></long2string>
-														<Message/>
-													</concat>
-												</concat>
-											</concat>
+											<Host/>
+											<URI/>
+											<long2string><Code/></long2string>
+											<Message/>
 										</concat>
 									</groupBy>
 									<trigger timeInterval="1">

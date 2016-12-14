@@ -60,23 +60,25 @@ typename Logic<IN>::t_string_value Logic<IN>::ParseString(const tinyxml2::XMLEle
 			}
 			throw ParseError("Logic parser found no children for node '" + name + "'");
 		} else if (name == "concat") {
-			const tinyxml2::XMLNode *node = elt->FirstChild();
-			const tinyxml2::XMLElement *first, *second;
-			if (node && (first = node->ToElement())) {
-				node = node->NextSiblingElement();
-				if (node && (second = node->ToElement())) {
-					t_string_value s_first = ParseString(first);
-					t_string_value s_second = ParseString(second);
-					// additional 'if' for future use
-					if (name == "concat") {
-						return ([s_first, s_second](const t_input &v) {
-							return(s_first(v) + s_second(v)); }
-						);
-					}
-				}
-				throw ParseError("Logic parser found no second child for node '" + name + "'");
+			const tinyxml2::XMLElement *child = elt->FirstChildElement();
+			if (!child)
+				throw ParseError("Logic parser found no children for node '" + name + "'");
+
+			std::vector<t_string_value> elts;
+			while (child) {
+				elts.push_back(ParseString(child));
+				child = child->NextSiblingElement();
 			}
-			throw ParseError("Logic parser found no children for node '" + name + "'");
+
+			if (name == "concat") {
+				return ([elts](const t_input &v) {
+					std::string r;
+					for (auto it = elts.begin(); it!=elts.end(); ++it) {
+						r += (*it)(v);
+					}
+					return (r);
+				});
+			}
 		}
 		return (ParseStringCustom(*elt));
 	}
