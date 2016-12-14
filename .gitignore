@@ -1,0 +1,15 @@
+**/*.o
+**.d
+**.gcda
+**.gcno
+**.log
+**.a
+**/strace_out
+Debug/report.tasks
+**/perf.data
+**/*.swp
+Debug/PVS-Studio.cfg
+.cproject
+.gdbinit
+.project
+.settings
