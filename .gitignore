@@ -13,3 +13,5 @@ Debug/PVS-Studio.cfg
 .gdbinit
 .project
 .settings
+/Debug/
+/Release/

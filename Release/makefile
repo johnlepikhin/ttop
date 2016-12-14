@@ -46,7 +46,7 @@ all: ttop
 ttop: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L"/home/eugene/workspace/ttop/static_libs" -L"/home/eugene/workspace/cpp-sparse-ropes/Release" -L"/home/eugene/workspace/TrafficAccounting/Release" -o "ttop" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L../static_libs -L../../cpp-sparse-ropes/Release -L../../TrafficAccounting/Release -o "ttop" $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--start-group -lsparseropes -ltrafficaccounting -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

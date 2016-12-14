@@ -46,7 +46,7 @@ all: ttop
 ttop: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L../../cpp-sparse-ropes/Debug -L../../TrafficAccounting/Debug -ftest-coverage -fprofile-arcs -o "ttop" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L../../cpp-sparse-ropes/Debug -L../../TrafficAccounting/Debug -ftest-coverage -fprofile-arcs -o "ttop" $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--start-group -lsparseropes -ltrafficaccounting -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

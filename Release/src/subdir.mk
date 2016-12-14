@@ -29,14 +29,14 @@ CPP_DEPS += \
 src/AppSettings.o: ../src/AppSettings.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -std=c++0x -I"/home/eugene/workspace/TrafficAccounting/src" -I"/home/eugene/workspace/cpp-sparse-ropes/src" -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"src/AppSettings.d" -o "$@" "$<"
+	g++ -std=c++0x -I../../TrafficAccounting/src -I../../cpp-sparse-ropes/src -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"src/AppSettings.d" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
 src/%.o: ../src/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -std=c++0x -I"/home/eugene/workspace/TrafficAccounting/src" -I"/home/eugene/workspace/cpp-sparse-ropes/src" -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -std=c++0x -I../../TrafficAccounting/src -I../../cpp-sparse-ropes/src -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

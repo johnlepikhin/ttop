@@ -6,6 +6,7 @@
 CPP_SRCS += \
 ../src/levels/DataEtherNet.cpp \
 ../src/levels/DataEtherNetDIX.cpp \
+../src/levels/DataEtherNetTraits.cpp \
 ../src/levels/DataHTTP.cpp \
 ../src/levels/DataIPv4.cpp \
 ../src/levels/DataMySQL.cpp \
@@ -34,6 +35,7 @@ CPP_SRCS += \
 OBJS += \
 ./src/levels/DataEtherNet.o \
 ./src/levels/DataEtherNetDIX.o \
+./src/levels/DataEtherNetTraits.o \
 ./src/levels/DataHTTP.o \
 ./src/levels/DataIPv4.o \
 ./src/levels/DataMySQL.o \
@@ -62,6 +64,7 @@ OBJS += \
 CPP_DEPS += \
 ./src/levels/DataEtherNet.d \
 ./src/levels/DataEtherNetDIX.d \
+./src/levels/DataEtherNetTraits.d \
 ./src/levels/DataHTTP.d \
 ./src/levels/DataIPv4.d \
 ./src/levels/DataMySQL.d \
@@ -92,7 +95,7 @@ CPP_DEPS += \
 src/levels/%.o: ../src/levels/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -std=c++0x -I"/home/eugene/workspace/TrafficAccounting/src" -I"/home/eugene/workspace/cpp-sparse-ropes/src" -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -std=c++0x -I../../TrafficAccounting/src -I../../cpp-sparse-ropes/src -O3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

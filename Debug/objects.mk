@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lpthread -lsparseropes -ltrafficaccounting -ltinyxml2 -lpcrecpp -lncurses -lpcap
+LIBS := -lpthread -ltinyxml2 -lpcrecpp -lncurses -lpcap
 
