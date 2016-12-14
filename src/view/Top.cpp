@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <csignal>
 #include <sys/ioctl.h>
+#include "../config.h"
 
 namespace ttop {
 namespace view {
@@ -337,6 +338,9 @@ void Top<IN>::ParseParams(const tinyxml2::XMLElement *node)
 {
 	if (isConstructed)
 		throw logic::ParseError("Only one view with type='top' can be used");
+
+	if (ttop::config::inputFile == "-")
+		throw logic::ParseError("Cannot use view with type='top' when data comes from STDIN");
 
 	isConstructed = true;
 
