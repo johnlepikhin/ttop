@@ -46,7 +46,7 @@ all: ttop
 ttop: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L../static_libs -L../../cpp-quilt-strings/Release -L../../TrafficProcessor/Release -o "ttop" $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--start-group -lsparseropes -ltrafficaccounting -Wl,--end-group
+	g++ -L../static_libs -L../../cpp-quilt-strings/Release -L../../TrafficProcessor/Release -o "ttop" $(OBJS) $(USER_OBJS) $(LIBS) -Wl,--start-group -lsparseropes -ltrafficprocessor -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
