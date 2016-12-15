@@ -102,7 +102,6 @@ void Top<IN>::ChangeActiveColumn(int8_t offset)
 	}
 
 	ColumnInfo &newCurrent = Columns.at(newCurrentPos);
-	ColumnInfo &current = Columns.at(CurrentColumn);
 
 	int16_t newEndPos = newCurrent.WindowPosition + newCurrent.Width + 1;
 	int16_t maxx = getmaxx(stdscr);

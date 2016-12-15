@@ -53,9 +53,9 @@ void AppSettings::ParseParsers(PARENT &parent, tinyxml2::XMLElement *parsers)
 	for(; NULL != parser; parser=parser->NextSiblingElement() ) {
 		const std::string name = parser->Value();
 		if (name == "parser") {
-			const tinyxml2::XMLAttribute *a_of = parser->FindAttribute("of");
+			const char *a_of = parser->Attribute("of");
 			if (a_of) {
-				std::string avalue(a_of->Value());
+				std::string avalue(a_of);
 				if (!BuildParser(parent, parser, avalue)) {
 					ParseError("parser " + avalue + " is not valid child");
 				}
