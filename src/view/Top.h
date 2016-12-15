@@ -26,6 +26,7 @@ class Top: public View<IN> {
 	uint16_t FirstVisibleRow = 0;
 	uint16_t RowsFitsOnScreen = 0;
 	std::mutex PauseMutex;
+	std::mutex RedrawMutex;
 	void PrintHeader() const;
 	void PrintValue(const ColumnInfo &col, const std::string &value, bool isHeader) const;
 	void RecalculateColumns();

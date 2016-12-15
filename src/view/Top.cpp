@@ -89,15 +89,19 @@ void Top<IN>::RecalculateColumns()
 template <typename IN>
 void Top<IN>::ChangeActiveColumn(int8_t offset)
 {
+	RedrawMutex.lock();
+
 	int16_t newCurrentPos = CurrentColumn + offset;
 	if (newCurrentPos < 0) {
 		FirstVisibleColumn = 0;
 		RecalculateColumns();
+		RedrawMutex.unlock();
 		return;
 	}
 	if (newCurrentPos >= static_cast<int16_t>(Columns.size())) {
 		FirstVisibleColumn = Columns.size()-1;
 		RecalculateColumns();
+		RedrawMutex.unlock();
 		return;
 	}
 
@@ -112,12 +116,14 @@ void Top<IN>::ChangeActiveColumn(int8_t offset)
 
 		CurrentColumn = newCurrentPos;
 		RecalculateColumns();
+		RedrawMutex.unlock();
 		return;
 	} else if (offset < 0) {
 		bool newIsVisible = newEndPos < getmaxx(stdscr) && FirstVisibleColumn <= newCurrentPos;
 		if (newIsVisible) {
 			CurrentColumn = newCurrentPos;
 			RecalculateColumns();
+			RedrawMutex.unlock();
 			return;
 		} else {
 			int16_t sumWidth = 0;
@@ -128,27 +134,35 @@ void Top<IN>::ChangeActiveColumn(int8_t offset)
 			RecalculateColumns();
 		}
 	}
+	RedrawMutex.unlock();
 }
 
 template <typename IN>
 void Top<IN>::ResizeColumn(ColumnInfo &column, uint16_t newWidth)
 {
+	RedrawMutex.lock();
 	column.Width = newWidth;
 	RecalculateColumns();
+	RedrawMutex.unlock();
 }
 
 template <typename IN>
 void Top<IN>::SetFirstVisibleColumn(uint16_t col)
 {
-	if (col > Columns.size())
+	RedrawMutex.lock();
+	if (col > Columns.size()) {
+		RedrawMutex.unlock();
 		return;
+	}
 	FirstVisibleColumn = col;
 	RecalculateColumns();
+	RedrawMutex.unlock();
 }
 
 template <typename IN>
 void Top<IN>::SetFirstVisibleRow(int16_t row)
 {
+	RedrawMutex.lock();
 	if (row >= static_cast<int16_t>(SavedOutput.size())) {
 		FirstVisibleRow = static_cast<int16_t>(SavedOutput.size()) - 1;
 	} else if (row < 0) {
@@ -157,6 +171,7 @@ void Top<IN>::SetFirstVisibleRow(int16_t row)
 		FirstVisibleRow = row;
 	}
 	RecalculateColumns();
+	RedrawMutex.unlock();
 }
 
 template <typename IN>
@@ -281,43 +296,51 @@ void Top<IN>::PrintHeader() const
 template <typename IN>
 void Top<IN>::Redraw()
 {
-	if (screenChanged) {
-		clear();
-		RecalculateColumns();
-		screenChanged = false;
-	}
-
-	move(0, 0);
-
-	PrintHeader();
-
-	uint32_t rowpos = 0;
-	uint16_t maxy = getmaxy(stdscr);
-	uint16_t __attribute__((unused)) x;
-	uint16_t y;
-
-	getyx(stdscr, y, x);
-	uint16_t firstY = y;
-	for (auto const &row : SavedOutput) {
-		uint16_t pos = 0;
-		if (rowpos >= FirstVisibleRow) {
-			for (auto const &field : row) {
-				PrintValue(Columns.at(pos), field.Val, false);
-				pos++;
-			}
+	RedrawMutex.lock();
+	try {
+		if (screenChanged) {
+			clear();
+			RecalculateColumns();
+			screenChanged = false;
 		}
+
+		move(0, 0);
+
+		PrintHeader();
+
+		uint32_t rowpos = 0;
+		uint16_t maxy = getmaxy(stdscr);
+		uint16_t __attribute__((unused)) x;
+		uint16_t y;
+
 		getyx(stdscr, y, x);
-		if (y == maxy)
-			break;
+		uint16_t firstY = y;
+		for (auto const &row : SavedOutput) {
+			uint16_t pos = 0;
+			if (rowpos >= FirstVisibleRow) {
+				for (auto const &field : row) {
+					PrintValue(Columns.at(pos), field.Val, false);
+					pos++;
+				}
+			}
+			getyx(stdscr, y, x);
+			if (y == maxy)
+				break;
 
-		rowpos++;
+			rowpos++;
+		}
+
+		RowsFitsOnScreen = maxy - firstY;
+
+		clrtobot();
+
+		refresh();
+
+		RedrawMutex.unlock();
+	} catch (...) {
+		RedrawMutex.unlock();
+		throw;
 	}
-
-	RowsFitsOnScreen = maxy - firstY;
-
-	clrtobot();
-
-	refresh();
 }
 
 template <typename IN>
