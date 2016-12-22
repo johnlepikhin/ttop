@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "DataSSL.h"
+#include "DataTCPSession.h"
 
 namespace ttop {
 namespace level_data {
@@ -19,7 +20,18 @@ std::string StringOfRecordType(const SSLRecordType &type) {
 typename logic::Logic<ChunkSSL>::t_string_value DataSSL::ParseStringCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "RecordType") {
+	if (name == "Parent") {
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCPSession LogicSessionTCP;
+			auto subfn = LogicSessionTCP.ParseString(child);
+			auto r = [subfn](const std::shared_ptr<ChunkSSL> &c) {
+				return(subfn(c->Parent));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "RecordType") {
 		return ([](const std::shared_ptr<ChunkSSL> &c) { return(StringOfRecordType(c->RecordType)); });
 	}
 
@@ -29,7 +41,18 @@ typename logic::Logic<ChunkSSL>::t_string_value DataSSL::ParseStringCustom(const
 typename logic::Logic<ChunkSSL>::t_bool_value DataSSL::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "Is_CHANGE_CIPHER_SPEC") {
+	if (name == "Parent") {
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCPSession LogicSessionTCP;
+			auto subfn = LogicSessionTCP.ParseBool(child);
+			auto r = [subfn](const std::shared_ptr<ChunkSSL> &c) {
+				return(subfn(c->Parent));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "Is_CHANGE_CIPHER_SPEC") {
 		return ([](const std::shared_ptr<ChunkSSL> &c) { return(c->RecordType == CHANGE_CIPHER_SPEC); });
 	} else if (name == "Is_ALERT") {
 		return ([](const std::shared_ptr<ChunkSSL> &c) { return(c->RecordType == ALERT); });
@@ -45,7 +68,18 @@ typename logic::Logic<ChunkSSL>::t_bool_value DataSSL::ParseBoolCustom(const tin
 typename logic::Logic<ChunkSSL>::t_longlong_value DataSSL::ParseLongLongCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "Version") {
+	if (name == "Parent") {
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCPSession LogicSessionTCP;
+			auto subfn = LogicSessionTCP.ParseLongLong(child);
+			auto r = [subfn](const std::shared_ptr<ChunkSSL> &c) {
+				return(subfn(c->Parent));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "Version") {
 		return ([](const std::shared_ptr<ChunkSSL> &c) { return(c->Version); });
 	} else if (name == "DataLength") {
 		return ([](const std::shared_ptr<ChunkSSL> &c) { return(c->DataLength); });
