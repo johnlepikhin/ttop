@@ -70,8 +70,10 @@ void View<IN>::Input(const std::shared_ptr<IN> &chunk, int32_t followersProcesse
 	DataMutex.lock();
 	try {
 		if ((followersProcessed > 0 && ProcessedByFollowersCondition == IF_FALSE)
-				|| (followersProcessed <= 0 && ProcessedByFollowersCondition == IF_TRUE))
+				|| (followersProcessed <= 0 && ProcessedByFollowersCondition == IF_TRUE)) {
+			DataMutex.unlock();
 			return;
+		}
 
 		Where.Input(chunk);
 		Trigger.Input(chunk);

@@ -73,7 +73,7 @@
 							<parser of="SSL"/>
 
 							<parser of="HTTP">
-								<view type="dump">
+								<view type="top">
 									<select>
 										<Method/>
 										<Host/>
@@ -81,17 +81,7 @@
 										<long2string><Code/></long2string>
 										<Message/>
 										<long2string><counter/></long2string>
-										<concat>
-											<Method/>
-											<Host/>
-											<URI/>
-											<long2string><Code/></long2string>
-											<Message/>
-										</concat>
 									</select>
-									<where>
-										<HasRequest/>
-									</where>
 									<groupBy>
 										<concat>
 											<Method/>
