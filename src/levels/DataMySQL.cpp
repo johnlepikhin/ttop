@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "DataMySQL.h"
+#include "DataTCPSession.h"
 
 #include "../src/core/utils.h"
 #include <algorithm>
@@ -12,7 +13,18 @@ namespace level_data {
 typename logic::Logic<PacketMySQL>::t_string_value DataMySQL::ParseStringCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "Query") {
+	if (name == "Parent") {
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCPSession LogicSessionTCP;
+			auto subfn = LogicSessionTCP.ParseString(child);
+			auto r = [subfn](const std::shared_ptr<PacketMySQL> &c) {
+				return(subfn(c->Parent));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "Query") {
 		return ([](const std::shared_ptr<PacketMySQL> &c) { return((c->Request != nullptr) ? c->Request->Query : ""); });
 	} else if (name == "QueryType") {
 		return ([](const std::shared_ptr<PacketMySQL> &c) { return((c->Request != nullptr) ? c->Request->QueryType : ""); });
@@ -30,7 +42,18 @@ typename logic::Logic<PacketMySQL>::t_string_value DataMySQL::ParseStringCustom(
 typename logic::Logic<PacketMySQL>::t_longlong_value DataMySQL::ParseLongLongCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "CommandType") {
+	if (name == "Parent") {
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCPSession LogicSessionTCP;
+			auto subfn = LogicSessionTCP.ParseLongLong(child);
+			auto r = [subfn](const std::shared_ptr<PacketMySQL> &c) {
+				return(subfn(c->Parent));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "CommandType") {
 		return ([](const std::shared_ptr<PacketMySQL> &c) { return((c->Request != nullptr) ? c->Request->CommandType : 255); });
 	} else if (name == "Charset") {
 		return ([](const std::shared_ptr<PacketMySQL> &c) { return(c->Charset); });
@@ -47,7 +70,18 @@ typename logic::Logic<PacketMySQL>::t_longlong_value DataMySQL::ParseLongLongCus
 typename logic::Logic<PacketMySQL>::t_bool_value DataMySQL::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "HasRequest") {
+	if (name == "Parent") {
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCPSession LogicSessionTCP;
+			auto subfn = LogicSessionTCP.ParseBool(child);
+			auto r = [subfn](const std::shared_ptr<PacketMySQL> &c) {
+				return(subfn(c->Parent));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "HasRequest") {
 		return ([](const std::shared_ptr<PacketMySQL> &c) { return(c->Request != nullptr); });
 	} else if (name == "HasResponse") {
 		return ([](const std::shared_ptr<PacketMySQL> &c) { return(c->Response != nullptr); });
