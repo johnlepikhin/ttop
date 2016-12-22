@@ -11,6 +11,8 @@
 namespace ttop {
 namespace view {
 
+std::mutex OutputMutex;
+
 template <typename IN>
 void View<IN>::DoOutput(const std::vector<t_selection> &output) {};
 
@@ -37,7 +39,14 @@ void View<IN>::Output()
 		});
 	}
 
-	DoOutput(output);
+	OutputMutex.lock();
+	try {
+		DoOutput(output);
+	} catch (...) {
+		OutputMutex.unlock();
+		throw;
+	}
+	OutputMutex.unlock();
 }
 
 template <typename IN>

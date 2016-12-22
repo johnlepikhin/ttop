@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "DataHTTP.h"
+#include "DataTCPSession.h"
 
 #include "../src/core/utils.h"
 #include <algorithm>
@@ -15,7 +16,18 @@ typename logic::Logic<ChunkHTTP>::t_string_value DataHTTP::ParseStringCustom(con
 	std::string _default = (_type) ? _type : "";
 
 	std::string name(elt.Value());
-	if (name == "Method") {
+	if (name == "Parent") {
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCPSession LogicSessionTCP;
+			auto subfn = LogicSessionTCP.ParseString(child);
+			auto r = [subfn](const std::shared_ptr<ChunkHTTP> &c) {
+				return(subfn(c->Parent));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "Method") {
 		return ([_default](const std::shared_ptr<ChunkHTTP> &c) {
 			if (c->Request != nullptr) return(c->Request->Method);
 			return (_default);
@@ -69,7 +81,18 @@ typename logic::Logic<ChunkHTTP>::t_longlong_value DataHTTP::ParseLongLongCustom
 		throw logic::ParseError(std::string("Long numeric value expected for default='..' attribute, but got ") + std::string(_type));
 	}
 
-	if (name == "Code") {
+	if (name == "Parent") {
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCPSession LogicSessionTCP;
+			auto subfn = LogicSessionTCP.ParseLongLong(child);
+			auto r = [subfn](const std::shared_ptr<ChunkHTTP> &c) {
+				return(subfn(c->Parent));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "Code") {
 		return ([_default](const std::shared_ptr<ChunkHTTP> &c) {
 			if (c->Response != nullptr) return(static_cast<uint64_t>(c->Response->Code));
 			return (_default);
@@ -81,7 +104,18 @@ typename logic::Logic<ChunkHTTP>::t_longlong_value DataHTTP::ParseLongLongCustom
 typename logic::Logic<ChunkHTTP>::t_bool_value DataHTTP::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "HasRequest") {
+	if (name == "Parent") {
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCPSession LogicSessionTCP;
+			auto subfn = LogicSessionTCP.ParseBool(child);
+			auto r = [subfn](const std::shared_ptr<ChunkHTTP> &c) {
+				return(subfn(c->Parent));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "HasRequest") {
 		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Request != nullptr); });
 	} else if (name == "HasResponse") {
 		return ([](const std::shared_ptr<ChunkHTTP> &c) { return(c->Response != nullptr); });

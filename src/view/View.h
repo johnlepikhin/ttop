@@ -15,6 +15,8 @@
 namespace ttop {
 namespace view {
 
+extern std::mutex OutputMutex;
+
 template <typename IN, typename VALUE>
 struct Value {
 	typedef std::function<VALUE(std::shared_ptr<IN>)> t_logic;

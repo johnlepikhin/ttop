@@ -2,7 +2,7 @@
 #ifndef SRC_VIEW_TOP_H_
 #define SRC_VIEW_TOP_H_
 
-#include "View.cpp"
+#include "View.h"
 #include <ncurses.h>
 #include <thread>
 #include <condition_variable>

@@ -10,7 +10,24 @@ namespace level_data {
 typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "PayloadPreview") {
+	if (name == "Parent") {
+		const char *defaultAttr = elt.Attribute("default");
+		if (!defaultAttr)
+			throw logic::ParseError("No default=... attribute for [<Client> or <Server>] -> <Parent/>");
+		std::string defaultValue(defaultAttr);
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCP LogicTCP;
+			auto subfn = LogicTCP.ParseString(child);
+			auto r = [subfn, defaultValue](const std::shared_ptr<EndPoint> &c) {
+				if (c->LastChunk == nullptr)
+					return (defaultValue);
+				return(subfn(c->LastChunk));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "PayloadPreview") {
 		const char *defaultPreview = elt.Attribute("default");
 		if (!defaultPreview)
 			throw logic::ParseError("No default=... attribute for <PayloadPreview/>");
@@ -46,7 +63,24 @@ typename logic::Logic<EndPoint>::t_string_value DataTCPEndPoint::ParseStringCust
 typename logic::Logic<EndPoint>::t_bool_value DataTCPEndPoint::ParseBoolCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "HasPayload") {
+	if (name == "Parent") {
+		const char *_defaultValue;
+		if(!(_defaultValue = elt.Attribute("default")))
+			throw logic::ParseError("No default=... attribute for [<Client> or <Server>] -> <Parent/>");
+		bool defaultValue((std::string(_defaultValue) == "true") ? true : false);
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCP LogicTCP;
+			auto subfn = LogicTCP.ParseBool(child);
+			auto r = [subfn, defaultValue](const std::shared_ptr<EndPoint> &c) {
+				if (c->LastChunk == nullptr)
+					return (defaultValue);
+				return(subfn(c->LastChunk));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "HasPayload") {
 		auto r = [](const std::shared_ptr<EndPoint> &c) {
 			return (c->Payload != nullptr && c->Payload->CoveredSize);
 		};
@@ -80,7 +114,25 @@ typename logic::Logic<EndPoint>::t_bool_value DataTCPEndPoint::ParseBoolCustom(c
 typename logic::Logic<EndPoint>::t_longlong_value DataTCPEndPoint::ParseLongLongCustom(const tinyxml2::XMLElement &elt)
 {
 	std::string name(elt.Value());
-	if (name == "NextExpectedSEQ") {
+	if (name == "Parent") {
+		const char *_defaultValue;
+		if(!(_defaultValue = elt.Attribute("default")))
+			throw logic::ParseError("No default=... attribute for [<Client> or <Server>] -> <Parent/>");
+		long long defaultValue(stoll(std::string(_defaultValue)));
+
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCP LogicTCP;
+			auto subfn = LogicTCP.ParseLongLong(child);
+			auto r = [subfn, defaultValue](const std::shared_ptr<EndPoint> &c) {
+				if (c->LastChunk == nullptr)
+					return (defaultValue);
+				return(subfn(c->LastChunk));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "NextExpectedSEQ") {
 		auto r = [](const std::shared_ptr<EndPoint> &c) {
 			return (c->NextExpectedSEQ);
 		};
@@ -125,7 +177,18 @@ typename logic::Logic<SessionTCP>::t_string_value DataTCPSession::ParseStringCus
 	std::string name(elt.Value());
 	const char *_defaultValue;
 
-	if (name == "FollowerProtocol") {
+	if (name == "Parent") {
+			auto child = elt.FirstChildElement();
+			if (child) {
+				DataTCP LogicTCP;
+				auto subfn = LogicTCP.ParseString(child);
+				auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
+					return(subfn(c->Parent));
+				};
+				return (r);
+			}
+			throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "FollowerProtocol") {
 		auto r = [](const std::shared_ptr<SessionTCP> &c) {
 			if (c->Follower != nullptr) {
 				return (c->Follower->ID());
@@ -173,7 +236,18 @@ typename logic::Logic<SessionTCP>::t_bool_value DataTCPSession::ParseBoolCustom(
 	std::string name(elt.Value());
 	const char *_defaultValue;
 
-	if (name == "DirectionDetected") {
+	if (name == "Parent") {
+		auto child = elt.FirstChildElement();
+		if (child) {
+			DataTCP LogicTCP;
+			auto subfn = LogicTCP.ParseBool(child);
+			auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
+				return(subfn(c->Parent));
+			};
+			return (r);
+		}
+		throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "DirectionDetected") {
 		auto r = [](const std::shared_ptr<SessionTCP> &c) {
 			return (c->DirectionDetected);
 		};
@@ -222,7 +296,18 @@ typename logic::Logic<SessionTCP>::t_longlong_value DataTCPSession::ParseLongLon
 	std::string name(elt.Value());
 	const char *_defaultValue;
 
-	if (name == "LastInternalID") {
+	if (name == "Parent") {
+			auto child = elt.FirstChildElement();
+			if (child) {
+				DataTCP LogicTCP;
+				auto subfn = LogicTCP.ParseLongLong(child);
+				auto r = [subfn](const std::shared_ptr<SessionTCP> &c) {
+					return(subfn(c->Parent));
+				};
+				return (r);
+			}
+			throw logic::ParseError("No child for <Parent/>");
+	} else if (name == "LastInternalID") {
 		auto r = [](const std::shared_ptr<SessionTCP> &c) {
 			return (c->LastInternalID);
 		};
