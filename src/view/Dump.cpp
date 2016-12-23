@@ -42,6 +42,7 @@ void Dump<IN>::DoOutput(const std::vector<typename View<IN>::t_selection> &outpu
 		o << RecordSeparator;
 	}
 	o << GroupSeparator;
+	std::flush(o);
 }
 
 template <typename IN>
