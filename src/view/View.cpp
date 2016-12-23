@@ -98,14 +98,15 @@ void View<IN>::Input(const std::shared_ptr<IN> &chunk, int32_t followersProcesse
 				FillSelection(g->second, chunk);
 			}
 		}
-		DataMutex.unlock();
 	} catch (...) {
 		DataMutex.unlock();
 		throw;
 	}
 
-	if (Trigger.Val)
+	if (Trigger.Val) {
+		DataMutex.unlock();
 		OutputAndRestart();
+	}
 }
 
 template <typename IN>
