@@ -21,7 +21,7 @@ void View<IN>::Output()
 {
 	std::vector<t_selection> output;
 	for (auto it : Selection)
-		output.push_back(std::move(it.second));
+		output.push_back(it.second);
 
 	if (OrderBy >= 0) {
 		std::sort(output.begin(), output.end(), [this](t_selection &left, t_selection &right) {
@@ -93,7 +93,7 @@ void View<IN>::Input(const std::shared_ptr<IN> &chunk, int32_t followersProcesse
 			if (g == Selection.end()) {
 				t_selection vector = Selection_source;
 				FillSelection(vector, chunk);
-				Selection.emplace(GroupBy.Val, std::move(vector));
+				Selection.emplace(GroupBy.Val, vector);
 			} else {
 				FillSelection(g->second, chunk);
 			}

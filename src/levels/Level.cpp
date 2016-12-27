@@ -20,11 +20,10 @@ template<typename PARSER>
 int32_t Level<PARSER>::BeforeRecursionHook(const t_value &chunk)
 {
 	try {
-		PARSER::BeforeRecursionHook(chunk);
 		bool r = Filter(chunk);
 
 		if (r) {
-			return (0);
+			return (PARSER::BeforeRecursionHook(chunk));
 		} else {
 			return (-1);
 		}
