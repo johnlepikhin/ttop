@@ -33,44 +33,41 @@ The key features are accessible via configuration file
 
 Base template:
 
-```<?xml version="1.0" ?>
-<ttop>
-   <parsers>
-      ... parsers and views ...
-   </parsers>
-</ttop>
-```
+    <?xml version="1.0" ?>
+    <ttop>
+       <parsers>
+          ... parsers and views ...
+       </parsers>
+    </ttop>
 
 <parsers> is root parser of parsing tree and provides information to very basinc EtherNet frames. At every level traffic information can be retrieved with <view>'s:
 
-```<?xml version="1.0" ?>
-<ttop>
-  <parsers>
-    <view>
-       ... view configuration ...
-    </view>
-   </parsers>
-</ttop>
-```
+    <?xml version="1.0" ?>
+    <ttop>
+      <parsers>
+        <view>
+           ... view configuration ...
+        </view>
+       </parsers>
+    </ttop>
 
 Similarly, one can view traffic at every level, as many times as required:
 
-```<?xml version="1.0" ?>
-<ttop>
-  <parsers>
-    <view>
-       ... view configuration ...
-    </view>
-    <parser of="DIX">
-      <parser of="IPv4">
+    <?xml version="1.0" ?>
+    <ttop>
+      <parsers>
         <view>
-          ... view configuration for IPv4 frames ...
+           ... view configuration ...
         </view>
-      </parser>
-    </parser>
-   </parsers>
-</ttop>
-```
+        <parser of="DIX">
+          <parser of="IPv4">
+            <view>
+              ... view configuration for IPv4 frames ...
+            </view>
+          </parser>
+        </parser>
+       </parsers>
+    </ttop>
 
 ### Valid hierarchy of parsers
 
@@ -122,25 +119,24 @@ I.e. parser "TCPSession" can be followed by parsers of "HTTP", "MySQL" and "SSL"
 
 <view> is SQL-like query language. For example, every second output to STDOUT UNIX time, source and destination MAC addresses, number of matched frames, total length of captured by PCAP bytes and total declared length of matched frames, group by source+destination MAC address:
 
-```<view type="dump" output="-">
-  <select>
-    <long2string name="seconds"><Seconds/></long2string>
-    <SourceMAC name="source"/>
-    <DestinationMAC name="dest"/>
-    <long2string  name="counter"><counter/></long2string>
-    <long2string order="numeric" name="captured"><sum><Captured/></sum></long2string>
-    <long2string name="length"><sum><Length/></sum></long2string>
-  </select>
-  <trigger timeInterval="1">
-    <false/>
-  </trigger>
-  <groupBy>
-    <concat>
-      <SourceMAC/>
-      <DestinationMAC/>
-    </concat>
-  </groupBy>
-</view>
-```
+    <view type="dump" output="-">
+      <select>
+        <long2string name="seconds"><Seconds/></long2string>
+        <SourceMAC name="source"/>
+        <DestinationMAC name="dest"/>
+        <long2string  name="counter"><counter/></long2string>
+        <long2string order="numeric" name="captured"><sum><Captured/></sum></long2string>
+        <long2string name="length"><sum><Length/></sum></long2string>
+      </select>
+      <trigger timeInterval="1">
+        <false/>
+      </trigger>
+      <groupBy>
+        <concat>
+          <SourceMAC/>
+          <DestinationMAC/>
+        </concat>
+      </groupBy>
+    </view>
 
 Check for more examples on Github's repository page.
