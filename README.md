@@ -40,7 +40,7 @@ Base template:
        </parsers>
     </ttop>
 
-<parsers> is root parser of parsing tree and provides information to very basinc EtherNet frames. At every level traffic information can be retrieved with <view>'s:
+```<parsers>``` is root parser of parsing tree and provides information to very basinc EtherNet frames. At every level traffic information can be retrieved with ```<view>```'s:
 
     <?xml version="1.0" ?>
     <ttop>
@@ -117,7 +117,7 @@ I.e. parser "TCPSession" can be followed by parsers of "HTTP", "MySQL" and "SSL"
 
 ### Views
 
-<view> is SQL-like query language. For example, every second output to STDOUT UNIX time, source and destination MAC addresses, number of matched frames, total length of captured by PCAP bytes and total declared length of matched frames, group by source+destination MAC address:
+```<view>``` is SQL-like query language. For example, every second output to STDOUT UNIX time, source and destination MAC addresses, number of matched frames, total length of captured by PCAP bytes and total declared length of matched frames, group by source+destination MAC address:
 
     <view type="dump" output="-">
       <select>
